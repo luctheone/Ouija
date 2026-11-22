@@ -1,0 +1,27 @@
+<!-- @dsCard group="Colors" viewport="700x140" name="Semantic & state" subtitle="Soft success / warning / danger — never harsh; cool tinted shadows, never black" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; font-family: var(--font-sans); background: var(--white); }
+  .wrap { display: flex; gap: 14px; padding: 24px; align-items: stretch; }
+  .tile { flex: 1; border-radius: var(--radius-md); padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; min-height: 78px; }
+  .tile .role { font-size: 11px; font-weight: var(--fw-bold); letter-spacing: var(--ls-eyebrow); text-transform: uppercase; }
+  .tile .hex { font-family: var(--font-mono); font-size: 11px; opacity: 0.85; }
+  .success { background: color-mix(in srgb, var(--success-500) 14%, white); color: var(--success-600); box-shadow: var(--glow-success); }
+  .warn { background: color-mix(in srgb, var(--warn-500) 16%, white); color: #9a6a13; }
+  .danger { background: color-mix(in srgb, var(--danger-500) 16%, white); color: #b23b34; }
+  .accent { background: var(--accent-50); color: var(--accent-600); box-shadow: var(--glow-accent); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="tile accent"><span class="role">Guidance</span><span class="hex">#7174ee</span></div>
+    <div class="tile success"><span class="role">Success</span><span class="hex">#2fbf93</span></div>
+    <div class="tile warn"><span class="role">Warning</span><span class="hex">#f0b24a</span></div>
+    <div class="tile danger"><span class="role">Danger</span><span class="hex">#f0726a</span></div>
+  </div>
+</body>
+</html>

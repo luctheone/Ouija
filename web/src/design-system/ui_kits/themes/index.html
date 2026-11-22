@@ -1,0 +1,149 @@
+<!-- @dsCard group="Themes" viewport="1180x900" name="Site-matched variants — Shopify vs Stripe" subtitle="Same glass, motion & components; the color identity adapts to feel native to the host site" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Ouija — site-matched theme variants</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html, body { margin: 0; background: #e7e9ee; font-family: var(--font-sans); color: var(--text-primary); }
+  .page { display: grid; grid-template-columns: 1fr 1fr; gap: 0; min-height: 100vh; }
+  .col { padding: 30px 30px 40px; display: flex; flex-direction: column; gap: 22px; }
+  .col--shopify { background: #eef2f0; }
+  .col--stripe  { background: #eef1f6; }
+
+  .vhead { display: flex; flex-direction: column; gap: 10px; }
+  .vname { display: flex; align-items: baseline; gap: 10px; }
+  .vname h2 { margin: 0; font-size: 22px; font-weight: var(--fw-extra); letter-spacing: -0.02em; color: var(--text-primary); }
+  .vname .tag { font-size: 11px; font-weight: var(--fw-bold); letter-spacing: var(--ls-eyebrow); text-transform: uppercase;
+                color: var(--text-accent); background: var(--accent-50); padding: 4px 9px; border-radius: var(--radius-pill); }
+  .vdesc { margin: 0; font-size: 13.5px; color: var(--text-secondary); line-height: var(--lh-normal); max-width: 46ch; }
+  .swatches { display: flex; gap: 7px; margin-top: 4px; }
+  .swatches i { width: 30px; height: 30px; border-radius: 9px; box-shadow: var(--shadow-sm); display: block; }
+
+  .seclabel { font-size: 10.5px; font-weight: var(--fw-bold); letter-spacing: var(--ls-eyebrow); text-transform: uppercase; color: var(--text-tertiary); margin-bottom: -8px; }
+
+  /* on-page overlay scene with a mocked host */
+  .scene { position: relative; height: 280px; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); }
+  .host { position: absolute; inset: 0; display: grid; grid-template-columns: 150px 1fr; }
+  .host__nav { padding: 16px 12px; display: flex; flex-direction: column; gap: 6px; }
+  .host__brand { font-weight: 800; font-size: 13px; padding: 2px 6px 12px; display:flex; align-items:center; gap:8px; }
+  .host__brand .lg { width:20px;height:20px;border-radius:6px; }
+  .host__ni { height: 30px; border-radius: 8px; display:flex; align-items:center; padding:0 10px; font-size:12.5px; font-weight:600; }
+  .host__main { padding: 18px 20px; }
+  .host__h { font-size: 17px; font-weight: 800; margin-bottom: 14px; }
+  .host__btn { border:none; border-radius:9px; font-family:inherit; font-weight:700; font-size:13px; padding:9px 16px; color:#fff; }
+  .host__card { background:#fff; border-radius:10px; height:64px; margin-top:14px; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+
+  /* shopify host skin */
+  .host--shopify { background:#f6f6f7; color:#4a4a4a; }
+  .host--shopify .host__nav { background:#fbfbfb; border-right:1px solid #ededed; }
+  .host--shopify .host__brand { color:#1a1a1a; }
+  .host--shopify .host__brand .lg { background:#008060; }
+  .host--shopify .host__ni { color:#5c5f62; }
+  .host--shopify .host__ni.on { background:#ebf3ef; color:#0c5132; }
+  .host--shopify .host__h { color:#1a1a1a; }
+  .host--shopify .host__btn { background:#008060; }
+
+  /* stripe host skin */
+  .host--stripe { background:#f6f9fc; color:#697386; }
+  .host--stripe .host__nav { background:#fff; border-right:1px solid #e3e8ee; }
+  .host--stripe .host__brand { color:#1a1f36; }
+  .host--stripe .host__brand .lg { background:#635bff; }
+  .host--stripe .host__ni { color:#697386; }
+  .host--stripe .host__ni.on { background:#f0f3f9; color:#3c4257; }
+  .host--stripe .host__h { color:#1a1f36; }
+  .host--stripe .host__btn { background:#635bff; }
+
+  .panelwrap { display:flex; justify-content:center; }
+</style>
+</head>
+<body>
+  <div class="page" id="page"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <script type="text/babel">
+    const { SidebarPanel, MessageBubble, GlassInput, Spotlight, Pointer, Coachmark } = window.OuijaDesignSystem_93fedd;
+
+    const VARIANTS = {
+      shopify: {
+        label: 'Shopify-native', tag: 'green',
+        desc: 'Frosted eucalyptus light — a considered two-green system read through the glass. Feels like it was made by Shopify: calm, confident, premium.',
+        swatches: ['#075a43', '#0a7556', '#0d946b', '#6cc1a6', '#e8f4ef'],
+        host: 'shopify', brand: 'Northwind', nav: ['Home', 'Orders', 'Customers'], on: 2,
+        cta: 'Customer events', heading: 'Customers',
+        sub: 'Connect Beacon Ads',
+        msg: "Click <b>Customer events</b> to set up your pixel \u2014 I\u2019ll show you where.",
+        coach: 'Click <b>Customer events</b>',
+        success: 'Your pixel is connected \u2014 nicely done.',
+        copy: 'px_8f3c20a91b4e',
+      },
+      stripe: {
+        label: 'Stripe-native', tag: 'indigo',
+        desc: 'Refined fintech indigo on Stripe\u2019s cool blue-slate — steered toward blue, away from generic AI violet. Native to the Dashboard, set in Geist.',
+        swatches: ['#333f95', '#4150b8', '#5469d4', '#94a3e6', '#eef0fb'],
+        host: 'stripe', brand: 'Ledgerly', nav: ['Home', 'Payments', 'Developers'], on: 2,
+        cta: 'Add endpoint', heading: 'Webhooks',
+        sub: 'Add a webhook',
+        msg: "Let\u2019s add your webhook. Click <b>Add endpoint</b> to begin.",
+        coach: 'Click <b>Add endpoint</b>',
+        success: 'Your endpoint is live \u2014 events will flow now.',
+        copy: 'whsec_3aF9\u2026Kp2',
+      },
+    };
+
+    function Column({ k }) {
+      const v = VARIANTS[k];
+      // host button geometry inside the 280px scene
+      const t = { top: 70, left: 170, w: 132, h: 36 };
+      return (
+        <div className={`col col--${k}`} data-theme={k}>
+          <div className="vhead">
+            <div className="vname"><h2>{v.label}</h2><span className="tag">{v.tag}</span></div>
+            <p className="vdesc">{v.desc}</p>
+            <div className="swatches">{v.swatches.map((c,i)=><i key={i} style={{background:c}}/>)}</div>
+          </div>
+
+          <div className="seclabel">On-page overlay</div>
+          <div className="scene">
+            <div className={`host host--${v.host}`}>
+              <div className="host__nav">
+                <div className="host__brand"><span className="lg"></span>{v.brand}</div>
+                {v.nav.map((n,i)=><div key={i} className={`host__ni ${i===v.on?'on':''}`}>{n}</div>)}
+              </div>
+              <div className="host__main">
+                <div className="host__h">{v.heading}</div>
+                <button className="host__btn">{v.cta}</button>
+                <div className="host__card"></div>
+              </div>
+            </div>
+            {/* Ouija overlay — themed, drawn onto the host */}
+            <div style={{position:'absolute', inset:0, pointerEvents:'none'}}>
+              <Spotlight radius={11} style={{ top:t.top-6, left:t.left-6, width:t.w+12, height:t.h+12 }} />
+              <Pointer direction="right" style={{ top:t.top+t.h/2-17, left:t.left-46 }} />
+              <Coachmark arrow="up" html={v.coach} copyValue={v.copy}
+                style={{ position:'absolute', top:t.top+t.h+18, left:t.left }} />
+            </div>
+          </div>
+
+          <div className="seclabel">Sidebar panel</div>
+          <div className="panelwrap">
+            <SidebarPanel subtitle={v.sub} step={3} totalSteps={6} advanceLabel="I did it \u2014 next">
+              <MessageBubble html={v.msg} />
+              <MessageBubble variant="user">On it</MessageBubble>
+              <MessageBubble variant="success">{v.success}</MessageBubble>
+            </SidebarPanel>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('page')).render(
+      <><Column k="shopify" /><Column k="stripe" /></>
+    );
+  </script>
+</body>
+</html>

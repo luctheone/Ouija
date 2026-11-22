@@ -1,0 +1,103 @@
+{
+  "site": "stripe",
+  "task": "payment-link-webhook",
+  "graph_template": {
+    "edges": [
+      {
+        "to": "stripe_1",
+        "from": "nav_1"
+      },
+      {
+        "to": "nav_2",
+        "from": "stripe_1"
+      },
+      {
+        "to": "store_1",
+        "from": "nav_2"
+      },
+      {
+        "to": "nav_3",
+        "from": "store_1"
+      },
+      {
+        "to": "stripe_2",
+        "from": "nav_3"
+      },
+      {
+        "to": "nav_4",
+        "from": "stripe_2"
+      },
+      {
+        "to": "store_2",
+        "from": "nav_4"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "nav_1",
+        "site": "ouijaboard.vercel.app/demo/stripe-dashboard",
+        "confidence": 0.95,
+        "instruction": "Go to your Stripe dashboard",
+        "selector_hint": "",
+        "verify_condition": "URL contains /demo/stripe-dashboard"
+      },
+      {
+        "id": "stripe_1",
+        "site": "ouijaboard.vercel.app/demo/stripe-dashboard",
+        "confidence": 0.95,
+        "instruction": "Click Create payment button \u2014 the embed code is copied for you",
+        "selector_hint": "[aria-label='Create payment button']",
+        "verify_condition": "clipboard contains buy-button"
+      },
+      {
+        "id": "nav_2",
+        "site": "ouijaboard.vercel.app/demo/stripe-storefront",
+        "confidence": 0.95,
+        "instruction": "Go to your storefront to paste the embed code",
+        "selector_hint": "",
+        "verify_condition": "URL contains /demo/stripe-storefront"
+      },
+      {
+        "id": "store_1",
+        "site": "ouijaboard.vercel.app/demo/stripe-storefront",
+        "confidence": 0.95,
+        "instruction": "Paste the embed code into the Payment Button field",
+        "selector_hint": "[aria-label='Embed code']",
+        "verify_condition": "Payment button configured"
+      },
+      {
+        "id": "nav_3",
+        "site": "ouijaboard.vercel.app/demo/stripe-dashboard",
+        "confidence": 0.95,
+        "instruction": "Go back to your Stripe dashboard",
+        "selector_hint": "",
+        "verify_condition": "URL contains /demo/stripe-dashboard"
+      },
+      {
+        "id": "stripe_2",
+        "site": "ouijaboard.vercel.app/demo/stripe-dashboard",
+        "confidence": 0.95,
+        "instruction": "Click Create webhook endpoint \u2014 the signing secret is copied for you",
+        "selector_hint": "[aria-label='Create webhook endpoint']",
+        "verify_condition": "clipboard contains whsec_"
+      },
+      {
+        "id": "nav_4",
+        "site": "ouijaboard.vercel.app/demo/stripe-storefront",
+        "confidence": 0.95,
+        "instruction": "Go back to your storefront to paste the secret",
+        "selector_hint": "",
+        "verify_condition": "URL contains /demo/stripe-storefront"
+      },
+      {
+        "id": "store_2",
+        "site": "ouijaboard.vercel.app/demo/stripe-storefront",
+        "confidence": 0.95,
+        "instruction": "Paste the signing secret into the Webhook Secret field",
+        "selector_hint": "[aria-label='Webhook secret']",
+        "verify_condition": "Webhook secret configured"
+      }
+    ],
+    "welcome_message": "Hey! I'll walk you through a simplified Stripe payments cross-site flow \u2014 just click Done when a step is completed. First step: head over to your Stripe dashboard https://ouijaboard.vercel.app/demo/stripe-dashboard to get started. \ud83c\udfaf"
+  }
+}

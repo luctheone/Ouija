@@ -1,0 +1,166 @@
+<!-- @dsCard group="Stripe" viewport="1440x900" name="Ouija inside Stripe Dashboard" subtitle="The extension layered onto a realistic payments dashboard — premium indigo theme, native feel" -->
+<!DOCTYPE html>
+<html lang="en" data-theme="stripe">
+<head>
+<meta charset="utf-8" />
+<title>Ouija · Stripe Dashboard</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  :root {
+    /* host (Stripe-dashboard-like) local palette — the SITE's own colors */
+    --p-indigo:#635bff; --p-indigo-d:#4b45c6; --p-bg:#f6f9fc; --p-surface:#ffffff;
+    --p-border:#e6ebf1; --p-ink:#1a1f36; --p-ink2:#4f566b; --p-ink3:#8792a8; --p-hover:#f0f3f9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--p-bg);
+    font-family: 'Geist','Manrope', -apple-system, system-ui, sans-serif; color: var(--p-ink); -webkit-font-smoothing: antialiased; }
+  .app { display: grid; grid-template-columns: 240px 1fr; height: 100vh; }
+
+  /* nav */
+  .nav { background: var(--p-surface); border-right: 1px solid var(--p-border); padding: 14px 12px; overflow-y:auto; display:flex; flex-direction:column; }
+  .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 14px;}
+  .brand .mk{width:28px;height:28px;border-radius:8px;background:linear-gradient(150deg,#7a73ff,#635bff);display:grid;place-items:center;}
+  .brand .mk svg{width:17px;height:17px;color:#fff;}
+  .brand .nm{font-weight:800;font-size:15px;letter-spacing:-.01em;}
+  .brand .ch{margin-left:auto;color:var(--p-ink3);} .brand .ch svg{width:15px;height:15px;}
+  .test{display:flex;align-items:center;gap:8px;margin:0 4px 10px;padding:7px 10px;border-radius:9px;background:#fff7ed;border:1px solid #fde7c8;color:#9a6a13;font-size:12px;font-weight:700;}
+  .test .dot{width:7px;height:7px;border-radius:50%;background:#f0b24a;}
+  .test .sw{margin-left:auto;width:30px;height:17px;border-radius:99px;background:#f0b24a;position:relative;}
+  .test .sw::after{content:'';position:absolute;top:2px;right:2px;width:13px;height:13px;border-radius:50%;background:#fff;}
+  .pi{display:flex;align-items:center;gap:11px;padding:7px 9px;border-radius:8px;font-size:13.5px;font-weight:600;color:var(--p-ink2);cursor:pointer;margin-bottom:1px;}
+  .pi:hover{background:var(--p-hover);}
+  .pi.on{background:#eef0fb;color:#4b45c6;}
+  .pi svg{width:17px;height:17px;opacity:.85;}
+  .nsec{font-size:11px;font-weight:700;color:var(--p-ink3);text-transform:uppercase;letter-spacing:.04em;padding:14px 9px 6px;}
+
+  /* main column */
+  .col{display:flex;flex-direction:column;overflow:hidden;}
+  .topbar{height:56px;flex:0 0 auto;border-bottom:1px solid var(--p-border);background:var(--p-surface);display:flex;align-items:center;gap:14px;padding:0 24px;}
+  .topbar .search{flex:1;max-width:440px;height:34px;background:var(--p-bg);border:1px solid var(--p-border);border-radius:9px;display:flex;align-items:center;gap:9px;padding:0 12px;color:var(--p-ink3);font-size:13px;}
+  .topbar .search svg{width:16px;height:16px;}
+  .topbar .sp{flex:1;}
+  .topbar .ic{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;color:var(--p-ink3);} .topbar .ic svg{width:18px;height:18px;}
+  .topbar .ava{width:30px;height:30px;border-radius:50%;background:linear-gradient(150deg,#635bff,#a06bf0);color:#fff;display:grid;place-items:center;font-weight:700;font-size:12px;}
+
+  .main{overflow-y:auto;padding:30px 36px;}
+  .wrap{max-width:720px;}
+  .crumb{font-size:13px;color:var(--p-ink3);font-weight:600;}
+  .h1row{display:flex;align-items:flex-end;justify-content:space-between;margin:4px 0 8px;}
+  .h1{font-size:26px;font-weight:800;letter-spacing:-.025em;}
+  .lead{font-size:14px;color:var(--p-ink2);line-height:1.55;max-width:60ch;margin-bottom:22px;}
+  .pbtn{border:none;border-radius:9px;font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;}
+  .pbtn.primary{background:linear-gradient(180deg,#7068ff,#5b53f0);color:#fff;box-shadow:0 1px 2px rgba(50,50,93,.2),0 1px 1px rgba(0,0,0,.08);}
+  .pbtn.primary svg{width:15px;height:15px;}
+  .pbtn.ghost{background:#fff;border:1px solid var(--p-border);color:var(--p-ink);box-shadow:0 1px 1px rgba(0,0,0,.04);}
+
+  .panel{background:var(--p-surface);border:1px solid var(--p-border);border-radius:12px;box-shadow:0 1px 3px rgba(50,50,93,.04);overflow:hidden;}
+  .panel .ph{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid var(--p-border);}
+  .panel .ph .t{font-weight:700;font-size:15px;}
+  .panel .ph .a{margin-left:auto;}
+  .thead,.trow{display:grid;grid-template-columns:1.6fr 1fr 1fr 90px;gap:12px;padding:12px 20px;align-items:center;}
+  .thead{font-size:11.5px;font-weight:700;color:var(--p-ink3);text-transform:uppercase;letter-spacing:.04em;background:#fbfcfd;border-bottom:1px solid var(--p-border);}
+  .trow{border-bottom:1px solid #f0f3f7;font-size:13px;}
+  .trow .url{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#3c4257;}
+  .trow .st{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12px;color:#1fa971;}
+  .trow .st .d{width:7px;height:7px;border-radius:50%;background:#3ecf8e;}
+  .trow .ev{color:var(--p-ink2);}
+  .trow .mn{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--p-ink3);text-align:right;}
+  .empty{padding:30px 20px;text-align:center;color:var(--p-ink3);font-size:13px;}
+</style>
+</head>
+<body>
+  <div class="app">
+    <aside class="nav">
+      <div class="brand"><span class="mk"><i data-lucide="zap"></i></span><span class="nm">Ledgerly</span><span class="ch"><i data-lucide="chevrons-up-down"></i></span></div>
+      <div class="test"><span class="dot"></span> Test mode <span class="sw"></span></div>
+      <div class="pi"><i data-lucide="house"></i> Home</div>
+      <div class="pi"><i data-lucide="wallet"></i> Balances</div>
+      <div class="pi"><i data-lucide="arrow-left-right"></i> Transactions</div>
+      <div class="pi"><i data-lucide="users"></i> Customers</div>
+      <div class="pi"><i data-lucide="package"></i> Product catalog</div>
+      <div class="nsec">Developers</div>
+      <div class="pi"><i data-lucide="key-round"></i> API keys</div>
+      <div class="pi on"><i data-lucide="webhook"></i> Webhooks</div>
+      <div class="pi"><i data-lucide="list"></i> Events</div>
+      <div class="pi"><i data-lucide="scroll-text"></i> Logs</div>
+    </aside>
+
+    <div class="col">
+      <div class="topbar">
+        <div class="search"><i data-lucide="search"></i> Search</div>
+        <div class="sp"></div>
+        <span class="ic"><i data-lucide="book-open"></i></span>
+        <span class="ic"><i data-lucide="bell"></i></span>
+        <span class="ava">MK</span>
+      </div>
+
+      <main class="main">
+        <div class="wrap">
+          <div class="crumb">Developers</div>
+          <div class="h1row">
+            <div class="h1">Webhooks</div>
+            <button class="pbtn primary" id="host-cta"><i data-lucide="plus"></i> Add endpoint</button>
+          </div>
+          <p class="lead">Webhook endpoints let Ledgerly notify your app when events happen in your account. Add an endpoint to start receiving events like successful payments and new customers.</p>
+
+          <div class="panel">
+            <div class="ph"><span class="t">Hosted endpoints</span><span class="a"><button class="pbtn ghost">Listen to events</button></span></div>
+            <div class="thead"><span>Endpoint URL</span><span>Status</span><span>Events</span><span style="text-align:right">Error rate</span></div>
+            <div class="trow"><span class="url">https://api.acme.com/wh</span><span><span class="st"><span class="d"></span>Enabled</span></span><span class="ev">12 events</span><span class="mn">0.0%</span></div>
+            <div class="trow"><span class="url">https://hooks.acme.io/v2</span><span><span class="st"><span class="d"></span>Enabled</span></span><span class="ev">4 events</span><span class="mn">0.2%</span></div>
+            <div class="empty">+ Add another endpoint to receive more events</div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="ouija-root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script type="text/babel">
+    lucide.createIcons();
+    const { SidebarPanel, MessageBubble, Spotlight, Pointer, Coachmark } = window.OuijaDesignSystem_93fedd;
+
+    function useRect(id){
+      const [r,setR]=React.useState(null);
+      React.useLayoutEffect(()=>{
+        const measure=()=>{const el=document.getElementById(id); if(el) setR(el.getBoundingClientRect());};
+        measure(); window.addEventListener('resize',measure);
+        const t=setTimeout(measure,300);
+        return ()=>{window.removeEventListener('resize',measure);clearTimeout(t);};
+      },[id]);
+      return r;
+    }
+
+    function Ouija(){
+      const r = useRect('host-cta');
+      const PAD=8;
+      return (
+        <>
+          {r && (
+            <div style={{position:'fixed',inset:0,zIndex:50,pointerEvents:'none'}}>
+              <Spotlight radius={12} style={{top:r.top-PAD,left:r.left-PAD,width:r.width+PAD*2,height:r.height+PAD*2}} />
+              <Coachmark arrow="up" html="Click <b>Add endpoint</b> to register your webhook."
+                copyValue="whsec_3aF9…Kp2"
+                style={{position:'fixed',top:r.bottom+18,left:r.right-300}} />
+            </div>
+          )}
+          <div style={{position:'fixed',top:'72px',right:'var(--panel-margin)',zIndex:60}}>
+            <SidebarPanel subtitle="Add a webhook" step={2} totalSteps={5} animate
+              advanceLabel="I did it — next">
+              <MessageBubble html="Let's set up your webhook so events reach your app. Click <b>Add endpoint</b> at the top right — I've highlighted it." />
+              <MessageBubble variant="user">On it</MessageBubble>
+            </SidebarPanel>
+          </div>
+        </>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('ouija-root')).render(<Ouija/>);
+  </script>
+</body>
+</html>

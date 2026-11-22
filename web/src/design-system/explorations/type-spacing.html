@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Ouija — type & spacing directions</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; font-family: var(--font-sans); }
+  .split { display: grid; grid-template-columns: 1fr 1fr; height: 100vh; }
+  .side { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+
+  .tag { position:absolute; top:22px; left:24px; z-index:9; max-width:300px; }
+  .tag .k{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#4a4f6b;display:block;margin-bottom:5px;}
+  .tag h3{margin:0 0 4px;font-size:19px;font-weight:800;color:#1a1f36;letter-spacing:-.01em;}
+  .tag p{margin:0;font-size:12px;line-height:1.5;color:#5a6072;}
+
+  /* bright host */
+  .host{position:absolute;inset:0;background:#eef1f6;}
+  .host::before{content:'';position:absolute;inset:0;
+    background-image:
+      radial-gradient(620px 420px at 88% -5%, #c7d6ff 0%, transparent 55%),
+      radial-gradient(560px 520px at 6% 35%, #c9f3e3 0%, transparent 55%),
+      radial-gradient(620px 520px at 70% 110%, #f3d9f0 0%, transparent 55%);}
+  .hui{position:absolute;inset:0;padding:96px 36px 36px;}
+  .hrow{display:flex;gap:14px;margin-bottom:14px;}
+  .hcard{flex:1;height:92px;border-radius:14px;background:#fff;border:1px solid #e6ebf2;padding:14px;box-shadow:0 1px 3px rgba(20,20,50,.05);}
+  .hcard small{font-size:11px;color:#8a90a3;font-weight:600;} .hcard .v{font-size:21px;font-weight:800;margin-top:8px;color:#1a1f36;}
+  .hcard.a .v{color:#ff8a5b;} .hcard.b .v{color:#19a974;} .hcard.c .v{color:#5b6df0;}
+  .hchart{height:140px;border-radius:14px;background:#fff;border:1px solid #e6ebf2;display:flex;align-items:flex-end;gap:8px;padding:14px;}
+  .hchart i{flex:1;border-radius:6px 6px 0 0;}
+
+  /* ===== shared Lens material + glint (locked) ===== */
+  @property --glint { syntax:'<angle>'; inherits:false; initial-value:0deg; }
+  .panel{position:relative;width:340px;border-radius:30px;isolation:isolate;
+    background:radial-gradient(135% 115% at 20% 8%, rgba(255,255,255,0.66), rgba(255,255,255,0.16) 56%), rgb(var(--accent-rgb)/0.12);
+    -webkit-backdrop-filter:blur(22px) saturate(235%);backdrop-filter:blur(22px) saturate(235%);
+    box-shadow:inset 0 2px 8px rgba(255,255,255,0.7), inset 0 -12px 26px -12px rgb(var(--accent-rgb)/0.3), 0 26px 56px -18px rgba(40,30,90,0.4);}
+  .panel::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.4px;pointer-events:none;z-index:3;
+    background:conic-gradient(from var(--glint), transparent 0deg, transparent 66deg, rgba(255,255,255,.25) 80deg, rgba(255,255,255,.95) 90deg, rgba(255,255,255,.25) 100deg, transparent 116deg, transparent 360deg);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;animation:glint 6.5s cubic-bezier(.6,0,.4,1) infinite;}
+  @keyframes glint{to{--glint:360deg;}}
+  .panel::before{content:'';position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;z-index:1;
+    background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.3) 50%,rgba(255,255,255,.04) 56%,transparent 66%);
+    background-size:260% 100%;background-position:180% 0;mix-blend-mode:screen;animation:sweep 8s ease-in-out infinite;}
+  @keyframes sweep{0%{background-position:175% 0;}14%,100%{background-position:-115% 0;}}
+  .pbody{position:relative;z-index:2;}
+  @media (prefers-reduced-motion:reduce){.panel::after,.panel::before{animation:none;}.panel::before{opacity:0;}}
+
+  .mk{border-radius:50%;display:grid;place-items:center;color:var(--accent-600);flex:0 0 auto;background:radial-gradient(circle at 35% 30%,#fff,rgb(var(--accent-rgb)/.22));box-shadow:inset 0 1px 0 #fff;}
+  .pmin{border-radius:50%;display:grid;place-items:center;border:none;cursor:pointer;flex:0 0 auto;background:rgba(255,255,255,.5);color:var(--ink-600);}
+  .pmin svg{width:16px;height:16px;}
+  .bar{flex:1;border-radius:99px;overflow:hidden;background:rgba(120,120,160,.2);}
+  .bar i{display:block;height:100%;width:50%;border-radius:99px;background:linear-gradient(90deg,var(--accent-400),var(--accent-500));box-shadow:0 0 10px rgb(var(--accent-rgb)/.6);}
+  .msg{display:flex;gap:10px;align-items:flex-end;}
+  .mav{border-radius:50%;display:grid;place-items:center;flex:0 0 auto;background:radial-gradient(circle at 35% 30%,#fff,rgb(var(--accent-rgb)/.2));color:var(--accent-600);}
+  .mav svg{width:13px;height:13px;}
+  .bubble{background:rgba(255,255,255,.74);color:var(--ink-900);-webkit-backdrop-filter:blur(12px) saturate(130%);backdrop-filter:blur(12px) saturate(130%);box-shadow:inset 0 1px 0 rgba(255,255,255,.6);}
+  .msg.user{flex-direction:row-reverse;}
+  .bubble.u{color:#fff;background:linear-gradient(180deg,var(--accent-400),var(--accent-600));box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 6px 16px -6px rgb(var(--accent-rgb)/.5);}
+  .pbtn{border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,var(--accent-400),var(--accent-600));box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 10px 26px -8px rgb(var(--accent-rgb)/.6);}
+  .pbtn svg{width:17px;height:17px;}
+  .mk svg{width:18px;height:18px;}
+
+  /* ============================================================
+     DIRECTION 1 · LUMEN — editorial / luminous serif · ROOMY
+     ============================================================ */
+  .lumen .pbody{padding:24px 22px;}
+  .lumen .phead{display:flex;align-items:center;gap:13px;margin-bottom:20px;}
+  .lumen .mk{width:36px;height:36px;}
+  .lumen .pid{flex:1;min-width:0;}
+  .lumen .pname{font-family:'Instrument Serif',serif;font-style:italic;font-size:29px;line-height:.95;color:var(--ink-900);letter-spacing:.01em;}
+  .lumen .psub{font-size:12.5px;font-weight:600;color:var(--ink-600);margin-top:3px;}
+  .lumen .pmin{width:32px;height:32px;}
+  .lumen .prog{display:flex;align-items:center;gap:12px;margin-bottom:22px;}
+  .lumen .bar{height:5px;}
+  .lumen .pstep{font-size:11px;font-weight:600;color:var(--accent-700);font-family:'Instrument Serif',serif;font-style:italic;letter-spacing:.02em;white-space:nowrap;font-size:15px;}
+  .lumen .stack{display:flex;flex-direction:column;gap:14px;margin-bottom:22px;}
+  .lumen .mav{width:28px;height:28px;}
+  .lumen .bubble{padding:13px 16px;border-radius:20px 20px 20px 7px;font-size:15.5px;font-weight:500;line-height:1.55;}
+  .lumen .bubble b{font-weight:700;}
+  .lumen .bubble.u{border-radius:20px 20px 7px 20px;font-weight:600;}
+  .lumen .pbtn{width:100%;height:48px;border-radius:99px;font-family:var(--font-sans);font-weight:700;font-size:15px;gap:8px;}
+
+  /* ============================================================
+     DIRECTION 2 · SIGNAL — technical grotesque + mono labels · TIGHT
+     ============================================================ */
+  .signal{font-family:'Space Grotesk',sans-serif;}
+  .signal .pbody{padding:17px 17px 18px;}
+  .signal .phead{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .signal .mk{width:32px;height:32px;border-radius:11px;}
+  .signal .pid{flex:1;min-width:0;}
+  .signal .pname{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;letter-spacing:-.01em;color:var(--ink-900);line-height:1.05;}
+  .signal .psub{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:500;color:var(--ink-500);letter-spacing:.02em;text-transform:lowercase;margin-top:3px;}
+  .signal .pmin{width:30px;height:30px;border-radius:9px;}
+  .signal .prog{display:flex;align-items:center;gap:10px;margin-bottom:15px;}
+  .signal .bar{height:4px;}
+  .signal .pstep{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--accent-700);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;}
+  .signal .stack{display:flex;flex-direction:column;gap:8px;margin-bottom:15px;}
+  .signal .mav{width:25px;height:25px;border-radius:9px;}
+  .signal .bubble{padding:10px 13px;border-radius:13px 13px 13px 5px;font-size:14px;font-weight:400;line-height:1.45;}
+  .signal .bubble b{font-weight:700;}
+  .signal .bubble.u{border-radius:13px 13px 5px 13px;font-weight:500;}
+  .signal .pbtn{width:100%;height:44px;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14.5px;gap:7px;letter-spacing:.01em;}
+</style>
+</head>
+<body>
+  <div class="split">
+    <div class="side">
+      <div class="host"><div class="hui">
+        <div class="hrow"><div class="hcard a"><small>Revenue</small><div class="v">$48.2k</div></div><div class="hcard b"><small>Active</small><div class="v">12,910</div></div></div>
+        <div class="hchart"><i style="height:55%;background:#5b8def"></i><i style="height:80%;background:#19c37d"></i><i style="height:45%;background:#ffd16b"></i><i style="height:90%;background:#b15bf0"></i><i style="height:62%;background:#ff8a5b"></i><i style="height:72%;background:#6be7c1"></i></div>
+      </div></div>
+      <div class="tag"><span class="k">Direction 1</span><h3>Lumen</h3><p>Editorial &amp; luminous. A high-contrast serif carries the Ouija identity; roomy, breathing spacing.</p></div>
+      <div class="panel lumen" id="L"></div>
+    </div>
+
+    <div class="side">
+      <div class="host"><div class="hui">
+        <div class="hrow"><div class="hcard c"><small>Requests</small><div class="v">2.4M</div></div><div class="hcard b"><small>Uptime</small><div class="v">99.98%</div></div></div>
+        <div class="hchart"><i style="height:60%;background:#5b8def"></i><i style="height:48%;background:#19c37d"></i><i style="height:82%;background:#ffd16b"></i><i style="height:55%;background:#b15bf0"></i><i style="height:90%;background:#ff8a5b"></i><i style="height:66%;background:#6be7c1"></i></div>
+      </div></div>
+      <div class="tag"><span class="k">Direction 2</span><h3>Signal</h3><p>Calm technical instrument. Characterful grotesque + mono labels for engineered precision; tight, dense rhythm.</p></div>
+      <div class="panel signal" id="S"></div>
+    </div>
+  </div>
+
+  <script>
+    const spark='<svg viewBox="0 0 64 64" fill="none"><path d="M32 6C33.2 16.8 38.2 24.5 47.6 27.4C50.8 28.4 50.8 35.6 47.6 36.6C38.2 39.5 33.2 47.2 32 58C30.8 47.2 25.8 39.5 16.4 36.6C13.2 35.6 13.2 28.4 16.4 27.4C25.8 24.5 30.8 16.8 32 6Z" fill="currentColor"/></svg>';
+    const minus='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg>';
+    const arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>';
+
+    const lumen=`<div class="pbody">
+      <div class="phead"><span class="mk">${spark}</span><span class="pid"><span class="pname">Ouija</span><div class="psub">Connect your pixel</div></span><button class="pmin">${minus}</button></div>
+      <div class="prog"><span class="bar"><i></i></span><span class="pstep">Step three of six</span></div>
+      <div class="stack">
+        <div class="msg"><span class="mav">${spark}</span><span class="bubble">Open <b>Settings</b> in the left menu — I've pointed it out for you.</span></div>
+        <div class="msg user"><span class="bubble u">Found it</span></div>
+      </div>
+      <button class="pbtn">I did it — next ${arrow}</button>
+    </div>`;
+
+    const signal=`<div class="pbody">
+      <div class="phead"><span class="mk">${spark}</span><span class="pid"><span class="pname">Ouija</span><div class="psub">connect_your_pixel</div></span><button class="pmin">${minus}</button></div>
+      <div class="prog"><span class="bar"><i></i></span><span class="pstep">Step 03 / 06</span></div>
+      <div class="stack">
+        <div class="msg"><span class="mav">${spark}</span><span class="bubble">Open <b>Settings</b> in the left menu — I've pointed it out for you.</span></div>
+        <div class="msg user"><span class="bubble u">Found it</span></div>
+      </div>
+      <button class="pbtn">I did it — next ${arrow}</button>
+    </div>`;
+
+    L.innerHTML=lumen; S.innerHTML=signal;
+  </script>
+</body>
+</html>

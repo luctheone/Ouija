@@ -1,0 +1,66 @@
+<!-- @dsCard group="Components" viewport="700x540" name="SidebarPanel & MessageBubble" subtitle="The hero surface — expanded panel, collapsed orb, agent bubbles, thinking state" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html, body { margin: 0; height: 100%; font-family: var(--font-sans); }
+  /* a mocked "host page" so the glass frost is visible */
+  .stage { position: relative; min-height: 540px; overflow: hidden;
+    background: linear-gradient(135deg, #dfe6f5 0%, #eef0f4 40%, #e9eef0 100%); }
+  .host { position: absolute; inset: 0; padding: 30px 36px; color: #9aa3b2; }
+  .host .bar { height: 44px; background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.06); margin-bottom: 20px; display:flex; align-items:center; padding:0 16px; gap:12px;}
+  .host .bar::before { content:''; width:80px;height:14px;background:#e3e7ee;border-radius:6px;}
+  .host .cols { display: grid; grid-template-columns: 180px 1fr; gap: 20px; }
+  .host .card { background:#fff; border-radius:12px; height:120px; box-shadow:0 1px 3px rgba(0,0,0,.05);}
+  .host .lines > div { height:12px;background:#e3e7ee;border-radius:5px;margin-bottom:12px;}
+  .host .lines > div:nth-child(2){width:70%}
+  .host .lines > div:nth-child(3){width:85%}
+  .row { position: relative; z-index: 2; display: flex; gap: 28px; align-items: flex-start;
+         padding: 28px 32px; }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="host">
+      <div class="bar"></div>
+      <div class="cols">
+        <div class="lines"><div></div><div></div><div></div><div></div></div>
+        <div><div class="card" style="margin-bottom:16px"></div><div class="lines"><div></div><div></div><div></div></div></div>
+      </div>
+    </div>
+    <div id="root" class="row"></div>
+  </div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <script type="text/babel">
+    const { SidebarPanel, MessageBubble } = window.OuijaDesignSystem_93fedd;
+
+    function Demo() {
+      return (
+        <>
+          <SidebarPanel subtitle="Connect your Meta Pixel" step={3} totalSteps={6}>
+            <MessageBubble html="Let's link your store. Click the <b>Events Manager</b> tab on the left." />
+            <MessageBubble variant="user">Found it</MessageBubble>
+            <MessageBubble variant="success">Your pixel is connected — nicely done.</MessageBubble>
+          </SidebarPanel>
+
+          <div style={{display:'flex', flexDirection:'column', gap:'18px', paddingTop:'8px'}}>
+            <SidebarPanel collapsed step={3} totalSteps={6} />
+            <SidebarPanel subtitle="Thinking" step={4} totalSteps={6} thinking advanceLabel="Waiting…"
+              showProgress={false}
+              style={{width:'300px'}}>
+              <MessageBubble>One moment — checking your settings.</MessageBubble>
+            </SidebarPanel>
+          </div>
+        </>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+  </script>
+</body>
+</html>

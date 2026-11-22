@@ -1,0 +1,28 @@
+<!-- @dsCard group="Spacing" viewport="700x170" name="Corner radii" subtitle="Rounded everything — pills, soft corners, no hard edges" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; font-family: var(--font-sans); background: var(--white); }
+  .wrap { padding: 24px; display: flex; gap: 16px; align-items: center; }
+  .col { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .box { width: 78px; height: 78px; background: var(--accent-100);
+         border: 1.5px solid var(--accent-300); }
+  .tok { font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); }
+  .val { font-size: 11px; font-weight: var(--fw-bold); color: var(--text-secondary); }
+  .pill { width: 78px; height: 40px; border-radius: var(--radius-pill); display:flex;align-items:center;justify-content:center;
+          font-size:11px;font-weight:var(--fw-bold);color:var(--accent-700); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="col"><div class="box" style="border-radius:var(--radius-sm)"></div><span class="val">10</span><span class="tok">sm · input</span></div>
+    <div class="col"><div class="box" style="border-radius:var(--radius-md)"></div><span class="val">14</span><span class="tok">md · control</span></div>
+    <div class="col"><div class="box" style="border-radius:var(--radius-lg)"></div><span class="val">20</span><span class="tok">lg · bubble</span></div>
+    <div class="col"><div class="box" style="border-radius:var(--radius-xl)"></div><span class="val">28</span><span class="tok">xl · panel</span></div>
+    <div class="col"><div class="box pill" style="background:var(--accent-100);border:1.5px solid var(--accent-300)">pill</div><span class="val">999</span><span class="tok">pill · orb</span></div>
+  </div>
+</body>
+</html>

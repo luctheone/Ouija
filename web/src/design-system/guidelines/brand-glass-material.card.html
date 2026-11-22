@@ -1,0 +1,57 @@
+<!-- @dsCard group="Brand" viewport="700x300" name="Liquid glass material" subtitle="The six-layer recipe — frosted tint, blur, top highlight, edge stroke, soft shadow, accent glow" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  html,body { margin: 0; height: 100%; font-family: var(--font-sans); }
+  /* a "host page" behind, so the frost is visible */
+  .stage { position: relative; height: 300px; overflow: hidden;
+           background: linear-gradient(135deg, #c9d2ff 0%, #f3d9ec 45%, #d6f3e8 100%); }
+  .blob { position: absolute; border-radius: 50%; filter: blur(2px); opacity: 0.85; }
+  .b1 { width: 200px; height: 200px; background: #ff9ec4; top: -40px; left: 60px; }
+  .b2 { width: 240px; height: 240px; background: #7bc6ff; bottom: -80px; left: 280px; }
+  .b3 { width: 160px; height: 160px; background: #ffd27b; top: 120px; left: 480px; }
+  .grid { position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.25) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.25) 1px,transparent 1px); background-size:28px 28px; }
+
+  .panels { position: absolute; inset: 0; display: flex; align-items: center; gap: 22px; padding: 0 40px; }
+  .panel {
+    background: var(--glass-tint);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-stroke);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--glass-highlight), var(--shadow-lg);
+    padding: 22px 24px; width: 230px;
+  }
+  .panel .eyebrow { font-size: var(--fs-xs); font-weight: var(--fw-bold); letter-spacing: var(--ls-eyebrow); text-transform: uppercase; color: var(--text-accent); }
+  .panel h3 { margin: 8px 0 6px; font-size: var(--fs-heading); font-weight: var(--fw-bold); color: var(--text-primary); }
+  .panel p { margin: 0; font-size: var(--fs-sm); color: var(--text-secondary); line-height: var(--lh-normal); }
+  .chip { display:inline-flex; gap:8px; margin-top:14px; }
+  .chip span { background: var(--glass-tint-soft); border:1px solid var(--glass-stroke); border-radius: var(--radius-pill);
+               padding: 5px 11px; font-size: 11px; font-weight: var(--fw-semibold); color: var(--text-secondary); box-shadow: var(--glass-highlight); }
+  .accent-panel { background: var(--glass-tint-accent); box-shadow: var(--glass-highlight), var(--glow-accent); }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+    <div class="grid"></div>
+    <div class="panels">
+      <div class="panel">
+        <div class="eyebrow">Standard surface</div>
+        <h3>Frosted panel</h3>
+        <p>Tint + blur + top highlight + hairline edge + soft ambient shadow. It floats; it doesn't sit.</p>
+        <div class="chip"><span>blur 22</span><span>0.62 tint</span></div>
+      </div>
+      <div class="panel accent-panel">
+        <div class="eyebrow">Active state</div>
+        <h3>Guidance glow</h3>
+        <p>Same material, accent tint + periwinkle halo. Used only when Ouija is pointing.</p>
+        <div class="chip"><span>glow-accent</span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

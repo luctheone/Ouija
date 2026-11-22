@@ -1,0 +1,38 @@
+<!-- @dsCard group="Extension" viewport="1280x800" name="Ouija in context" subtitle="The full extension over a host site — click through the connect-your-pixel journey" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Ouija — in context</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html, body { margin: 0; height: 100%; background: #e9ecf2; font-family: var(--font-sans); }
+  /* browser chrome around the host page, so it reads as "a site the user is on" */
+  .browser { position: absolute; inset: 0; display: flex; flex-direction: column; }
+  .browser__bar { height: 46px; flex: 0 0 auto; background: #dfe3ea; display: flex; align-items: center; gap: 10px; padding: 0 16px; }
+  .browser__lights { display: flex; gap: 7px; }
+  .browser__lights i { width: 12px; height: 12px; border-radius: 50%; }
+  .browser__url { flex: 1; height: 28px; background: #fff; border-radius: 8px; display: flex; align-items: center; padding: 0 14px;
+    font-size: 12.5px; color: #8a91a0; font-family: var(--font-mono); }
+  .browser__stage { position: relative; flex: 1; min-height: 0; }
+</style>
+</head>
+<body>
+  <div class="browser">
+    <div class="browser__bar">
+      <div class="browser__lights"><i style="background:#f0726a"></i><i style="background:#f0b24a"></i><i style="background:#4fd1a8"></i></div>
+      <div class="browser__url" id="url">app.northwind.shop/home</div>
+    </div>
+    <div class="browser__stage" id="stage"></div>
+  </div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <script type="text/babel">
+    const { OuijaExtension } = window.OuijaDesignSystem_93fedd;
+    ReactDOM.createRoot(document.getElementById('stage')).render(<OuijaExtension/>);
+  </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Ouija",
+  "version": "0.1.0",
+  "description": "AI-powered cross-site onboarding guide — sees the page, points the way, never acts.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "background": {
+    "service_worker": "dist/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["dist/content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Ouija"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["sidebar.html", "graph-panel.html", "assets/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

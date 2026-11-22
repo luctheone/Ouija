@@ -1,0 +1,326 @@
+[
+  {
+    "site": "aws",
+    "task": "iam-cross-account-role",
+    "graph_template": {
+      "edges": [
+        {
+          "to": "monitor_1",
+          "from": "nav_1"
+        },
+        {
+          "to": "nav_2",
+          "from": "monitor_1"
+        },
+        {
+          "to": "aws_1",
+          "from": "nav_2"
+        },
+        {
+          "to": "aws_2",
+          "from": "aws_1"
+        },
+        {
+          "to": "aws_3",
+          "from": "aws_2"
+        },
+        {
+          "to": "aws_4",
+          "from": "aws_3"
+        },
+        {
+          "to": "nav_3",
+          "from": "aws_4"
+        },
+        {
+          "to": "monitor_2",
+          "from": "nav_3"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "nav_1",
+          "site": "ouijaboard.vercel.app/demo/aws-monitoring-connect",
+          "confidence": 0.95,
+          "instruction": "Go to CloudPulse to get your AWS credentials",
+          "selector_hint": "",
+          "verify_condition": "URL contains /demo/aws-monitoring-connect"
+        },
+        {
+          "id": "monitor_1",
+          "site": "ouijaboard.vercel.app/demo/aws-monitoring-connect",
+          "confidence": 0.95,
+          "instruction": "Click Copy credentials to save your Account ID and External ID",
+          "selector_hint": "[aria-label='Copy credentials']",
+          "verify_condition": "clipboard contains External ID"
+        },
+        {
+          "id": "nav_2",
+          "site": "ouijaboard.vercel.app/demo/aws-iam-console",
+          "confidence": 0.95,
+          "instruction": "Go to the AWS IAM Console",
+          "selector_hint": "",
+          "verify_condition": "URL contains /demo/aws-iam-console"
+        },
+        {
+          "id": "aws_1",
+          "site": "ouijaboard.vercel.app/demo/aws-iam-console",
+          "confidence": 0.95,
+          "instruction": "From your Ouija clipboard, copy the Account ID and paste it into the Account ID field",
+          "selector_hint": "[aria-label='Account ID']",
+          "verify_condition": "The Account ID field has been filled in"
+        },
+        {
+          "id": "aws_2",
+          "site": "ouijaboard.vercel.app/demo/aws-iam-console",
+          "confidence": 0.95,
+          "instruction": "From your Ouija clipboard, copy the External ID and paste it into the External ID field",
+          "selector_hint": "[aria-label='External ID']",
+          "verify_condition": "The External ID field has been filled in"
+        },
+        {
+          "id": "aws_3",
+          "site": "ouijaboard.vercel.app/demo/aws-iam-console",
+          "confidence": 0.95,
+          "instruction": "Click Create role",
+          "selector_hint": "[aria-label='Create role']",
+          "verify_condition": "Role created"
+        },
+        {
+          "id": "aws_4",
+          "site": "ouijaboard.vercel.app/demo/aws-iam-console",
+          "confidence": 0.95,
+          "instruction": "Copy the Role ARN from the summary",
+          "selector_hint": "[aria-label='Copy Role ARN']",
+          "verify_condition": "clipboard contains OuijaMonitoringRole"
+        },
+        {
+          "id": "nav_3",
+          "site": "ouijaboard.vercel.app/demo/aws-monitoring-connect",
+          "confidence": 0.95,
+          "instruction": "Go back to CloudPulse to finish connecting",
+          "selector_hint": "",
+          "verify_condition": "URL contains /demo/aws-monitoring-connect"
+        },
+        {
+          "id": "monitor_2",
+          "site": "ouijaboard.vercel.app/demo/aws-monitoring-connect",
+          "confidence": 0.95,
+          "instruction": "Paste the Role ARN to connect your account",
+          "selector_hint": "[aria-label='Role ARN']",
+          "verify_condition": "URL contains connected=1"
+        }
+      ],
+      "welcome_message": "Hey! I'll walk you through a simplified cross-account IAM flow \u2014 just click Done when a step is completed. First step: head over to CloudPulse https://ouijaboard.vercel.app/demo/aws-monitoring-connect to grab your credentials. \ud83c\udfaf"
+    }
+  },
+  {
+    "site": "stripe",
+    "task": "payment-link-webhook",
+    "graph_template": {
+      "edges": [
+        {
+          "to": "stripe_1",
+          "from": "nav_1"
+        },
+        {
+          "to": "nav_2",
+          "from": "stripe_1"
+        },
+        {
+          "to": "store_1",
+          "from": "nav_2"
+        },
+        {
+          "to": "nav_3",
+          "from": "store_1"
+        },
+        {
+          "to": "stripe_2",
+          "from": "nav_3"
+        },
+        {
+          "to": "nav_4",
+          "from": "stripe_2"
+        },
+        {
+          "to": "store_2",
+          "from": "nav_4"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "nav_1",
+          "site": "ouijaboard.vercel.app/demo/stripe-dashboard",
+          "confidence": 0.95,
+          "instruction": "Go to your Stripe dashboard",
+          "selector_hint": "",
+          "verify_condition": "URL contains /demo/stripe-dashboard"
+        },
+        {
+          "id": "stripe_1",
+          "site": "ouijaboard.vercel.app/demo/stripe-dashboard",
+          "confidence": 0.95,
+          "instruction": "Click Create payment button \u2014 the embed code is copied for you",
+          "selector_hint": "[aria-label='Create payment button']",
+          "verify_condition": "clipboard contains buy-button"
+        },
+        {
+          "id": "nav_2",
+          "site": "ouijaboard.vercel.app/demo/stripe-storefront",
+          "confidence": 0.95,
+          "instruction": "Go to your storefront to paste the embed code",
+          "selector_hint": "",
+          "verify_condition": "URL contains /demo/stripe-storefront"
+        },
+        {
+          "id": "store_1",
+          "site": "ouijaboard.vercel.app/demo/stripe-storefront",
+          "confidence": 0.95,
+          "instruction": "Paste the embed code into the Payment Button field",
+          "selector_hint": "[aria-label='Embed code']",
+          "verify_condition": "Payment button configured"
+        },
+        {
+          "id": "nav_3",
+          "site": "ouijaboard.vercel.app/demo/stripe-dashboard",
+          "confidence": 0.95,
+          "instruction": "Go back to your Stripe dashboard",
+          "selector_hint": "",
+          "verify_condition": "URL contains /demo/stripe-dashboard"
+        },
+        {
+          "id": "stripe_2",
+          "site": "ouijaboard.vercel.app/demo/stripe-dashboard",
+          "confidence": 0.95,
+          "instruction": "Click Create webhook endpoint \u2014 the signing secret is copied for you",
+          "selector_hint": "[aria-label='Create webhook endpoint']",
+          "verify_condition": "clipboard contains whsec_"
+        },
+        {
+          "id": "nav_4",
+          "site": "ouijaboard.vercel.app/demo/stripe-storefront",
+          "confidence": 0.95,
+          "instruction": "Go back to your storefront to paste the secret",
+          "selector_hint": "",
+          "verify_condition": "URL contains /demo/stripe-storefront"
+        },
+        {
+          "id": "store_2",
+          "site": "ouijaboard.vercel.app/demo/stripe-storefront",
+          "confidence": 0.95,
+          "instruction": "Paste the signing secret into the Webhook Secret field",
+          "selector_hint": "[aria-label='Webhook secret']",
+          "verify_condition": "Webhook secret configured"
+        }
+      ],
+      "welcome_message": "Hey! I'll walk you through a simplified Stripe payments cross-site flow \u2014 just click Done when a step is completed. First step: head over to your Stripe dashboard https://ouijaboard.vercel.app/demo/stripe-dashboard to get started. \ud83c\udfaf"
+    }
+  },
+  {
+    "site": "shopify",
+    "task": "meta-pixel-connect",
+    "graph_template": {
+      "edges": [
+        {
+          "to": "meta_1",
+          "from": "nav_1"
+        },
+        {
+          "to": "meta_2",
+          "from": "meta_1"
+        },
+        {
+          "to": "meta_3",
+          "from": "meta_2"
+        },
+        {
+          "to": "meta_4",
+          "from": "meta_3"
+        },
+        {
+          "to": "nav_2",
+          "from": "meta_4"
+        },
+        {
+          "to": "shopify_1",
+          "from": "nav_2"
+        },
+        {
+          "to": "shopify_2",
+          "from": "shopify_1"
+        },
+        {
+          "to": "shopify_3",
+          "from": "shopify_2"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "nav_1",
+          "site": "ouijaboard.vercel.app/demo/meta-events-manager",
+          "instruction": "Navigate to the Meta Events Manager to get your Pixel credentials",
+          "selector_hint": "",
+          "verify_condition": "URL contains /demo/meta-events-manager"
+        },
+        {
+          "id": "meta_1",
+          "site": "ouijaboard.vercel.app/demo/meta-events-manager",
+          "instruction": "Click the Settings tab to view your Pixel ID and Conversions API",
+          "selector_hint": "[role=tab][aria-selected=false]",
+          "verify_condition": "Settings tab is selected"
+        },
+        {
+          "id": "meta_2",
+          "site": "ouijaboard.vercel.app/demo/meta-events-manager",
+          "instruction": "Copy the Pixel ID \u2014 it will be saved to your Ouija clipboard",
+          "selector_hint": "[aria-label=Copy Pixel ID]",
+          "verify_condition": "clipboard contains Pixel ID"
+        },
+        {
+          "id": "meta_3",
+          "site": "ouijaboard.vercel.app/demo/meta-events-manager",
+          "instruction": "Click Generate access token",
+          "selector_hint": "[aria-label=Generate access token]",
+          "verify_condition": "Access token field is visible"
+        },
+        {
+          "id": "meta_4",
+          "site": "ouijaboard.vercel.app/demo/meta-events-manager",
+          "instruction": "Copy the access token \u2014 it will not be shown again",
+          "selector_hint": "[aria-label=Copy access token]",
+          "verify_condition": "clipboard contains Access Token"
+        },
+        {
+          "id": "nav_2",
+          "site": "ouijaboard.vercel.app/demo/shopify-pixel-settings",
+          "instruction": "Navigate to your Shopify admin to paste the credentials",
+          "selector_hint": "",
+          "verify_condition": "URL contains /demo/shopify-pixel-settings"
+        },
+        {
+          "id": "shopify_1",
+          "site": "ouijaboard.vercel.app/demo/shopify-pixel-settings",
+          "instruction": "Paste your Pixel ID from the clipboard into the Pixel ID field",
+          "selector_hint": "[aria-label=Pixel ID]",
+          "verify_condition": "The Pixel ID input field (aria-label Pixel ID) has a non-empty value. ONLY check this one field, ignore the access token field."
+        },
+        {
+          "id": "shopify_2",
+          "site": "ouijaboard.vercel.app/demo/shopify-pixel-settings",
+          "instruction": "Paste your access token from the clipboard into the token field",
+          "selector_hint": "[aria-label=Access token]",
+          "verify_condition": "The Access token input field (aria-label Access token) has a non-empty value. ONLY check this one field, ignore the Pixel ID field."
+        },
+        {
+          "id": "shopify_3",
+          "site": "ouijaboard.vercel.app/demo/shopify-pixel-settings",
+          "instruction": "Click Save to connect your Meta Pixel",
+          "selector_hint": "[aria-label=Save pixel configuration]",
+          "verify_condition": "The page shows a success state: Meta Pixel connected or Connected checkmark visible"
+        }
+      ],
+      "welcome_message": "Let's connect your Meta Pixel to Shopify. First, head to the Meta Events Manager to grab your credentials:\n\nhttps://ouijaboard.vercel.app/demo/meta-events-manager\n\nOpen that link, then press **Done** when you're there."
+    }
+  }
+]

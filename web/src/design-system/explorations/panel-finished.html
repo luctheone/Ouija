@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Ouija — finished panel · Vapor + Lens with crystal glint edge</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; font-family: var(--font-sans); }
+  .split { display: grid; grid-template-columns: 1fr 1fr; height: 100vh; }
+  .side { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+
+  /* caption */
+  .tag { position: absolute; top: 22px; left: 24px; z-index: 9; font-size: 11px; font-weight: 800;
+    letter-spacing: .12em; text-transform: uppercase; padding: 6px 12px; border-radius: 99px; }
+  .tag.dark { background: rgba(255,255,255,.1); color: #cdd3ff; }
+  .tag.bright { background: rgba(20,20,40,.06); color: #4a4f6b; }
+
+  /* ---------- DARK host (for Vapor) ---------- */
+  .host-dark { background: #0b0e1c; }
+  .host-dark::before { content:''; position:absolute; inset:0;
+    background-image:
+      radial-gradient(700px 460px at 18% 0%, #1c2550 0%, transparent 60%),
+      radial-gradient(620px 520px at 100% 30%, #16313a 0%, transparent 55%),
+      radial-gradient(680px 560px at 60% 110%, #2a1c45 0%, transparent 55%); }
+  .host-dark .hui { position:absolute; inset:0; padding:60px 36px; color:#aab2d5; }
+  .host-dark .hbar { display:flex; gap:10px; margin-bottom:24px; }
+  .host-dark .hbar b{color:#fff;font-weight:800;font-size:15px;}
+  .host-dark .hbar .p{height:26px;border-radius:8px;background:rgba(255,255,255,.07);padding:0 12px;display:flex;align-items:center;font-size:12px;color:#9aa3cc;}
+  .host-dark .hrow{display:flex;gap:14px;margin-bottom:14px;}
+  .host-dark .hcard{flex:1;height:96px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);padding:14px;}
+  .host-dark .hcard .v{font-size:22px;font-weight:800;color:#e7ebff;margin-top:8px;}
+  .host-dark .hcard small{font-size:11px;color:#7c86b4;}
+  .host-dark .hchart{height:150px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);display:flex;align-items:flex-end;gap:8px;padding:14px;}
+  .host-dark .hchart i{flex:1;border-radius:6px 6px 0 0;background:linear-gradient(#5b8def,#3a4db8);}
+
+  /* ---------- BRIGHT host (for Lens) ---------- */
+  .host-bright { background: #eef1f6; }
+  .host-bright::before { content:''; position:absolute; inset:0;
+    background-image:
+      radial-gradient(620px 420px at 88% -5%, #c7d6ff 0%, transparent 55%),
+      radial-gradient(560px 520px at 6% 30%, #c9f3e3 0%, transparent 55%),
+      radial-gradient(620px 520px at 70% 110%, #f3d9f0 0%, transparent 55%); }
+  .host-bright .hui{position:absolute;inset:0;padding:60px 36px;color:#5a6072;}
+  .host-bright .hbar{display:flex;gap:10px;margin-bottom:24px;align-items:center;}
+  .host-bright .hbar b{color:#1a1f36;font-weight:800;font-size:15px;}
+  .host-bright .hbar .p{height:26px;border-radius:8px;background:#fff;border:1px solid #e3e8f0;padding:0 12px;display:flex;align-items:center;font-size:12px;color:#6b7280;}
+  .host-bright .hrow{display:flex;gap:14px;margin-bottom:14px;}
+  .host-bright .hcard{flex:1;height:96px;border-radius:14px;background:#fff;border:1px solid #e6ebf2;padding:14px;box-shadow:0 1px 3px rgba(20,20,50,.05);}
+  .host-bright .hcard .v{font-size:22px;font-weight:800;color:#1a1f36;margin-top:8px;}
+  .host-bright .hcard small{font-size:11px;color:#8a90a3;}
+  .host-bright .hcard.col1 .v{color:#ff8a5b;} .host-bright .hcard.col2 .v{color:#19a974;}
+  .host-bright .hchart{height:150px;border-radius:14px;background:#fff;border:1px solid #e6ebf2;display:flex;align-items:flex-end;gap:8px;padding:14px;}
+  .host-bright .hchart i{flex:1;border-radius:6px 6px 0 0;}
+
+  /* ============================================================
+     THE GLINT EDGE — B's crystal shine, woven in as a traveling rim
+     ============================================================ */
+  @property --glint { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+
+  .panel { position: relative; width: 332px; border-radius: 28px; padding: 18px 18px 18px;
+    isolation: isolate; }
+
+  /* traveling comet of light around the rounded rim */
+  .panel::after {
+    content:''; position:absolute; inset:0; border-radius:inherit; padding:1.4px; pointer-events:none; z-index:3;
+    background: conic-gradient(from var(--glint),
+      transparent 0deg, transparent 66deg,
+      rgba(255,255,255,0.25) 80deg, rgba(255,255,255,0.95) 90deg, rgba(255,255,255,0.25) 100deg,
+      transparent 116deg, transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    animation: glint-travel 6.5s cubic-bezier(.6,0,.4,1) infinite;
+  }
+  @keyframes glint-travel { to { --glint: 360deg; } }
+
+  /* soft light that passes BEHIND the text (a gentle gleam, never a white bar) */
+  .panel::before {
+    content:''; position:absolute; inset:0; border-radius:inherit; overflow:hidden; pointer-events:none; z-index:1;
+    background: linear-gradient(115deg, transparent 42%, rgba(255,255,255,0.30) 50%, rgba(255,255,255,0.04) 56%, transparent 66%);
+    background-size: 260% 100%; background-position: 180% 0;
+    mix-blend-mode: screen;
+    animation: sweep 8s ease-in-out infinite;
+  }
+  @keyframes sweep { 0% { background-position: 175% 0; } 14%,100% { background-position: -115% 0; } }
+
+  /* content rides ABOVE the gleam */
+  .pbody { position: relative; z-index: 2; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .panel::after, .panel::before { animation: none; }
+    .panel::before { opacity: 0; }
+    .panel::after { background: linear-gradient(135deg, rgba(255,255,255,.7), rgba(255,255,255,.15)); }
+  }
+
+  /* shared content */
+  .phead { display:flex; align-items:center; gap:11px; margin-bottom:14px; }
+  .mk { width:34px;height:34px;border-radius:50%;display:grid;place-items:center; flex:0 0 auto; }
+  .mk svg{width:18px;height:18px;}
+  .pid{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0;}
+  .pname{font-weight:800;font-size:16px;letter-spacing:-.01em;line-height:1.1;}
+  .psub{font-size:12px;font-weight:600;}
+  .pmin{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;border:none;cursor:pointer;flex:0 0 auto;}
+  .pmin svg{width:16px;height:16px;}
+  .prog{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .bar{flex:1;height:5px;border-radius:99px;overflow:hidden;}
+  .bar i{display:block;height:100%;width:50%;border-radius:99px;}
+  .pstep{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;}
+  .msg{display:flex;gap:10px;align-items:flex-end;margin-bottom:10px;}
+  .mavatar{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;}
+  .mavatar svg{width:14px;height:14px;}
+  .bubble{padding:11px 14px;border-radius:18px 18px 18px 6px;font-size:14.5px;font-weight:500;line-height:1.45;}
+  .bubble b{font-weight:800;}
+  .msg.user{flex-direction:row-reverse;}
+  .bubble.u{border-radius:18px 18px 6px 18px;color:#fff;font-weight:600;}
+  .pbtn{width:100%;height:46px;margin-top:8px;border:none;border-radius:99px;font-family:inherit;font-weight:700;font-size:15px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;}
+  .pbtn svg{width:17px;height:17px;}
+
+  /* ===== Vapor (dark host) ===== */
+  .vapor { background: rgba(255,255,255,0.12);
+    -webkit-backdrop-filter: blur(32px) saturate(160%); backdrop-filter: blur(32px) saturate(160%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 30px 70px -30px rgba(0,0,0,0.6); }
+  .vapor .pname{color:#fff;} .vapor .psub{color:rgba(255,255,255,.6);}
+  .vapor .mk{background:rgba(255,255,255,.16);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.5), 0 0 18px rgba(138,142,243,.5);}
+  .vapor .pmin{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);}
+  .vapor .bar{background:rgba(255,255,255,.15);} .vapor .bar i{background:linear-gradient(90deg,#8a8ef3,#a3a9f7);box-shadow:0 0 12px rgba(138,142,243,.7);}
+  .vapor .pstep{color:rgba(255,255,255,.7);}
+  .vapor .mavatar{background:rgba(255,255,255,.16);color:#fff;box-shadow:0 0 14px rgba(138,142,243,.5);}
+  .vapor .bubble{background:rgba(255,255,255,.2);color:#fff;-webkit-backdrop-filter:blur(14px) saturate(150%);backdrop-filter:blur(14px) saturate(150%);box-shadow:inset 0 1px 0 rgba(255,255,255,.32);}
+  .vapor .bubble.u{background:linear-gradient(180deg,#8a8ef3,#6d6ce6);}
+  .vapor .pbtn{background:linear-gradient(180deg,#8a8ef3,#5d5ce0);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 10px 26px -8px rgba(93,92,224,.7);}
+
+  /* ===== Lens (bright host) ===== */
+  .lens { border-radius: 30px;
+    background:
+      radial-gradient(135% 115% at 20% 8%, rgba(255,255,255,0.66), rgba(255,255,255,0.16) 56%),
+      rgb(var(--accent-rgb) / 0.12);
+    -webkit-backdrop-filter: blur(22px) saturate(235%); backdrop-filter: blur(22px) saturate(235%);
+    box-shadow: inset 0 2px 8px rgba(255,255,255,0.7), inset 0 -12px 26px -12px rgb(var(--accent-rgb) / 0.3), 0 26px 56px -18px rgba(40,30,90,0.4); }
+  .lens .pname{color:var(--ink-900);} .lens .psub{color:var(--ink-600);}
+  .lens .mk{background:radial-gradient(circle at 35% 30%,#fff,rgb(var(--accent-rgb)/.22));color:var(--accent-600);box-shadow:inset 0 1px 0 #fff;}
+  .lens .pmin{background:rgba(255,255,255,.5);color:var(--ink-600);}
+  .lens .bar{background:rgba(120,120,160,.2);} .lens .bar i{background:linear-gradient(90deg,var(--accent-400),var(--accent-500));box-shadow:0 0 10px rgb(var(--accent-rgb)/.6);}
+  .lens .pstep{color:var(--accent-700);}
+  .lens .mavatar{background:radial-gradient(circle at 35% 30%,#fff,rgb(var(--accent-rgb)/.2));color:var(--accent-600);}
+  .lens .bubble{background:rgba(255,255,255,.74);color:var(--ink-900);-webkit-backdrop-filter:blur(12px) saturate(130%);backdrop-filter:blur(12px) saturate(130%);box-shadow:inset 0 1px 0 rgba(255,255,255,.6);}
+  .lens .bubble.u{background:linear-gradient(180deg,var(--accent-400),var(--accent-600));}
+  .lens .pbtn{background:linear-gradient(180deg,var(--accent-400),var(--accent-600));box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 10px 26px -8px rgb(var(--accent-rgb)/.6);}
+</style>
+</head>
+<body>
+  <div class="split">
+    <div class="side host-dark">
+      <span class="tag dark">A · Vapor — for dark hosts</span>
+      <div class="hui">
+        <div class="hbar"><b>Vertex</b><span class="p">Overview</span><span class="p">Logs</span><span class="p">Team</span></div>
+        <div class="hrow"><div class="hcard"><small>Deploys</small><div class="v">1,204</div></div><div class="hcard"><small>p95 latency</small><div class="v">82ms</div></div></div>
+        <div class="hchart"><i style="height:50%"></i><i style="height:75%"></i><i style="height:40%"></i><i style="height:88%"></i><i style="height:62%"></i><i style="height:95%"></i><i style="height:55%"></i></div>
+      </div>
+      <div class="panel vapor" id="A"></div>
+    </div>
+
+    <div class="side host-bright">
+      <span class="tag bright">C · Liquid lens — for bright hosts</span>
+      <div class="hui">
+        <div class="hbar"><b>Aurora</b><span class="p">Insights</span><span class="p">Audience</span><span class="p">Billing</span></div>
+        <div class="hrow"><div class="hcard col1"><small>Revenue</small><div class="v">$48.2k</div></div><div class="hcard col2"><small>Active</small><div class="v">12,910</div></div></div>
+        <div class="hchart"><i style="height:55%;background:#5b8def"></i><i style="height:80%;background:#19c37d"></i><i style="height:45%;background:#ffd16b"></i><i style="height:90%;background:#b15bf0"></i><i style="height:60%;background:#ff8a5b"></i><i style="height:72%;background:#6be7c1"></i></div>
+      </div>
+      <div class="panel lens" id="C"></div>
+    </div>
+  </div>
+
+  <script>
+    const spark='<svg viewBox="0 0 64 64" fill="none"><path d="M32 6C33.2 16.8 38.2 24.5 47.6 27.4C50.8 28.4 50.8 35.6 47.6 36.6C38.2 39.5 33.2 47.2 32 58C30.8 47.2 25.8 39.5 16.4 36.6C13.2 35.6 13.2 28.4 16.4 27.4C25.8 24.5 30.8 16.8 32 6Z" fill="currentColor"/></svg>';
+    const minus='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg>';
+    const arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>';
+    const content=`<div class="pbody">
+      <div class="phead">
+        <span class="mk">${spark}</span>
+        <span class="pid"><span class="pname">Ouija</span><span class="psub">Connect your pixel</span></span>
+        <button class="pmin">${minus}</button>
+      </div>
+      <div class="prog"><span class="bar"><i></i></span><span class="pstep">Step 3 of 6</span></div>
+      <div class="msg"><span class="mavatar">${spark}</span><span class="bubble">Open <b>Settings</b> in the left menu — I've pointed it out for you.</span></div>
+      <div class="msg user"><span class="bubble u">Found it</span></div>
+      <button class="pbtn">I did it — next ${arrow}</button>
+    </div>`;
+    A.innerHTML=content; C.innerHTML=content;
+  </script>
+</body>
+</html>

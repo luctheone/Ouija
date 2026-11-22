@@ -1,0 +1,47 @@
+<!-- @dsCard group="Brand" viewport="700x200" name="Motion — summoned, not imposed" subtitle="Soft spring overshoot on appearance; calm easings between states" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; font-family: var(--font-sans); background: var(--white); color: var(--text-primary); }
+  .wrap { padding: 22px 26px; display: flex; gap: 18px; }
+  .curve { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .name { font-size: 12px; font-weight: var(--fw-bold); color: var(--text-secondary); }
+  .desc { font-size: 10.5px; color: var(--text-muted); font-family: var(--font-mono); }
+  svg { width: 100%; height: 84px; background: var(--ink-50); border-radius: var(--radius-md); }
+  .dot { animation: run 2.4s infinite; }
+  @keyframes run { 0%{transform:translateX(0)} 50%{transform:translateX(96px)} 100%{transform:translateX(0)} }
+  .demo { display:flex; align-items:center; gap:8px; }
+  .ball { width: 26px; height: 26px; border-radius: var(--radius-pill); background: var(--accent-500); box-shadow: var(--glow-accent); }
+  .track { flex:1; }
+  .bouncy .ball { animation: pop 2.2s var(--spring-bouncy) infinite; }
+  .soft .ball { animation: pop 2.2s var(--spring-soft) infinite; }
+  .glide .ball { animation: pop 2.2s var(--ease-out) infinite; }
+  @keyframes pop { 0%,100%{transform:translateX(0) scale(.7);opacity:.4} 12%,80%{transform:translateX(120px) scale(1);opacity:1} }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="curve bouncy"><span class="name">Orb → panel summon</span><span class="desc">--spring-bouncy</span>
+      <svg viewBox="0 0 140 60" preserveAspectRatio="none"><div></div></svg></div>
+    <div class="curve soft"><span class="name">Surface appear</span><span class="desc">--spring-soft</span>
+      <svg viewBox="0 0 140 60" preserveAspectRatio="none"></svg></div>
+    <div class="curve glide"><span class="name">State cross-fade</span><span class="desc">--ease-out</span>
+      <svg viewBox="0 0 140 60" preserveAspectRatio="none"></svg></div>
+  </div>
+  <script>
+    // replace each svg with a live easing demo track
+    document.querySelectorAll('.curve').forEach(c => {
+      const svg = c.querySelector('svg');
+      const track = document.createElement('div');
+      track.className = 'demo';
+      track.style.cssText = 'height:84px;background:var(--ink-50);border-radius:var(--radius-md);padding:0 8px;align-items:center';
+      track.innerHTML = '<div class="track"><div class="ball"></div></div>';
+      svg.replaceWith(track);
+      c.querySelector('.ball').style.animationTimingFunction = getComputedStyle(document.documentElement).getPropertyValue(c.querySelector('.desc').textContent.trim());
+    });
+  </script>
+</body>
+</html>

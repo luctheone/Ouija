@@ -1,0 +1,67 @@
+/* ============================================================
+   OUIJA · TYPOGRAPHY TOKENS
+   Two-family system: Instrument Serif for identity, Manrope for UI.
+
+   WHEN TO USE EACH:
+   --font-serif  → panel name, display moments, AI-voice prose (always italic)
+   --font-sans   → all chrome: labels, buttons, nav, captions, body
+   --font-mono   → pixel IDs, API keys, tokens, any text the user copies
+
+   The serif is precious and intentional — never use it for UI chrome.
+   ============================================================ */
+
+:root {
+  /* ─── FAMILIES ───────────────────────────────────────────────*/
+  --font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif; /* @kind font */
+  --font-sans:  'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; /* @kind font */
+  --font-mono:  'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace; /* @kind font */
+
+  /* ─── SCALE ──────────────────────────────────────────────────
+     Tuned for the floating sidebar surface (compact, high-density).
+  ──────────────────────────────────────────────────────────── */
+  --fs-identity: 28px;   /* panel name (Instrument Serif italic)    */
+  --fs-display:  44px;   /* fullscreen / large serif display moment */
+  --fs-title:    20px;   /* section / journey title                 */
+  --fs-heading:  17px;   /* step heading                            */
+  --fs-body:     15px;   /* default conversational body             */
+  --fs-sm:       13px;   /* secondary text, captions                */
+  --fs-xs:       11px;   /* labels, eyebrows, step counters         */
+  --fs-mono:     13px;   /* IDs, keys, code                         */
+
+  /* ─── WEIGHTS ────────────────────────────────────────────────*/
+  --fw-regular:  400; /* @kind font */
+  --fw-medium:   500; /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold:     700; /* @kind font */
+  --fw-extra:    800; /* @kind font */
+
+  /* ─── LINE HEIGHTS ───────────────────────────────────────────*/
+  --lh-tight:   1.15; /* @kind other */
+  --lh-snug:    1.30; /* @kind other */
+  --lh-normal:  1.50; /* @kind other */
+  --lh-relaxed: 1.68; /* @kind other */
+
+  /* ─── LETTER SPACING ─────────────────────────────────────────*/
+  --ls-tight:   -0.025em; /* @kind other */
+  --ls-normal:   0em;     /* @kind other */
+  --ls-wide:     0.04em;  /* @kind other */
+  --ls-eyebrow:  0.10em;  /* @kind other */
+
+  /* ─── SEMANTIC PAIRINGS (role → token) ──────────────────────
+     Use these as shorthand when building components.
+  ──────────────────────────────────────────────────────────── */
+  --text-identity-family: var(--font-serif);    /* + font-style: italic */
+  --text-identity-size:   var(--fs-identity);
+  --text-identity-lh:     var(--lh-tight);
+
+  --text-display-family:  var(--font-serif);    /* + font-style: italic */
+  --text-display-size:    var(--fs-display);
+  --text-display-lh:      var(--lh-tight);
+
+  --text-ui-family:       var(--font-sans);
+  --text-body-weight:     var(--fw-medium);
+  --text-label-weight:    var(--fw-bold);
+
+  --text-data-family:     var(--font-mono);
+  --text-data-size:       var(--fs-mono);
+}

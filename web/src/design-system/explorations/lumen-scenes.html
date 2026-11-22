@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Ouija — Production Directions</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--s:'Instrument Serif',serif;font-family:'Manrope',sans-serif;}
+@property --dkg{syntax:'<angle>';inherits:false;initial-value:45deg;}
+
+/* ── ECOM ADMIN HOST ── */
+.he{position:absolute;inset:0;background:#0c0f16;}
+.he-top{position:absolute;top:0;left:0;right:0;height:48px;background:#111520;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;padding:0 20px;gap:10px;}
+.he-nav{position:absolute;top:48px;left:0;bottom:0;width:192px;background:#0a0d14;border-right:1px solid rgba(255,255,255,.04);padding:10px 0;}
+.he-ni{height:36px;display:flex;align-items:center;gap:9px;padding:0 14px;font-size:13px;font-weight:500;color:rgba(255,255,255,.35);}
+.he-ni.on{color:rgba(255,255,255,.88);background:rgba(255,255,255,.06);}
+.he-ni-dot{width:14px;height:14px;border-radius:4px;background:rgba(255,255,255,.08);flex:0 0 auto;}
+.he-main{position:absolute;top:48px;left:192px;right:0;bottom:0;padding:22px;overflow:hidden;}
+.he-h{font-size:15px;font-weight:700;color:rgba(255,255,255,.82);margin-bottom:16px;}
+.he-tbl{width:100%;border-collapse:collapse;}
+.he-th{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.28);text-transform:uppercase;letter-spacing:.08em;padding:0 12px 10px;text-align:left;}
+.he-tr{border-top:1px solid rgba(255,255,255,.04);}
+.he-td{padding:11px 12px;font-size:13px;color:rgba(255,255,255,.62);}
+.he-td.oid{color:#7174ee;font-weight:600;}
+.he-td.amt{color:rgba(255,255,255,.82);font-weight:600;}
+.bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700;}
+.bdg-paid{background:rgba(47,191,147,.15);color:#2fbf93;}
+.bdg-pend{background:rgba(240,178,74,.15);color:#f0b24a;}
+.bdg-new{background:rgba(113,116,238,.15);color:#7174ee;}
+
+/* ── META ADMIN HOST ── */
+.hm{position:absolute;inset:0;background:#0d1117;}
+.hm-top{position:absolute;top:0;left:0;right:0;height:48px;background:#0a0d12;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:center;padding:0 20px;gap:12px;}
+.hm-nav{position:absolute;top:48px;left:0;bottom:0;width:210px;background:#090c11;border-right:1px solid rgba(255,255,255,.04);padding:12px 0;}
+.hm-ng{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.2);padding:10px 14px 4px;}
+.hm-ni{height:33px;display:flex;align-items:center;padding:0 14px;font-size:12.5px;color:rgba(255,255,255,.38);}
+.hm-ni.on{color:rgba(255,255,255,.88);background:rgba(8,102,255,.1);}
+.hm-main{position:absolute;top:48px;left:210px;right:0;bottom:0;padding:22px 26px;overflow:hidden;}
+.hm-sh{font-size:14px;font-weight:700;color:rgba(255,255,255,.78);margin-bottom:18px;}
+.hm-fl{margin-bottom:14px;max-width:440px;}
+.hm-fl-lbl{font-size:10.5px;font-weight:600;color:rgba(255,255,255,.3);letter-spacing:.04em;margin-bottom:5px;}
+.hm-inp{height:36px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;padding:0 12px;font-family:monospace;font-size:12.5px;color:rgba(255,255,255,.62);}
+.hm-inp.hi{border-color:rgba(8,102,255,.45);box-shadow:0 0 0 3px rgba(8,102,255,.1);}
+.hm-chk-row{display:flex;align-items:center;gap:9px;margin-bottom:8px;font-size:13px;color:rgba(255,255,255,.45);}
+.hm-chk{width:14px;height:14px;border-radius:4px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04);flex:0 0 auto;}
+
+/* ── DARK OUIJA PANEL (Reliquary + Solstice) ── */
+.dk-p{position:absolute;right:20px;top:58px;width:280px;border-radius:24px;isolation:isolate;
+  background:radial-gradient(130% 110% at 22% 7%,rgba(175,115,45,.14),transparent 55%),rgba(12,7,2,.84);
+  backdrop-filter:blur(28px) saturate(175%);-webkit-backdrop-filter:blur(28px) saturate(175%);
+  box-shadow:inset 0 1.5px 0 rgba(210,160,70,.28),inset 0 -12px 28px -12px rgba(175,110,30,.1),0 0 0 .5px rgba(175,125,50,.18),0 32px 80px -18px rgba(0,0,0,.96);}
+.dk-p::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;z-index:3;pointer-events:none;
+  background:conic-gradient(from var(--dkg),transparent 0deg,transparent 66deg,rgba(195,148,60,.1) 75deg,rgba(255,210,100,.7) 84deg,rgba(195,148,60,.1) 93deg,transparent 102deg,transparent 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;animation:dkglint 9s ease-in-out infinite;}
+@keyframes dkglint{to{--dkg:405deg;}}
+.dk-bd{position:relative;z-index:2;padding:18px 16px 16px;}
+.dk-hd{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.dk-ik,.dk-av{border-radius:50%;display:grid;place-items:center;color:#c08828;flex:0 0 auto;}
+.dk-ik{width:34px;height:34px;background:radial-gradient(circle at 38% 32%,rgba(215,160,70,.24),rgba(110,70,18,.12));border:1px solid rgba(205,155,60,.22);}
+.dk-ik svg{width:16px;height:16px;}
+.dk-av{width:22px;height:22px;background:radial-gradient(circle at 38% 30%,rgba(215,160,70,.22),rgba(110,70,18,.1));border:1px solid rgba(205,155,60,.18);}
+.dk-av svg{width:11px;height:11px;}
+.dk-wm{font-family:var(--s);font-style:italic;font-size:24px;line-height:.95;color:#eedcb2;flex:1;letter-spacing:.01em;}
+.dk-ws{font-size:10px;color:#5e3e18;font-weight:600;margin-top:1px;}
+.dk-mn{width:26px;height:26px;border-radius:50%;border:none;background:rgba(255,255,255,.05);cursor:pointer;display:grid;place-items:center;color:#6a4c22;flex:0 0 auto;}
+.dk-mn svg{width:13px;height:13px;}
+.dk-pr{display:flex;align-items:center;gap:4px;margin-bottom:14px;}
+.nd{width:7px;height:7px;border-radius:50%;flex:0 0 auto;}
+.nd.dn{background:rgba(200,148,55,.62);border:1px solid rgba(200,148,55,.8);}
+.nd.nw{width:9px;height:9px;background:transparent;border:1.5px solid #c08828;box-shadow:0 0 10px rgba(200,148,55,.65),inset 0 0 4px rgba(200,148,55,.3);}
+.nd.ft{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);}
+.nd-seg{flex:1;height:1px;background:rgba(200,148,55,.14);}
+.nd-lbl{font-size:10px;font-weight:600;color:rgba(200,148,55,.5);margin-left:2px;white-space:nowrap;}
+.dk-st{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.dk-msg{display:flex;gap:7px;align-items:flex-end;}
+.dk-msg.u{flex-direction:row-reverse;}
+.dk-bb{padding:9px 12px;border-radius:14px 14px 14px 4px;font-size:13px;line-height:1.5;background:rgba(175,120,40,.13);border:1px solid rgba(175,120,40,.17);color:#c8a870;max-width:205px;text-wrap:pretty;}
+.dk-bb b{color:#eedcb2;font-weight:600;}
+.dk-bb.u{border-radius:14px 14px 4px 14px;background:linear-gradient(140deg,rgba(200,148,50,.32),rgba(170,110,28,.22));border-color:rgba(200,148,50,.28);color:#e8cfa0;font-weight:500;}
+.dk-ct{width:100%;height:44px;border-radius:99px;border:1px solid rgba(205,155,60,.24);background:rgba(195,145,55,.07);color:#c08828;font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;letter-spacing:.01em;}
+.dk-ct svg{width:14px;height:14px;}
+.dk-orb{position:absolute;bottom:20px;left:16px;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 38% 32%,rgba(215,160,70,.36),rgba(80,50,12,.22));border:1px solid rgba(205,155,60,.28);box-shadow:0 0 18px rgba(200,148,55,.24);display:grid;place-items:center;color:#c08828;}
+.dk-orb svg{width:20px;height:20px;}
+
+/* ── LIGHT OUIJA PANEL (Vitrine) ── */
+.lt-p{position:absolute;right:20px;top:58px;width:268px;border-radius:5px;
+  border:.5px solid rgba(0,0,0,.11);background:rgba(242,240,236,.72);
+  backdrop-filter:blur(14px) saturate(120%);-webkit-backdrop-filter:blur(14px) saturate(120%);
+  box-shadow:0 1px 40px rgba(0,0,0,.07),0 0 0 .5px rgba(0,0,0,.07);}
+.lt-p::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.22) 50%,rgba(255,255,255,.04) 57%,transparent 67%);background-size:260% 100%;background-position:180% 0;mix-blend-mode:screen;animation:ltsw 10s ease-in-out infinite;pointer-events:none;}
+@keyframes ltsw{0%{background-position:175% 0;}18%,100%{background-position:-120% 0;}}
+.lt-bd{position:relative;z-index:1;padding:22px 20px 18px;}
+.lt-tp{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.lt-dp-row{display:flex;gap:3px;align-items:center;}
+.lt-dp{width:5px;height:5px;border-radius:50%;background:#d4d0ca;}
+.lt-dp.on{background:#1a1714;}
+.lt-rom{font-family:var(--s);font-style:italic;font-size:12px;color:#aaa69e;}
+.lt-wm{font-family:var(--s);font-size:54px;line-height:.82;letter-spacing:-.025em;color:#1a1714;margin-bottom:14px;}
+.lt-rl{height:.5px;background:#1a1714;opacity:.8;margin-bottom:13px;}
+.lt-st{display:flex;flex-direction:column;gap:7px;margin-bottom:13px;}
+.lt-msg{display:flex;align-items:flex-end;}
+.lt-msg.u{flex-direction:row-reverse;}
+.lt-bb{padding:8px 11px;border-radius:10px 10px 10px 3px;font-size:12.5px;line-height:1.55;background:rgba(0,0,0,.05);border:.5px solid rgba(0,0,0,.08);color:#3a3530;max-width:196px;text-wrap:pretty;}
+.lt-bb b{color:#1a1714;font-weight:600;}
+.lt-bb.u{border-radius:10px 10px 3px 10px;background:rgba(26,23,20,.08);border-color:rgba(26,23,20,.1);color:#1a1714;font-weight:500;}
+.lt-ct{width:100%;height:40px;border-radius:2px;border:.5px solid #1a1714;background:transparent;color:#1a1714;font-family:'Manrope',sans-serif;font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;}
+.lt-ct svg{width:12px;height:12px;}
+.lt-orb{position:absolute;bottom:20px;left:16px;width:38px;height:38px;border-radius:50%;background:rgba(242,240,236,.9);border:.5px solid rgba(0,0,0,.14);box-shadow:0 2px 14px rgba(0,0,0,.1);display:grid;place-items:center;color:#1a1714;}
+.lt-orb svg{width:16px;height:16px;}
+
+/* ── SPOTLIGHT / OVERLAY ── */
+.spt{position:absolute;border-radius:8px;box-shadow:0 0 0 9999px rgba(0,0,0,.26),0 0 22px 5px rgba(113,116,238,.18);z-index:5;pointer-events:none;}
+.dk-tt{position:absolute;border-radius:12px;padding:10px 13px;display:flex;align-items:center;gap:10px;
+  background:rgba(12,7,2,.9);border:1px solid rgba(175,125,50,.2);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:inset 0 1px 0 rgba(210,160,70,.2),0 8px 28px rgba(0,0,0,.7);z-index:10;}
+.lt-tt{position:absolute;border-radius:5px;padding:10px 13px;display:flex;align-items:center;gap:10px;
+  background:rgba(242,240,236,.94);border:.5px solid rgba(0,0,0,.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:0 6px 22px rgba(0,0,0,.12);z-index:10;}
+.tt-id{font-family:monospace;font-size:12px;}
+.dk-tt .tt-id{color:#eedcb2;}
+.lt-tt .tt-id{color:#1a1714;}
+.tt-cp{height:28px;padding:0 10px;border-radius:6px;border:none;cursor:pointer;font-size:11px;font-weight:700;}
+.dk-tt .tt-cp{background:rgba(195,145,55,.18);color:#c08828;border:1px solid rgba(195,145,55,.25);}
+.lt-tt .tt-cp{background:rgba(0,0,0,.1);color:#1a1714;border:.5px solid rgba(0,0,0,.2);}
+.ptr{position:absolute;display:flex;align-items:center;gap:6px;z-index:11;pointer-events:none;}
+
+/* ── BROWSER WINDOW ── */
+.bw{border-radius:10px 10px 6px 6px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.08);flex:0 0 auto;}
+.bw-ch{height:34px;background:#1a1d24;display:flex;align-items:center;padding:0 12px;gap:6px;}
+.bw-url{flex:1;height:20px;border-radius:3px;background:#252830;margin:0 8px;display:flex;align-items:center;padding:0 10px;font-size:10px;color:rgba(255,255,255,.38);font-weight:500;}
+.bw-bd{position:relative;overflow:hidden;}
+
+/* ── COMPONENTS ── */
+.comp-item{display:flex;flex-direction:column;gap:7px;}
+.comp-lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+.dk-comp-lbl{color:rgba(200,148,55,.4);}
+.lt-comp-lbl{color:rgba(0,0,0,.28);}
+.clip{border-radius:14px;padding:11px 13px;display:flex;align-items:center;gap:10px;}
+.dk-clip{background:rgba(12,7,2,.9);border:1px solid rgba(175,125,50,.2);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 rgba(210,160,70,.2),0 8px 28px rgba(0,0,0,.6);}
+.lt-clip{background:rgba(242,240,236,.94);border:.5px solid rgba(0,0,0,.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 6px 22px rgba(0,0,0,.1);}
+.clip-key{font-size:9px;font-weight:700;border-radius:4px;padding:2px 6px;font-family:monospace;}
+.dk-clip-key{background:rgba(200,148,55,.1);color:rgba(200,148,55,.65);border:1px solid rgba(200,148,55,.15);}
+.lt-clip-key{background:rgba(0,0,0,.07);color:#7a756e;border:.5px solid rgba(0,0,0,.1);}
+.clip-val{font-family:monospace;font-size:12px;}
+.dk-clip-val{color:#eedcb2;}
+.lt-clip-val{color:#1a1714;}
+.clip-acts{display:flex;gap:5px;}
+.cl-btn{height:27px;padding:0 9px;border-radius:6px;border:none;cursor:pointer;font-size:11px;font-weight:700;}
+.dk-cl{background:rgba(195,145,55,.14);color:#c08828;border:1px solid rgba(195,145,55,.2);}
+.lt-cl{background:rgba(0,0,0,.08);color:#1a1714;border:.5px solid rgba(0,0,0,.15);}
+.dk-cl.x{background:transparent;color:rgba(200,148,55,.35);border-color:transparent;}
+.lt-cl.x{background:transparent;color:rgba(0,0,0,.25);border-color:transparent;}
+.err{border-radius:14px 14px 14px 4px;padding:10px 13px;max-width:215px;}
+.dk-err{background:rgba(240,114,106,.08);border:1px solid rgba(240,114,106,.18);color:#e09888;}
+.lt-err{background:rgba(185,45,38,.05);border:.5px solid rgba(185,45,38,.14);color:#7a2820;}
+.err-in{display:flex;align-items:flex-start;gap:8px;}
+.err-dot{width:6px;height:6px;border-radius:50%;flex:0 0 auto;margin-top:4px;}
+.dk-err .err-dot{background:rgba(240,114,106,.65);}
+.lt-err .err-dot{background:rgba(185,45,38,.55);}
+.err-tx{font-size:13px;line-height:1.5;}
+.cfm{border-radius:14px 14px 14px 4px;padding:10px 13px;}
+.dk-cfm{background:rgba(175,120,40,.13);border:1px solid rgba(175,120,40,.17);color:#c8a870;}
+.lt-cfm{background:rgba(0,0,0,.05);border:.5px solid rgba(0,0,0,.08);color:#3a3530;}
+.cfm-msg{font-size:13px;line-height:1.5;margin-bottom:9px;}
+.dk-cfm .cfm-msg b{color:#eedcb2;}
+.lt-cfm .cfm-msg b{color:#1a1714;}
+.cfm-acts{display:flex;gap:6px;}
+.cfm-y,.cfm-n{height:29px;padding:0 12px;border-radius:99px;font-size:12px;font-weight:700;cursor:pointer;border:none;}
+.dk-cfm .cfm-y{background:linear-gradient(140deg,rgba(200,148,50,.38),rgba(170,110,28,.28));color:#e8cfa0;border:1px solid rgba(200,148,50,.28);}
+.dk-cfm .cfm-n{background:transparent;color:rgba(200,148,55,.45);border:1px solid rgba(200,148,55,.14);}
+.lt-cfm .cfm-y{background:#1a1714;color:#f0ece6;}
+.lt-cfm .cfm-n{background:transparent;color:#7a756e;border:.5px solid rgba(0,0,0,.15);}
+
+@media(prefers-reduced-motion:reduce){.dk-p::after,.lt-p::before{animation:none;}.lt-p::before{opacity:0;}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {DesignCanvas,DCSection,DCArtboard} = window;
+
+const SPARK = `<svg viewBox="0 0 64 64" fill="none"><path d="M32 6C33.2 16.8 38.2 24.5 47.6 27.4C50.8 28.4 50.8 35.6 47.6 36.6C38.2 39.5 33.2 47.2 32 58C30.8 47.2 25.8 39.5 16.4 36.6C13.2 35.6 13.2 28.4 16.4 27.4C25.8 24.5 30.8 16.8 32 6Z" fill="currentColor"/></svg>`;
+const MINUS = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg>`;
+const ARROW = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>`;
+
+const Ico = ({html}) => <span style={{display:'inline-flex',alignItems:'center',lineHeight:0,flexShrink:0}} dangerouslySetInnerHTML={{__html:html}}/>;
+
+const ORDERS = [
+  {id:'#4821',cust:'Aiko Tanaka',amt:'$248.00',s:'paid'},
+  {id:'#4820',cust:'Marcus Chen',amt:'$89.50',s:'paid'},
+  {id:'#4819',cust:'Sofia García',amt:'$312.00',s:'pend'},
+  {id:'#4818',cust:'Jake Miller',amt:'$145.00',s:'paid'},
+  {id:'#4817',cust:'Emma Wilson',amt:'$78.00',s:'new'},
+];
+
+/* ── HOST BACKGROUNDS ── */
+function EcomHost() {
+  return (
+    <div className="he">
+      <div className="he-top">
+        <div style={{width:22,height:22,borderRadius:6,background:'rgba(113,116,238,.8)',display:'grid',placeItems:'center',fontSize:11,fontWeight:800,color:'#fff',flexShrink:0}}>S</div>
+        <span style={{fontSize:12,color:'rgba(255,255,255,.4)',fontWeight:500}}>Store <span style={{color:'rgba(255,255,255,.78)'}}>/ Orders</span></span>
+        <div style={{flex:1}}/>
+        <div style={{height:28,padding:'0 12px',borderRadius:6,background:'rgba(113,116,238,.14)',border:'1px solid rgba(113,116,238,.24)',display:'flex',alignItems:'center',fontSize:12,fontWeight:600,color:'rgba(113,116,238,.85)',gap:4}}>
+          <span style={{fontSize:15,lineHeight:1}}>+</span> New order
+        </div>
+      </div>
+      <div className="he-nav">
+        {[['Orders',true],['Products',false],['Customers',false],['Analytics',false],['Settings',false]].map(([l,a])=>(
+          <div key={l} className={`he-ni${a?' on':''}`}><div className="he-ni-dot"/>{l}</div>
+        ))}
+      </div>
+      <div className="he-main">
+        <div className="he-h">Orders</div>
+        <table className="he-tbl">
+          <thead><tr>{['Order','Customer','Amount','Status'].map(h=><th key={h} className="he-th">{h}</th>)}</tr></thead>
+          <tbody>{ORDERS.map(o=>(
+            <tr key={o.id} className="he-tr">
+              <td className="he-td oid">{o.id}</td>
+              <td className="he-td">{o.cust}</td>
+              <td className="he-td amt">{o.amt}</td>
+              <td className="he-td"><span className={`bdg bdg-${o.s}`}>{o.s==='paid'?'Paid':o.s==='pend'?'Pending':'New'}</span></td>
+            </tr>
+          ))}</tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function MetaHost() {
+  return (
+    <div className="hm">
+      <div className="hm-top">
+        <span style={{fontSize:12,fontWeight:800,letterSpacing:'.04em',color:'rgba(8,102,255,.85)'}}>META</span>
+        <span style={{width:1,height:16,background:'rgba(255,255,255,.12)',flexShrink:0}}/>
+        <span style={{fontSize:13,color:'rgba(255,255,255,.48)',fontWeight:500}}>Events Manager</span>
+      </div>
+      <div className="hm-nav">
+        <div className="hm-ng">Data Sources</div>
+        {['Pixels','Test Events','Diagnostics'].map(l=><div key={l} className="hm-ni">{l}</div>)}
+        <div className="hm-ng" style={{marginTop:4}}>Setup</div>
+        {[['Overview',false],['Connections',false],['Activity',true],['Settings',false]].map(([l,a])=>(
+          <div key={l} className={`hm-ni${a?' on':''}`}>{l}</div>
+        ))}
+      </div>
+      <div className="hm-main">
+        <div className="hm-sh">Pixel Configuration</div>
+        <div className="hm-fl">
+          <div className="hm-fl-lbl">PIXEL ID</div>
+          <div className="hm-inp hi">px_8f3c20a91b4e</div>
+        </div>
+        <div className="hm-fl">
+          <div className="hm-fl-lbl">PIXEL NAME</div>
+          <div className="hm-inp">My Store Pixel</div>
+        </div>
+        <div className="hm-fl" style={{marginTop:18}}>
+          <div className="hm-fl-lbl">MATCH KEYS</div>
+          {[['Email address',true],['Phone number',false],['External ID',false]].map(([l,c])=>(
+            <div key={l} className="hm-chk-row">
+              <div className="hm-chk" style={c?{background:'rgba(8,102,255,.65)',borderColor:'rgba(8,102,255,.75)'}:{}}/>
+              {l}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── OUIJA PANELS ── */
+function DkPanel({step=3,msgs=[],noBtn=false,style={}}) {
+  return (
+    <div className="dk-p" style={style}>
+      <div className="dk-bd">
+        <div className="dk-hd">
+          <div className="dk-ik"><Ico html={SPARK}/></div>
+          <div style={{flex:1,minWidth:0}}>
+            <div className="dk-wm">Ouija</div>
+            <div className="dk-ws">Connect your pixel</div>
+          </div>
+          <button className="dk-mn"><Ico html={MINUS}/></button>
+        </div>
+        <div className="dk-pr">
+          {[0,1,2,3,4,5].map((i,idx)=>(
+            <React.Fragment key={i}>
+              {idx>0 && <div className="nd-seg"/>}
+              <div className={`nd ${i<step-1?'dn':i===step-1?'nw':'ft'}`}/>
+            </React.Fragment>
+          ))}
+          <span className="nd-lbl">Step {step}</span>
+        </div>
+        <div className="dk-st">
+          {msgs.map((m,i)=>(
+            <div key={i} className={`dk-msg${m.u?' u':''}`}>
+              {!m.u && <div className="dk-av"><Ico html={SPARK}/></div>}
+              <div className={`dk-bb${m.u?' u':''}`} dangerouslySetInnerHTML={{__html:m.t}}/>
+            </div>
+          ))}
+        </div>
+        {!noBtn && <button className="dk-ct">Continue&thinsp;<Ico html={ARROW}/></button>}
+      </div>
+    </div>
+  );
+}
+
+function LtPanel({step=3,msgs=[],noBtn=false,style={}}) {
+  const roms=['i.','ii.','iii.','iv.','v.','vi.'];
+  return (
+    <div className="lt-p" style={style}>
+      <div className="lt-bd">
+        <div className="lt-tp">
+          <div className="lt-dp-row">{[0,1,2,3,4,5].map(i=><div key={i} className={`lt-dp${i<step?' on':''}`}/>)}</div>
+          <div className="lt-rom">{roms[step-1]||''}</div>
+        </div>
+        <div className="lt-wm">Ouija</div>
+        <div className="lt-rl"/>
+        <div className="lt-st">
+          {msgs.map((m,i)=>(
+            <div key={i} className={`lt-msg${m.u?' u':''}`}>
+              <div className={`lt-bb${m.u?' u':''}`} dangerouslySetInnerHTML={{__html:m.t}}/>
+            </div>
+          ))}
+        </div>
+        {!noBtn && <button className="lt-ct">Continue&thinsp;<Ico html={ARROW}/></button>}
+      </div>
+    </div>
+  );
+}
+
+const DkOrb = ({style={}}) => <div className="dk-orb" style={style}><Ico html={SPARK}/></div>;
+const LtOrb = ({style={}}) => <div className="lt-orb" style={style}><Ico html={SPARK}/></div>;
+
+/* ── SCENE 1: SIDEBAR IN CONTEXT ── */
+const S1M = [
+  {t:'Click your most recent order — I\'ll verify if the pixel fired on that purchase.'},
+  {t:'I clicked it',u:true}
+];
+
+function S1Dark() {
+  return (
+    <div style={{position:'absolute',inset:0,overflow:'hidden'}}>
+      <EcomHost/>
+      <DkPanel step={3} msgs={S1M}/>
+      <DkOrb/>
+    </div>
+  );
+}
+function S1Light() {
+  return (
+    <div style={{position:'absolute',inset:0,overflow:'hidden'}}>
+      <EcomHost/>
+      <LtPanel step={3} msgs={S1M}/>
+      <LtOrb/>
+    </div>
+  );
+}
+
+/* ── SCENE 2: OVERLAY ──
+   .hm-main: top:48 + padding-top:22 = 70px content start
+   .hm-sh: ~20px text + 18px margin = 38px → content at 108
+   first .hm-fl-lbl: ~15px + 5px margin = 20px → input at 128
+   .hm-inp.hi: height 36px → spotlight at top:128, left:210+26=236 */
+function S2Dark() {
+  return (
+    <div style={{position:'absolute',inset:0,overflow:'hidden'}}>
+      <MetaHost/>
+      <div className="spt" style={{top:128,left:236,width:440,height:36}}/>
+      <div className="ptr" style={{top:174,left:252,display:'flex',alignItems:'center',gap:6}}>
+        <div style={{width:50,height:1,background:'rgba(255,255,255,.5)',flexShrink:0}}/>
+        <span style={{fontSize:10.5,fontWeight:600,color:'rgba(255,255,255,.72)',whiteSpace:'nowrap'}}>Copy and paste here</span>
+      </div>
+      <div className="dk-tt" style={{top:198,left:236}}>
+        <span className="tt-id">px_8f3c20a91b4e</span>
+        <button className="tt-cp">Copy</button>
+      </div>
+      <DkOrb style={{left:'auto',right:20}}/>
+    </div>
+  );
+}
+function S2Light() {
+  return (
+    <div style={{position:'absolute',inset:0,overflow:'hidden'}}>
+      <MetaHost/>
+      <div className="spt" style={{top:128,left:236,width:440,height:36}}/>
+      <div className="ptr" style={{top:174,left:252,display:'flex',alignItems:'center',gap:6}}>
+        <div style={{width:50,height:1,background:'rgba(26,23,20,.45)',flexShrink:0}}/>
+        <span style={{fontSize:10.5,fontWeight:600,color:'rgba(26,23,20,.68)',whiteSpace:'nowrap'}}>Copy and paste here</span>
+      </div>
+      <div className="lt-tt" style={{top:198,left:236}}>
+        <span className="tt-id">px_8f3c20a91b4e</span>
+        <button className="tt-cp">Copy</button>
+      </div>
+      <LtOrb style={{left:'auto',right:20}}/>
+    </div>
+  );
+}
+
+/* ── SCENE 3: CROSS-TAB ── */
+function BrowserWin({url,bg,children,style={}}) {
+  return (
+    <div className="bw" style={style}>
+      <div className="bw-ch">
+        <div style={{display:'flex',gap:5,flexShrink:0}}>
+          {['#ff5f57','#ffbd2e','#28c841'].map(c=><div key={c} style={{width:10,height:10,borderRadius:'50%',background:c,flexShrink:0}}/>)}
+        </div>
+        <div className="bw-url">{url}</div>
+      </div>
+      <div className="bw-bd" style={{width:'100%',height:486,background:bg}}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function MiniNav({items,ai=0,w=130,bg='#0a0d14',bc='rgba(255,255,255,.04)',tc='rgba(255,255,255,.3)',ac='rgba(255,255,255,.85)'}) {
+  return (
+    <div style={{position:'absolute',top:0,left:0,bottom:0,width:w,background:bg,borderRight:`1px solid ${bc}`}}>
+      {items.map((l,i)=>(
+        <div key={l} style={{height:32,display:'flex',alignItems:'center',padding:'0 12px',fontSize:11.5,fontWeight:i===ai?600:400,color:i===ai?ac:tc,background:i===ai?'rgba(255,255,255,.06)':'transparent'}}>{l}</div>
+      ))}
+    </div>
+  );
+}
+
+const S3DA=[{t:'Pixel verified on checkout ✓'},{t:'Now jump to your <b>Meta</b> tab — I\'ll be waiting there.'}];
+const S3DB=[{t:'Still here. Let\'s attach this pixel to your campaign.'}];
+
+function S3Dark() {
+  return (
+    <div style={{position:'absolute',inset:0,overflow:'hidden',background:'#050810',display:'flex',alignItems:'center',justifyContent:'center',gap:24}}>
+      <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse 260px 260px at 50% 50%,rgba(200,148,55,.04),transparent 70%)',pointerEvents:'none'}}/>
+      <BrowserWin url="store.myshop.com/admin" bg="#0c0f16" style={{width:490,height:520}}>
+        <MiniNav items={['Orders','Products','Customers','Settings']} w={128}/>
+        <div style={{position:'absolute',top:0,left:128,right:0,bottom:0,padding:12,overflow:'hidden'}}>
+          <div style={{fontSize:11,fontWeight:600,color:'rgba(255,255,255,.5)',marginBottom:8}}>Recent Orders</div>
+          {ORDERS.slice(0,4).map(o=>(
+            <div key={o.id} style={{height:34,borderBottom:'1px solid rgba(255,255,255,.04)',display:'flex',alignItems:'center',gap:12,fontSize:11,color:'rgba(255,255,255,.5)',padding:'0 2px'}}>
+              <span style={{color:'rgba(113,116,238,.8)',fontWeight:600}}>{o.id}</span>
+              <span style={{flex:1}}>{o.cust}</span>
+              <span style={{color:'rgba(255,255,255,.78)',fontWeight:600}}>{o.amt}</span>
+            </div>
+          ))}
+        </div>
+        <DkPanel step={6} msgs={S3DA} noBtn style={{right:10,top:6,width:216,borderRadius:18}}/>
+      </BrowserWin>
+      <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:5,flexShrink:0,zIndex:10}}>
+        {[1,2,1].map((v,i)=>(i===1
+          ?<div key={i} style={{width:22,height:22,borderRadius:'50%',border:'1px solid rgba(200,148,55,.3)',display:'grid',placeItems:'center',color:'rgba(200,148,55,.55)',fontSize:13}}>→</div>
+          :<div key={i} style={{width:1,height:32,background:'linear-gradient(to bottom,transparent,rgba(200,148,55,.3),transparent)'}}/>
+        ))}
+      </div>
+      <BrowserWin url="business.facebook.com/ads/manager" bg="#0d1117" style={{width:490,height:520}}>
+        <MiniNav items={['Campaigns','Ad Sets','Ads','Audiences']} w={136} bg="#090c11" bc="rgba(255,255,255,.04)"/>
+        <div style={{position:'absolute',top:0,left:136,right:0,bottom:0,padding:12,overflow:'hidden'}}>
+          <div style={{fontSize:11,fontWeight:600,color:'rgba(255,255,255,.5)',marginBottom:8}}>Campaigns</div>
+          {[['Summer Sale','Active','$24.80'],['Retargeting','Paused','—'],['Brand Awareness','Active','$8.40']].map(([n,s,v])=>(
+            <div key={n} style={{height:34,borderBottom:'1px solid rgba(255,255,255,.04)',display:'flex',alignItems:'center',gap:10,fontSize:11,color:'rgba(255,255,255,.48)',padding:'0 2px'}}>
+              <span style={{flex:1}}>{n}</span>
+              <span style={{color:s==='Active'?'#2fbf93':'rgba(255,255,255,.28)',fontSize:10,fontWeight:700}}>{s}</span>
+              <span style={{color:'rgba(255,255,255,.7)',fontWeight:600}}>{v}</span>
+            </div>
+          ))}
+        </div>
+        <DkPanel step={1} msgs={S3DB} noBtn style={{right:10,top:6,width:216,borderRadius:18,boxShadow:'inset 0 1.5px 0 rgba(210,160,70,.28),0 0 0 .5px rgba(175,125,50,.18),0 0 28px rgba(200,148,55,.08),0 18px 50px -12px rgba(0,0,0,.9)'}}/>
+      </BrowserWin>
+    </div>
+  );
+}
+
+function S3Light() {
+  return (
+    <div style={{position:'absolute',inset:0,overflow:'hidden',background:'#edeae5',display:'flex',alignItems:'center',justifyContent:'center',gap:24}}>
+      <BrowserWin url="store.myshop.com/admin" bg="#f6f4f0" style={{width:490,height:520}}>
+        <MiniNav items={['Orders','Products','Customers','Settings']} w={128} bg="#ede9e3" bc="rgba(0,0,0,.07)" tc="rgba(26,23,20,.35)" ac="#1a1714"/>
+        <div style={{position:'absolute',top:0,left:128,right:0,bottom:0,padding:12,overflow:'hidden'}}>
+          <div style={{fontSize:11,fontWeight:600,color:'rgba(26,23,20,.45)',marginBottom:8}}>Recent Orders</div>
+          {ORDERS.slice(0,4).map(o=>(
+            <div key={o.id} style={{height:34,borderBottom:'1px solid rgba(0,0,0,.06)',display:'flex',alignItems:'center',gap:12,fontSize:11,color:'rgba(26,23,20,.5)',padding:'0 2px'}}>
+              <span style={{color:'#1a1714',fontWeight:600}}>{o.id}</span>
+              <span style={{flex:1}}>{o.cust}</span>
+              <span style={{color:'#1a1714',fontWeight:600}}>{o.amt}</span>
+            </div>
+          ))}
+        </div>
+        <LtPanel step={6} msgs={S3DA} noBtn style={{right:10,top:6,width:210,borderRadius:4}}/>
+      </BrowserWin>
+      <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:5,flexShrink:0,zIndex:10}}>
+        {[1,2,1].map((v,i)=>(i===1
+          ?<div key={i} style={{width:22,height:22,borderRadius:'50%',border:'1px solid rgba(0,0,0,.18)',display:'grid',placeItems:'center',color:'rgba(0,0,0,.38)',fontSize:13}}>→</div>
+          :<div key={i} style={{width:1,height:32,background:'linear-gradient(to bottom,transparent,rgba(0,0,0,.18),transparent)'}}/>
+        ))}
+      </div>
+      <BrowserWin url="business.facebook.com/ads/manager" bg="#0d1117" style={{width:490,height:520}}>
+        <MiniNav items={['Campaigns','Ad Sets','Ads','Audiences']} w={136} bg="#090c11" bc="rgba(255,255,255,.04)"/>
+        <div style={{position:'absolute',top:0,left:136,right:0,bottom:0,padding:12,overflow:'hidden'}}>
+          <div style={{fontSize:11,fontWeight:600,color:'rgba(255,255,255,.5)',marginBottom:8}}>Campaigns</div>
+          {[['Summer Sale','Active','$24.80'],['Retargeting','Paused','—'],['Brand Awareness','Active','$8.40']].map(([n,s,v])=>(
+            <div key={n} style={{height:34,borderBottom:'1px solid rgba(255,255,255,.04)',display:'flex',alignItems:'center',gap:10,fontSize:11,color:'rgba(255,255,255,.48)',padding:'0 2px'}}>
+              <span style={{flex:1}}>{n}</span>
+              <span style={{color:s==='Active'?'#2fbf93':'rgba(255,255,255,.28)',fontSize:10,fontWeight:700}}>{s}</span>
+              <span style={{color:'rgba(255,255,255,.7)',fontWeight:600}}>{v}</span>
+            </div>
+          ))}
+        </div>
+        <LtPanel step={1} msgs={S3DB} noBtn style={{right:10,top:6,width:210,borderRadius:4}}/>
+      </BrowserWin>
+    </div>
+  );
+}
+
+/* ── COMPONENT STRIPS ── */
+function CompsDark() {
+  return (
+    <div style={{position:'absolute',inset:0,background:'#0c0f16',display:'flex',alignItems:'center',justifyContent:'space-evenly',padding:'24px 32px',gap:20}}>
+      <div className="comp-item">
+        <div className="comp-lbl dk-comp-lbl">⌥C · Clipboard</div>
+        <div className="clip dk-clip">
+          <span className="clip-key dk-clip-key">⌥C</span>
+          <span className="clip-val dk-clip-val">px_8f3c20a91b4e</span>
+          <div className="clip-acts">
+            <button className="cl-btn dk-cl">Copy</button>
+            <button className="cl-btn dk-cl x">Clear</button>
+          </div>
+        </div>
+      </div>
+      <div className="comp-item">
+        <div className="comp-lbl dk-comp-lbl">Error / Fork</div>
+        <div className="err dk-err"><div className="err-in"><div className="err-dot"/><div className="err-tx">That didn't go through — trying a different path</div></div></div>
+      </div>
+      <div className="comp-item">
+        <div className="comp-lbl dk-comp-lbl">Self-verification</div>
+        <div className="cfm dk-cfm">
+          <div className="cfm-msg">Looks like that <b>saved ✓</b> — continue?</div>
+          <div className="cfm-acts"><button className="cfm-y">Confirm</button><button className="cfm-n">That's not right</button></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+function CompsLight() {
+  return (
+    <div style={{position:'absolute',inset:0,background:'#ece9e4',display:'flex',alignItems:'center',justifyContent:'space-evenly',padding:'24px 32px',gap:20}}>
+      <div className="comp-item">
+        <div className="comp-lbl lt-comp-lbl">⌥C · Clipboard</div>
+        <div className="clip lt-clip">
+          <span className="clip-key lt-clip-key">⌥C</span>
+          <span className="clip-val lt-clip-val">px_8f3c20a91b4e</span>
+          <div className="clip-acts">
+            <button className="cl-btn lt-cl">Copy</button>
+            <button className="cl-btn lt-cl x">Clear</button>
+          </div>
+        </div>
+      </div>
+      <div className="comp-item">
+        <div className="comp-lbl lt-comp-lbl">Error / Fork</div>
+        <div className="err lt-err"><div className="err-in"><div className="err-dot"/><div className="err-tx">That didn't go through — trying a different path</div></div></div>
+      </div>
+      <div className="comp-item">
+        <div className="comp-lbl lt-comp-lbl">Self-verification</div>
+        <div className="cfm lt-cfm">
+          <div className="cfm-msg">Looks like that <b>saved ✓</b> — continue?</div>
+          <div className="cfm-acts"><button className="cfm-y">Confirm</button><button className="cfm-n">That's not right</button></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── APP ── */
+function App() {
+  return (
+    <DesignCanvas title="Ouija — Production Directions">
+      <DCSection id="s1" title="Scene 1 — Sidebar in Context" subtitle="Floating above a live e-commerce admin, margin on all sides">
+        <DCArtboard id="s1d" label="Dark · Reliquary + Solstice" width={1100} height={680}><S1Dark/></DCArtboard>
+        <DCArtboard id="s1l" label="Light · Vitrine" width={1100} height={680}><S1Light/></DCArtboard>
+      </DCSection>
+      <DCSection id="s2" title="Scene 2 — Overlay in Context" subtitle="Soft spotlight on Pixel ID · frosted tooltip · orb in corner">
+        <DCArtboard id="s2d" label="Dark · Reliquary + Solstice" width={1100} height={680}><S2Dark/></DCArtboard>
+        <DCArtboard id="s2l" label="Light · Vitrine" width={1100} height={680}><S2Light/></DCArtboard>
+      </DCSection>
+      <DCSection id="s3" title="Scene 3 — Cross-tab Moment" subtitle="Ouija follows the user from store to Meta Ads">
+        <DCArtboard id="s3d" label="Dark · Reliquary + Solstice" width={1100} height={580}><S3Dark/></DCArtboard>
+        <DCArtboard id="s3l" label="Light · Vitrine" width={1100} height={580}><S3Light/></DCArtboard>
+      </DCSection>
+      <DCSection id="comp" title="Components" subtitle="Clipboard popup · Error/fork · Self-verification">
+        <DCArtboard id="cd" label="Dark · Reliquary + Solstice" width={1000} height={260}><CompsDark/></DCArtboard>
+        <DCArtboard id="cl" label="Light · Vitrine" width={1000} height={260}><CompsLight/></DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

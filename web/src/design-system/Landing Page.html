@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ouija — Landing Page Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── RELIQUARY TOKENS ──────────────────────────────────────────── */
+:root {
+  --h: 35; --c: 0.24;
+  --surface:        oklch(0.14 calc(var(--c)*.42) var(--h)/.90);
+  --surface-strong: oklch(0.08 calc(var(--c)*.30) var(--h)/.98);
+  --surface-soft:   oklch(0.32 calc(var(--c)*.28) var(--h)/.12);
+  --glint-hi:  oklch(0.96 calc(var(--c)*.95) 42/.95);
+  --glint-mid: oklch(0.74 calc(var(--c)*.72) 38/.38);
+  --glint-lo:  oklch(0.50 calc(var(--c)*.45) 35/.00);
+  --text-hi:    oklch(0.97 calc(var(--c)*.10) var(--h));
+  --text-md:    oklch(0.78 calc(var(--c)*.55) var(--h));
+  --text-lo:    oklch(0.60 calc(var(--c)*.45) var(--h));
+  --text-muted: oklch(0.44 calc(var(--c)*.38) var(--h));
+  --mark-bg:     oklch(0.22 calc(var(--c)*.52) var(--h)/.30);
+  --mark-border: oklch(0.66 calc(var(--c)*.78) var(--h)/.48);
+  --mark-color:  oklch(0.84 calc(var(--c)*.92) var(--h));
+  --btn-bg:           oklch(0.20 calc(var(--c)*.55) var(--h)/.14);
+  --btn-border:       oklch(0.70 calc(var(--c)*.72) var(--h)/.50);
+  --btn-text:         oklch(0.86 calc(var(--c)*.90) var(--h));
+  --btn-bg-h:         oklch(0.26 calc(var(--c)*.60) var(--h)/.24);
+  --btn-border-h:     oklch(0.76 calc(var(--c)*.80) var(--h)/.80);
+  --node-done:  oklch(0.60 calc(var(--c)*.80) var(--h)/.65);
+  --node-now:   oklch(0.88 var(--c) var(--h));
+  --node-seg:   oklch(0.30 calc(var(--c)*.20) var(--h)/.35);
+  --shadow-panel:
+    inset 0 2px 0 var(--glint-hi),
+    0 0 0 1px oklch(0.55 calc(var(--c)*.70) var(--h)/.22),
+    0 32px 80px -16px oklch(0.04 0 0/.95);
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans:  'Manrope', system-ui, sans-serif;
+  --mono:  'JetBrains Mono', monospace;
+  --spring: cubic-bezier(0.34,1.32,0.64,1);
+  --ease:   cubic-bezier(0.22,1,0.36,1);
+}
+
+@property --g-angle { syntax:'<angle>'; inherits:false; initial-value:45deg; }
+@keyframes glint    { to { --g-angle: 405deg; } }
+@keyframes scrollL  { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+@keyframes breathe  { 0%,100%{opacity:.7;transform:scale(1)} 50%{opacity:1;transform:scale(1.04)} }
+
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body { background:#030307; color:var(--text-md); font-family:var(--sans);
+       -webkit-font-smoothing:antialiased; position:relative; }
+body::before {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(ellipse 900px 560px at 50% 0%,
+      oklch(0.28 calc(var(--c)*.85) var(--h)/.18) 0%, transparent 65%),
+    radial-gradient(ellipse 500px 400px at 15% 70%,
+      oklch(0.22 calc(var(--c)*.55) 55/.07) 0%, transparent 70%);
+}
+nav, .hero, .marquee-section, .setup-section, footer { position:relative; z-index:1; }
+
+/* ── GLINT BORDER ──────────────────────────────────────────────── */
+.glint { position:relative; isolation:isolate; }
+.glint::after {
+  content:''; position:absolute; inset:0; border-radius:inherit; padding:1px;
+  background: conic-gradient(from var(--g-angle),
+    var(--glint-lo) 0deg, var(--glint-lo) 66deg,
+    var(--glint-mid) 75deg, var(--glint-hi) 84deg,
+    var(--glint-mid) 93deg, var(--glint-lo) 102deg,
+    var(--glint-lo) 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: glint 9s ease-in-out infinite;
+  pointer-events:none; z-index:3;
+}
+
+/* ── NAV ───────────────────────────────────────────────────────── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  padding:16px 32px;
+  display:flex; align-items:center; justify-content:center;
+}
+.nav-logo {
+  position:absolute; left:32px;
+  display:flex; align-items:center; gap:9px; text-decoration:none;
+  padding:6px 12px; border-radius:12px;
+  background:transparent;
+  -webkit-backdrop-filter:blur(0px); backdrop-filter:blur(0px);
+  transition:background .30s, backdrop-filter .30s, -webkit-backdrop-filter .30s;
+}
+nav.scrolled .nav-logo {
+  background:oklch(0.06 calc(var(--c)*.18) var(--h)/.82);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  backdrop-filter:blur(24px) saturate(180%);
+}
+.nav-logo-name {
+  font-family:var(--serif); font-style:italic; font-size:20px;
+  color:var(--text-hi); letter-spacing:-0.01em;
+}
+.nav-pill {
+  display:flex; align-items:center; gap:2px;
+  padding:5px 7px; border-radius:999px;
+  background:linear-gradient(135deg,
+    oklch(0.13 calc(var(--c)*.32) var(--h)/.96) 0%,
+    oklch(0.08 calc(var(--c)*.22) var(--h)/.94) 100%);
+  -webkit-backdrop-filter:blur(28px) saturate(175%);
+  backdrop-filter:blur(28px) saturate(175%);
+  transition:box-shadow .30s;
+}
+nav.scrolled .nav-pill {
+  box-shadow:0 0 0 1px oklch(0.55 calc(var(--c)*.65) var(--h)/.22);
+}
+.nav-link {
+  padding:7px 17px; border-radius:999px; font-size:13px; font-weight:500;
+  color:var(--text-lo); text-decoration:none;
+  transition:color .15s, background .15s;
+}
+.nav-link:hover { color:var(--text-hi); background:var(--surface-soft); }
+.nav-cta {
+  position:absolute; right:32px;
+  padding:9px 22px; border-radius:999px;
+  font-size:13px; font-weight:700; letter-spacing:.01em;
+  color:var(--btn-text); text-decoration:none; transition:all .20s; cursor:pointer;
+  background:linear-gradient(135deg,
+    oklch(0.24 calc(var(--c)*.58) var(--h)/.28) 0%,
+    oklch(0.14 calc(var(--c)*.40) var(--h)/.16) 100%);
+  border:1px solid oklch(0.70 calc(var(--c)*.75) var(--h)/.58);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0/.18),
+    0 0 24px -6px oklch(0.84 calc(var(--c)*.92) var(--h)/.45);
+}
+.nav-cta:hover {
+  border-color:oklch(0.80 calc(var(--c)*.85) var(--h)/.75);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0/.24),
+    0 0 36px -6px oklch(0.84 calc(var(--c)*.92) var(--h)/.65);
+  transform:translateY(-1px);
+}
+
+/* ── HERO ──────────────────────────────────────────────────────── */
+.hero {
+  position:relative; padding:140px 32px 72px;
+  display:flex; flex-direction:column; align-items:center;
+  text-align:center; overflow:hidden;
+}
+.hero-glow {
+  position:absolute; top:-100px; left:50%; transform:translateX(-50%);
+  width:1100px; height:700px; pointer-events:none;
+  background: radial-gradient(ellipse at 50% 28%,
+    oklch(0.84 calc(var(--c)*.92) var(--h)/.18) 0%,
+    oklch(0.74 calc(var(--c)*.80) var(--h)/.09) 38%,
+    transparent 66%);
+  filter:blur(8px);
+}
+.hero-eyebrow {
+  font-size:10px; font-weight:700; letter-spacing:.20em;
+  text-transform:uppercase; color:var(--mark-color); opacity:.80; margin-bottom:20px;
+  white-space:nowrap;
+}
+h1 {
+  font-size:clamp(2.4rem,5.5vw,4rem); font-weight:800;
+  letter-spacing:-.03em; line-height:1.05;
+  color:var(--text-hi); max-width:780px;
+}
+h1 em {
+  font-family:var(--serif); font-style:italic; font-weight:400;
+  color:var(--text-md); letter-spacing:-.01em;
+}
+.hero-sub {
+  margin-top:20px; font-size:16px; font-weight:500; line-height:1.7;
+  color:var(--text-lo); max-width:520px;
+}
+.hero-cta {
+  margin-top:40px; display:flex; flex-direction:column; align-items:center; gap:10px;
+}
+.hero-btn {
+  padding:14px 46px; border-radius:999px; font-family:var(--sans);
+  font-size:15px; font-weight:700; letter-spacing:.02em;
+  color:var(--btn-text); text-decoration:none; cursor:pointer; display:inline-block;
+  background:linear-gradient(135deg,
+    oklch(0.28 calc(var(--c)*.65) var(--h)/.34) 0%,
+    oklch(0.16 calc(var(--c)*.46) var(--h)/.22) 100%);
+  border:1px solid oklch(0.74 calc(var(--c)*.80) var(--h)/.65);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0/.24),
+    inset 0 -1px 0 oklch(0 0 0/.14),
+    0 0 0 1px oklch(0.70 calc(var(--c)*.72) var(--h)/.16),
+    0 8px 44px -8px oklch(0.84 calc(var(--c)*.92) var(--h)/.62),
+    0 4px 20px oklch(0.84 calc(var(--c)*.92) var(--h)/.14);
+  transition:all .22s var(--spring);
+}
+.hero-btn:hover {
+  background:linear-gradient(135deg,
+    oklch(0.34 calc(var(--c)*.72) var(--h)/.42) 0%,
+    oklch(0.22 calc(var(--c)*.54) var(--h)/.30) 100%);
+  border-color:oklch(0.84 calc(var(--c)*.90) var(--h)/.82);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0/.30),
+    inset 0 -1px 0 oklch(0 0 0/.14),
+    0 0 0 1px oklch(0.78 calc(var(--c)*.82) var(--h)/.28),
+    0 14px 56px -8px oklch(0.84 calc(var(--c)*.92) var(--h)/.85),
+    0 6px 28px oklch(0.84 calc(var(--c)*.92) var(--h)/.24);
+  transform:translateY(-2px);
+}
+.hero-btn:active { transform:scale(.96); }
+.hero-note { font-size:11px; color:var(--text-muted); font-weight:500; }
+
+/* ── PRODUCT PREVIEW (video) ───────────────────────────────────── */
+.preview-wrap {
+  margin-top:52px; width:100%; max-width:900px; position:relative;
+}
+.preview-frame {
+  width:100%; border-radius:20px; overflow:hidden;
+  box-shadow:var(--shadow-panel); aspect-ratio:900/540;
+}
+.preview-overlay {
+  position:absolute; inset:0; display:flex; align-items:center;
+  justify-content:center; z-index:10;
+  background: radial-gradient(ellipse at center,
+    oklch(0.06 calc(var(--c)*.15) var(--h)/.60) 0%,
+    oklch(0.06 calc(var(--c)*.10) var(--h)/.20) 60%,
+    transparent 100%);
+  border-radius:20px;
+}
+.play-btn {
+  width:68px; height:68px; border-radius:50%;
+  background:var(--surface-strong); border:1px solid var(--mark-border);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--mark-color); cursor:pointer;
+  -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
+  transition:transform .2s var(--spring), box-shadow .2s;
+  box-shadow: 0 0 24px oklch(0.74 calc(var(--c)*.82) var(--h)/.22);
+}
+.play-btn:hover {
+  transform:scale(1.10);
+  box-shadow: 0 0 36px oklch(0.74 calc(var(--c)*.82) var(--h)/.40);
+}
+.play-icon { margin-left:4px; }
+.preview-label {
+  position:absolute; bottom:18px; left:22px;
+  font-size:10px; font-weight:600; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--text-muted); z-index:10;
+}
+
+/* ── BROWSER CHROME MOCKUP ─────────────────────────────────────── */
+.bc { width:100%; height:100%; display:flex; flex-direction:column; background:#141414; }
+.bc-bar {
+  height:38px; background:#1c1c1c;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  display:flex; align-items:center; gap:10px; padding:0 14px; flex-shrink:0;
+}
+.bc-lights { display:flex; gap:5px; }
+.bc-lights span { width:11px; height:11px; border-radius:50%; }
+.bc-r { background:#ff5f57; } .bc-y { background:#febc2e; } .bc-g { background:#28c840; }
+.bc-url {
+  flex:1; max-width:280px; margin:0 auto; height:22px;
+  background:rgba(255,255,255,.05); border-radius:6px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:10px; color:rgba(255,255,255,.28);
+}
+.bc-body { flex:1; display:flex; position:relative; overflow:hidden; }
+
+/* Host page */
+.hp { flex:1; display:flex; }
+.hp-nav {
+  width:var(--hp-nav-w,175px); flex-shrink:0;
+  background:var(--hp-nav-bg,#f2f2f0);
+  border-right:1px solid var(--hp-divider,rgba(0,0,0,.06));
+  padding:14px 10px; display:flex; flex-direction:column; gap:3px;
+}
+.hp-logo {
+  height:20px; width:70%; border-radius:4px;
+  background:var(--hp-accent,rgba(26,128,82,.18)); margin-bottom:10px;
+}
+.hp-ni {
+  height:20px; border-radius:5px;
+  background:var(--hp-ni-bg,rgba(0,0,0,.04));
+}
+.hp-ni.hi { background:var(--hp-ni-hi,rgba(26,128,82,.12)); }
+.hp-main {
+  flex:1; background:var(--hp-bg,#fff);
+  padding:20px 24px; position:relative;
+}
+.hp-h { height:13px; width:45%; border-radius:3px; background:rgba(0,0,0,.12); margin-bottom:12px; }
+.hp-b { height:7px; border-radius:3px; background:rgba(0,0,0,.06); margin-bottom:6px; }
+.hp-b.w8 { width:80%; } .hp-b.w6 { width:60%; } .hp-b.w9 { width:90%; } .hp-b.w5 { width:50%; }
+.hp-cta {
+  position:absolute; bottom:44px; left:28px;
+  padding:8px 18px; border-radius:7px;
+  background:var(--hp-cta-bg,#1a8052); color:#fff;
+  font-family:var(--sans); font-size:10px; font-weight:700;
+  white-space:nowrap;
+  box-shadow:
+    0 0 0 3px var(--hp-glow, oklch(0.74 .148 35/.35)),
+    0 0 0 6px var(--hp-glow-s, oklch(0.74 .148 35/.10)),
+    0 0 28px var(--hp-glow-lg, oklch(0.74 .148 35/.28));
+  animation: breathe 2.4s ease-in-out infinite;
+}
+
+/* Ouija sidebar mock */
+.om {
+  position:absolute; right:10px; top:10px; bottom:10px; width:var(--om-w,210px);
+  background:oklch(0.10 calc(.18*.30) 35/.96);
+  border-radius:16px;
+  border:.5px solid oklch(0.40 calc(.18*.55) 35/.24);
+  box-shadow:
+    inset 0 1.5px 0 oklch(0.68 calc(.18*.62) 35/.20),
+    0 8px 40px -8px oklch(0.04 0 0/.85);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.om-head {
+  padding:10px 11px 8px;
+  border-bottom:1px solid oklch(.50 calc(.18*.55) 35/.10);
+  display:flex; align-items:center; gap:7px; flex-shrink:0;
+  background:linear-gradient(180deg, oklch(.08 calc(.18*.25) 35/.96), transparent);
+}
+.om-mark {
+  width:26px; height:26px; border-radius:50%; flex-shrink:0;
+  background:oklch(.20 calc(.18*.40) 35/.22);
+  border:1px solid oklch(.55 calc(.18*.65) 35/.28);
+  display:flex; align-items:center; justify-content:center;
+  color:oklch(.74 calc(.18*.82) 35);
+}
+.om-name {
+  font-family:var(--serif); font-style:italic; font-size:13px;
+  color:oklch(.94 calc(.18*.16) 35); line-height:1.1; display:block;
+}
+.om-step {
+  font-size:8px; font-weight:700; letter-spacing:.10em;
+  color:oklch(.48 calc(.18*.40) 35); display:block; margin-top:1px;
+}
+.om-counter {
+  margin-left:auto; font-size:9px; font-weight:700; letter-spacing:.08em;
+  color:oklch(.48 calc(.18*.40) 35);
+}
+.om-nodes {
+  padding:6px 11px; display:flex; align-items:center; gap:0; flex-shrink:0;
+}
+.on { border-radius:50%; }
+.on.d { width:6px; height:6px;
+  background:oklch(.56 calc(.18*.80) 35/.55);
+  border:1px solid oklch(.68 calc(.18*.85) 35/.65); }
+.on.n { width:8px; height:8px;
+  border:1.5px solid oklch(.84 .18 35);
+  box-shadow:0 0 6px oklch(.84 .18 35/.60); }
+.on.f { width:6px; height:6px;
+  background:oklch(.20 calc(.18*.20) 35/.50);
+  border:1px solid transparent; }
+.on-seg { flex:1; height:1px; background:oklch(.28 calc(.18*.18) 35/.30); }
+.on-seg.d { background:oklch(.56 calc(.18*.80) 35/.35); }
+.om-body {
+  flex:1; padding:7px 9px;
+  display:flex; flex-direction:column; gap:5px; overflow:hidden;
+}
+.ob {
+  padding:7px 9px; font-size:9.5px; line-height:1.5;
+  max-width:95%;
+}
+.ob.ai {
+  border-radius:10px 10px 10px 3px;
+  background:oklch(.22 calc(.18*.35) 35/.15);
+  border:1px solid oklch(.50 calc(.18*.55) 35/.17);
+  color:oklch(.72 calc(.18*.52) 35);
+}
+.ob.ai b { color:oklch(.84 .18 35); font-weight:600; }
+.ob.u {
+  border-radius:10px 10px 3px 10px; align-self:flex-end;
+  background:oklch(.28 calc(.18*.80) 35/.28);
+  border:1px solid oklch(.55 calc(.18*.85) 35/.25);
+  color:oklch(.88 calc(.18*.24) 35);
+}
+.ob.sys {
+  align-self:center; font-size:9px; font-weight:700;
+  color:oklch(.48 calc(.18*.40) 35); padding:3px 0;
+  background:transparent; border:none;
+}
+.om-foot {
+  padding:8px 9px 10px; display:flex; gap:5px; flex-shrink:0;
+  border-top:1px solid oklch(.50 calc(.18*.55) 35/.08);
+}
+.ob-btn {
+  flex:1; padding:7px 6px; border-radius:999px;
+  font-family:var(--sans); font-size:9px; font-weight:700; text-align:center;
+  border:1px solid oklch(.65 calc(.18*.60) 35/.28);
+  color:oklch(.74 calc(.18*.82) 35);
+  background:oklch(.22 calc(.18*.50) 35/.08);
+}
+.ob-btn.sec {
+  background:transparent;
+  border-color:oklch(.50 calc(.18*.55) 35/.16);
+  color:oklch(.55 calc(.18*.40) 35);
+}
+
+/* ── MARQUEE ───────────────────────────────────────────────────── */
+.marquee-section {
+  padding:64px 0; overflow:hidden;
+  border-top:1px solid oklch(.40 calc(var(--c)*.30) var(--h)/.06);
+  border-bottom:1px solid oklch(.40 calc(var(--c)*.30) var(--h)/.06);
+}
+.marquee-label {
+  text-align:center; font-size:10px; font-weight:700; letter-spacing:.20em;
+  text-transform:uppercase; color:var(--text-muted); margin-bottom:32px;
+}
+.marquee-track { display:flex; animation:scrollL 50s linear infinite; width:max-content; }
+.marquee-card {
+  flex-shrink:0; width:680px; height:380px; margin:0 10px;
+  border-radius:16px; overflow:hidden;
+  box-shadow:0 4px 32px -8px oklch(.04 0 0/.70);
+}
+
+/* ── SETUP STEPS ───────────────────────────────────────────────── */
+.setup-section { max-width:680px; margin:0 auto; padding:80px 32px; }
+.section-eyebrow {
+  text-align:center; font-size:10px; font-weight:700; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--mark-color); opacity:.75;
+  margin-bottom:16px;
+}
+.section-h2 {
+  text-align:center; font-size:28px; font-weight:800; letter-spacing:-.02em;
+  color:var(--text-hi); line-height:1.1; margin-bottom:8px;
+}
+.section-sub {
+  text-align:center; font-size:14px; font-weight:500;
+  color:var(--text-lo); margin-bottom:48px;
+}
+.steps { display:flex; flex-direction:column; gap:10px; }
+.step-card {
+  display:flex; align-items:flex-start; gap:16px;
+  padding:20px 24px; border-radius:18px;
+  background:linear-gradient(160deg,
+    oklch(1 0 0/.06) 0%,
+    oklch(0.14 calc(var(--c)*.44) var(--h)/.90) 14%,
+    oklch(0.10 calc(var(--c)*.28) var(--h)/.86) 100%);
+  -webkit-backdrop-filter:blur(36px) saturate(220%);
+  backdrop-filter:blur(36px) saturate(220%);
+  border:1px solid oklch(1 0 0/.11);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0/.18),
+    inset 0 -1px 0 oklch(0 0 0/.10),
+    0 4px 24px -8px oklch(0 0 0/.65);
+  transition:border-color .22s, box-shadow .22s, transform .22s var(--spring);
+}
+.step-card:hover {
+  border-color:oklch(1 0 0/.22);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0/.26),
+    inset 0 -1px 0 oklch(0 0 0/.10),
+    0 14px 44px -10px oklch(0 0 0/.80),
+    0 0 36px -12px oklch(0.84 calc(var(--c)*.92) var(--h)/.20);
+  transform:translateY(-2px);
+}
+.step-num {
+  flex-shrink:0; width:34px; height:34px; border-radius:50%;
+  background:var(--mark-bg); border:1px solid var(--mark-border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:800; color:var(--mark-color);
+}
+.step-title {
+  font-size:14px; font-weight:700; color:var(--text-hi); margin-bottom:5px;
+}
+.step-body {
+  font-size:13px; font-weight:500; line-height:1.6; color:var(--text-lo);
+}
+.step-code {
+  font-family:var(--mono); font-size:11px; color:var(--text-md);
+  background:var(--surface-soft); padding:1px 5px; border-radius:4px;
+}
+.key-pill {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px; margin-top:8px; border-radius:10px;
+  background:var(--surface-soft);
+  border:1px solid var(--mark-border);
+}
+.key-code { font-family:var(--mono); font-size:11px; color:var(--mark-color); }
+.key-label {
+  font-size:9px; font-weight:700; letter-spacing:.10em; text-transform:uppercase;
+  color:var(--text-muted); margin-left:auto;
+}
+.kbd {
+  font-family:var(--mono); font-size:10px;
+  background:var(--surface-soft); border:1px solid var(--mark-border);
+  padding:1px 6px; border-radius:4px; color:var(--text-md);
+}
+.skip-note {
+  text-align:center; font-size:12px; color:var(--text-muted); font-weight:500;
+  margin-top:40px;
+}
+.skip-link { color:var(--mark-color); opacity:.65; text-decoration:none; }
+.skip-link:hover { opacity:1; }
+
+/* ── FOOTER ────────────────────────────────────────────────────── */
+footer {
+  border-top:1px solid oklch(.40 calc(var(--c)*.30) var(--h)/.06);
+  padding:28px 32px; text-align:center;
+}
+footer p {
+  font-size:11px; color:var(--text-muted); font-weight:500; letter-spacing:.04em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glint::after, .marquee-track { animation:none; }
+  .hp-cta { animation:none; }
+  .step-card:hover, .hero-btn:hover, .nav-cta:hover { transform:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ───────────────────────────────────────────────────────── -->
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-mark" data-compass="16"></span>
+    <span class="nav-logo-name">Ouija</span>
+  </a>
+  <div class="nav-pill glint">
+    <a href="#" class="nav-link">Home</a>
+    <a href="#" class="nav-link">Features</a>
+    <a href="#" class="nav-link">Admin</a>
+    <a href="#" class="nav-link">Pricing</a>
+  </div>
+  <a href="#setup" class="nav-cta glint">Demo it →</a>
+</nav>
+
+<!-- ── HERO ──────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-glow"></div>
+
+  <p class="hero-eyebrow">Cross-site onboarding guidance</p>
+
+  <h1>
+    Onboarding doesn't have to end<br>
+    <em>at your domain.</em>
+  </h1>
+
+  <p class="hero-sub">
+    Ouija is the world's first tool to follow users cross-site to abolish
+    onboarding churn. It sees the page, points the way, and never acts.
+  </p>
+
+  <div class="hero-cta">
+    <a href="#setup" class="hero-btn glint">Demo Ouija! →</a>
+    <span class="hero-note">For SuperAI NEXT hackathon judges</span>
+  </div>
+
+  <!-- Product preview frame -->
+  <div class="preview-wrap">
+    <div class="preview-frame glint" id="preview-frame">
+      <!-- Browser chrome mockup showing the product in action -->
+      <div class="bc">
+        <div class="bc-bar">
+          <div class="bc-lights">
+            <span class="bc-r"></span><span class="bc-y"></span><span class="bc-g"></span>
+          </div>
+          <div class="bc-url">app.shopify.com/admin/settings/channels</div>
+        </div>
+        <div class="bc-body">
+          <div class="hp"
+            style="--hp-nav-bg:#f2f2f0;--hp-bg:#fff;--hp-cta-bg:#1a8052;
+            --hp-glow:oklch(0.74 .148 35/.40);--hp-glow-s:oklch(0.74 .148 35/.12);
+            --hp-glow-lg:oklch(0.74 .148 35/.32);--hp-ni-hi:rgba(26,128,82,.14);">
+            <div class="hp-nav">
+              <div class="hp-logo"></div>
+              <div class="hp-ni hi"></div>
+              <div class="hp-ni"></div>
+              <div class="hp-ni"></div>
+              <div class="hp-ni"></div>
+              <div class="hp-ni"></div>
+              <div class="hp-ni"></div>
+              <div class="hp-ni"></div>
+            </div>
+            <div class="hp-main">
+              <div class="hp-h"></div>
+              <div class="hp-b w9"></div>
+              <div class="hp-b w8"></div>
+              <div class="hp-b w6"></div>
+              <div class="hp-b w9" style="margin-top:16px"></div>
+              <div class="hp-b w8"></div>
+              <div class="hp-cta">Connect channel</div>
+            </div>
+          </div>
+          <!-- Ouija panel -->
+          <div class="om" style="--om-w:224px">
+            <div class="om-head">
+              <div class="om-mark"><span data-compass="13"></span></div>
+              <div>
+                <span class="om-name">Ouija</span>
+                <span class="om-step">connect your meta pixel</span>
+              </div>
+              <span class="om-counter">3/6</span>
+            </div>
+            <div class="om-nodes">
+              <div class="on d"></div><div class="on-seg d"></div>
+              <div class="on d"></div><div class="on-seg d"></div>
+              <div class="on n"></div><div class="on-seg"></div>
+              <div class="on f"></div><div class="on-seg"></div>
+              <div class="on f"></div><div class="on-seg"></div>
+              <div class="on f"></div>
+            </div>
+            <div class="om-body">
+              <div class="ob ai">Click the <b>Connect channel</b> button — I've highlighted it for you.</div>
+              <div class="ob sys">✓ Step 2 verified</div>
+            </div>
+            <div class="om-foot">
+              <div class="ob-btn">Done ✓</div>
+              <div class="ob-btn sec">Check for me</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Play button overlay -->
+    <div class="preview-overlay">
+      <button class="play-btn">
+        <svg class="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </button>
+    </div>
+    <span class="preview-label">Demo video</span>
+  </div>
+</section>
+
+<!-- ── MARQUEE ────────────────────────────────────────────────────── -->
+<section class="marquee-section">
+  <p class="marquee-label">Guides across any site</p>
+  <div class="marquee-track" id="marquee-track">
+    <!-- Cards injected by JS -->
+  </div>
+</section>
+
+<!-- ── SETUP STEPS ───────────────────────────────────────────────── -->
+<section class="setup-section" id="setup">
+  <p class="section-eyebrow">Try it yourself</p>
+  <h2 class="section-h2">Set up in under two minutes.</h2>
+  <p class="section-sub">No accounts, no credentials — we provide everything.</p>
+
+  <div class="steps">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">Load the extension</div>
+        <p class="step-body">
+          Download and load Ouija unpacked in Chrome.
+          <span class="step-code">chrome://extensions</span>
+          → Developer Mode → Load unpacked.
+        </p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Enter a demo API key</div>
+        <p class="step-body">Click the Ouija icon and paste one of these:</p>
+        <div class="key-pill" style="margin-top:10px">
+          <span class="key-code">ouija_demo_shopify_2025</span>
+          <span class="key-label">Shopify flow</span>
+        </div>
+        <div class="key-pill">
+          <span class="key-code">ouija_demo_stripe_2025</span>
+          <span class="key-label">Stripe KYB</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">The sidebar appears</div>
+        <p class="step-body">
+          Ouija greets you and begins guiding — highlighting elements, pointing the way,
+          verifying each step. Press <span class="kbd">`</span> to toggle.
+        </p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title">Follow the guide</div>
+        <p class="step-body">
+          Ouija walks you through the full journey — across sites if needed.
+          At the end, it links you to the admin panel showing your own session.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <p class="skip-note">
+    Don't want to set it up?
+    <a href="#" class="skip-link">Watch the video ↑</a>
+  </p>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────────────── -->
+<footer>
+  <p>Ouija · SuperAI NEXT Hackathon 2025 · AWS + Vercel</p>
+</footer>
+
+<script>
+/* ── Compass SVG ─────────────────────────────────────────── */
+function compassSVG(size) {
+  const s = Number(size);
+  return `<svg width="${s}" height="${s}" viewBox="0 0 100 100" fill="none"
+    xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;flex-shrink:0">
+    <circle cx="50" cy="50" r="43" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="80.4" y1="19.6" x2="75.6" y2="24.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".38"/>
+    <line x1="80.4" y1="80.4" x2="75.6" y2="75.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".38"/>
+    <line x1="19.6" y1="80.4" x2="24.4" y2="75.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".38"/>
+    <line x1="19.6" y1="19.6" x2="24.4" y2="24.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".38"/>
+    <path d="M50,12 L56,36 L50,50 L44,36 Z" fill="currentColor"/>
+    <path d="M50,88 L44,64 L50,50 L56,64 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M88,50 L64,44 L50,50 L64,56 Z" fill="currentColor" opacity=".68"/>
+    <path d="M12,50 L36,44 L50,50 L36,56 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" opacity=".52"/>
+    <circle cx="50" cy="50" r="4.5" fill="currentColor"/>
+  </svg>`;
+}
+document.querySelectorAll('[data-compass]').forEach(el => {
+  el.style.color = 'var(--mark-color)';
+  el.innerHTML = compassSVG(el.dataset.compass);
+});
+
+/* ── Carousel cards ──────────────────────────────────────── */
+const CARDS = [
+  { url:'app.shopify.com/admin/home', navBg:'#f2f2f0', bg:'#fff',
+    accentCss:'rgba(26,128,82,.14)', ctaBg:'#1a8052', ctaLabel:'Connect channel',
+    step:'3/6', nodes:[1,1,0,0,0,0], msg:'Click the <b>Connect channel</b> button — I\'ve highlighted it.',
+    user:null },
+  { url:'app.shopify.com/admin/settings', navBg:'#f2f2f0', bg:'#fff',
+    accentCss:'rgba(26,128,82,.14)', ctaBg:'#1a8052', ctaLabel:'Save changes',
+    step:'4/6', nodes:[1,1,1,0,0,0], msg:'Click <b>Save changes</b> to confirm.',
+    user:'Done' },
+  { url:'business.facebook.com/events-manager', navBg:'#e4e6eb', bg:'#f0f2f5',
+    accentCss:'rgba(24,119,242,.14)', ctaBg:'#1877f2', ctaLabel:'Add pixel',
+    step:'5/6', nodes:[1,1,1,1,0,0], msg:'Click <b>Add pixel</b> in the sources panel.',
+    user:null },
+  { url:'dashboard.stripe.com/webhooks', navBg:'#f0f3f8', bg:'#f6f9fc',
+    accentCss:'rgba(84,105,212,.14)', ctaBg:'#5469d4', ctaLabel:'Add endpoint',
+    step:'2/5', nodes:[1,0,0,0,0], msg:'Click <b>Add endpoint</b> to register your URL.',
+    user:null },
+  { url:'app.shopify.com/admin/apps/ouija', navBg:'#f2f2f0', bg:'#fff',
+    accentCss:'rgba(26,128,82,.14)', ctaBg:'#1a8052', ctaLabel:'Enable pixel',
+    step:'6/6', nodes:[1,1,1,1,1,0], msg:'Toggle <b>Enable pixel</b> — almost done.',
+    user:'Looking good!' },
+];
+
+function buildCard(d) {
+  const glow = d.ctaBg.includes('52') ? 'oklch(0.74 .148 35' :
+               d.ctaBg.includes('f2') ? 'oklch(0.65 .18 250' : 'oklch(0.62 .16 280';
+  const nodesHtml = d.nodes.map((s,i) => {
+    const cl = s===1 ? 'd' : i===d.nodes.indexOf(0) ? 'n' : 'f';
+    return (i>0 ? `<div class="on-seg${s===1&&i>0&&d.nodes[i-1]===1?' d':''}"></div>` : '')
+      + `<div class="on ${cl}"></div>`;
+  }).join('');
+
+  return `<div class="marquee-card">
+    <div class="bc">
+      <div class="bc-bar">
+        <div class="bc-lights"><span class="bc-r"></span><span class="bc-y"></span><span class="bc-g"></span></div>
+        <div class="bc-url">${d.url}</div>
+      </div>
+      <div class="bc-body">
+        <div class="hp" style="--hp-nav-bg:${d.navBg};--hp-bg:${d.bg};--hp-cta-bg:${d.ctaBg};
+          --hp-ni-hi:${d.accentCss};
+          --hp-glow:${glow}/.40);--hp-glow-s:${glow}/.12);--hp-glow-lg:${glow}/.30);">
+          <div class="hp-nav">
+            <div class="hp-logo"></div>
+            <div class="hp-ni hi"></div>
+            <div class="hp-ni"></div><div class="hp-ni"></div>
+            <div class="hp-ni"></div><div class="hp-ni"></div>
+          </div>
+          <div class="hp-main">
+            <div class="hp-h"></div>
+            <div class="hp-b w9"></div><div class="hp-b w8"></div>
+            <div class="hp-b w6"></div><div class="hp-b w9"></div>
+            <div class="hp-cta">${d.ctaLabel}</div>
+          </div>
+        </div>
+        <div class="om">
+          <div class="om-head">
+            <div class="om-mark"><span data-compass="12"></span></div>
+            <div><span class="om-name">Ouija</span><span class="om-step">guided setup</span></div>
+            <span class="om-counter">${d.step}</span>
+          </div>
+          <div class="om-nodes">${nodesHtml}</div>
+          <div class="om-body">
+            <div class="ob ai">${d.msg}</div>
+            ${d.user ? `<div class="ob u">${d.user}</div>` : ''}
+          </div>
+          <div class="om-foot">
+            <div class="ob-btn">Done ✓</div>
+            <div class="ob-btn sec">Check</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+const track = document.getElementById('marquee-track');
+const allCards = [...CARDS, ...CARDS]; // duplicate for infinite loop
+track.innerHTML = allCards.map(buildCard).join('');
+
+// Inject compass marks into carousel cards
+track.querySelectorAll('[data-compass]').forEach(el => {
+  el.style.color = 'oklch(0.74 calc(0.18*0.82) 35)';
+  el.innerHTML = compassSVG(el.dataset.compass);
+});
+
+// Nav scroll halo
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+</script>
+</body>
+</html>

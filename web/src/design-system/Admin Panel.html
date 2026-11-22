@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ouija — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── RELIQUARY TOKENS — lava edition ───────────────────────────── */
+:root {
+  --h:35; --c:0.24;
+
+  --surface:        oklch(0.14 calc(var(--c)*.42) var(--h)/.90);
+  --surface-strong: oklch(0.08 calc(var(--c)*.30) var(--h)/.98);
+  --surface-soft:   oklch(0.32 calc(var(--c)*.28) var(--h)/.12);
+
+  --glint-hi:  oklch(0.96 calc(var(--c)*.95) 42/.95);
+  --glint-mid: oklch(0.74 calc(var(--c)*.72) 38/.38);
+  --glint-lo:  oklch(0.50 calc(var(--c)*.45) 35/.00);
+
+  --text-hi:    oklch(0.97 calc(var(--c)*.10) var(--h));
+  --text-md:    oklch(0.78 calc(var(--c)*.55) var(--h));
+  --text-lo:    oklch(0.60 calc(var(--c)*.45) var(--h));
+  --text-muted: oklch(0.44 calc(var(--c)*.38) var(--h));
+
+  --mark-bg:     oklch(0.22 calc(var(--c)*.52) var(--h)/.30);
+  --mark-border: oklch(0.66 calc(var(--c)*.78) var(--h)/.48);
+  --mark-color:  oklch(0.84 calc(var(--c)*.92) var(--h));
+
+  --btn-bg:      oklch(0.20 calc(var(--c)*.55) var(--h)/.14);
+  --btn-border:  oklch(0.70 calc(var(--c)*.72) var(--h)/.50);
+  --btn-text:    oklch(0.86 calc(var(--c)*.90) var(--h));
+  --btn-bg-h:    oklch(0.26 calc(var(--c)*.60) var(--h)/.24);
+  --btn-border-h:oklch(0.76 calc(var(--c)*.80) var(--h)/.80);
+
+  --success: oklch(0.76 0.20 162);
+  --warn:    oklch(0.82 0.18  52);
+  --danger:  oklch(0.72 0.22  22);
+
+  --shadow-panel:
+    inset 0 2px 0 var(--glint-hi),
+    0 0 0 1px oklch(0.55 calc(var(--c)*.70) var(--h)/.22),
+    0 32px 80px -16px oklch(0.04 0 0/.95);
+
+  --serif:'Instrument Serif',Georgia,serif;
+  --sans:'Manrope',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --spring:cubic-bezier(0.34,1.32,0.64,1);
+  --ease:cubic-bezier(0.22,1,0.36,1);
+}
+
+@property --g-angle{syntax:'<angle>';inherits:false;initial-value:45deg;}
+@keyframes glint{to{--g-angle:405deg;}}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 0 0 var(--mark-color)80}50%{box-shadow:0 0 0 5px transparent}}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{color-scheme:dark;}
+body{
+  background:#030307;
+  color:var(--text-md);font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;min-height:100vh;
+  position:relative;
+}
+
+/* Page-level ambient glow */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 900px 560px at 50% 0%,
+      oklch(0.28 calc(var(--c)*.85) var(--h)/.16) 0%,
+      transparent 65%),
+    radial-gradient(ellipse 600px 400px at 80% 80%,
+      oklch(0.22 calc(var(--c)*.60) 55/.08) 0%,
+      transparent 70%);
+}
+
+/* ── GLINT BORDER ──────────────────────────────────────────────── */
+.glint{position:relative;isolation:isolate;}
+.glint::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:conic-gradient(from var(--g-angle),
+    var(--glint-lo) 0deg,var(--glint-lo) 60deg,
+    var(--glint-mid) 72deg,var(--glint-hi) 84deg,
+    var(--glint-mid) 96deg,var(--glint-lo) 108deg,
+    var(--glint-lo) 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:glint 9s ease-in-out infinite;pointer-events:none;z-index:3;
+}
+
+/* ── GLASS MATERIAL ────────────────────────────────────────────── */
+.glass{
+  background:linear-gradient(160deg,
+    oklch(1 0 0/.06) 0%,
+    oklch(0.14 calc(var(--c)*.42) var(--h)/.88) 14%,
+    oklch(0.10 calc(var(--c)*.28) var(--h)/.84) 100%);
+  -webkit-backdrop-filter:blur(36px) saturate(220%);
+  backdrop-filter:blur(36px) saturate(220%);
+  border:1px solid oklch(1 0 0/.11);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0/.18),
+    inset 0 -1px 0 oklch(0 0 0/.10),
+    0 8px 40px -12px oklch(0 0 0/.80);
+  transition:transform .22s var(--spring),box-shadow .22s,border-color .22s;
+}
+.glass:hover{
+  border-color:oklch(1 0 0/.20);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0/.24),
+    inset 0 -1px 0 oklch(0 0 0/.10),
+    0 20px 60px -16px oklch(0 0 0/.90),
+    0 0 32px -12px oklch(0.84 calc(var(--c)*.92) var(--h)/.18);
+  transform:translateY(-2px);
+}
+
+/* ── NAV ───────────────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:16px 32px;display:flex;align-items:center;justify-content:center;
+}
+.nav-logo{position:absolute;left:32px;display:flex;align-items:center;gap:9px;text-decoration:none;
+  padding:6px 12px;border-radius:12px;background:transparent;
+  -webkit-backdrop-filter:blur(0px);backdrop-filter:blur(0px);
+  transition:background .30s,backdrop-filter .30s,-webkit-backdrop-filter .30s;}
+nav.scrolled .nav-logo{
+  background:oklch(0.06 calc(var(--c)*.18) var(--h)/.82);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  backdrop-filter:blur(24px) saturate(180%);
+}
+.nav-logo-name{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--text-hi);letter-spacing:-.01em;}
+.nav-pill{
+  display:flex;align-items:center;gap:2px;padding:5px 7px;border-radius:999px;
+  background:linear-gradient(135deg,
+    oklch(0.13 calc(var(--c)*.32) var(--h)/.96) 0%,
+    oklch(0.08 calc(var(--c)*.22) var(--h)/.94) 100%);
+  -webkit-backdrop-filter:blur(32px) saturate(200%);backdrop-filter:blur(32px) saturate(200%);
+  transition:box-shadow .30s;
+}
+nav.scrolled .nav-pill{box-shadow:0 0 0 1px oklch(0.55 calc(var(--c)*.65) var(--h)/.22);}
+.nav-link{padding:7px 17px;border-radius:999px;font-size:13px;font-weight:500;color:var(--text-lo);text-decoration:none;transition:color .15s,background .15s;}
+.nav-link:hover{color:var(--text-hi);background:var(--surface-soft);}
+.nav-link.active{color:var(--mark-color);}
+.nav-cta{
+  position:absolute;right:32px;padding:9px 22px;border-radius:999px;
+  font-size:13px;font-weight:700;color:var(--btn-text);text-decoration:none;transition:all .20s;
+  background:linear-gradient(135deg,
+    oklch(0.24 calc(var(--c)*.58) var(--h)/.28) 0%,
+    oklch(0.14 calc(var(--c)*.40) var(--h)/.16) 100%);
+  border:1px solid oklch(0.70 calc(var(--c)*.75) var(--h)/.58);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0/.18),
+    0 0 24px -6px oklch(0.84 calc(var(--c)*.92) var(--h)/.45);
+}
+.nav-cta:hover{
+  border-color:oklch(0.80 calc(var(--c)*.85) var(--h)/.75);
+  box-shadow:inset 0 1px 0 oklch(1 0 0/.24),0 0 36px -6px oklch(0.84 calc(var(--c)*.92) var(--h)/.65);
+  transform:translateY(-1px);
+}
+
+/* ── PAGE ──────────────────────────────────────────────────────── */
+.page{max-width:1140px;margin:0 auto;padding:96px 32px 80px;position:relative;z-index:1;}
+
+/* Banner */
+.banner{
+  padding:14px 22px;border-radius:14px;text-align:center;margin-bottom:36px;
+  background:oklch(0.16 calc(var(--c)*.30) var(--h)/.60);
+  border:1px solid oklch(0.50 calc(var(--c)*.55) var(--h)/.18);
+}
+.banner p{font-size:12px;color:var(--text-lo);line-height:1.6;font-weight:500;}
+
+/* Admin header */
+.admin-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
+.admin-id{display:flex;align-items:center;gap:14px;}
+.admin-mark{
+  width:44px;height:44px;border-radius:14px;
+  display:grid;place-items:center;
+  background:var(--mark-bg);border:1px solid var(--mark-border);
+  color:var(--mark-color);
+  box-shadow:0 0 20px -4px oklch(0.84 calc(var(--c)*.92) var(--h)/.35);
+}
+.admin-title{font-size:22px;font-weight:800;color:var(--text-hi);letter-spacing:-.025em;}
+.admin-sub{font-size:11px;color:var(--text-muted);font-weight:600;letter-spacing:.05em;margin-top:2px;}
+.flow-select{
+  padding:9px 32px 9px 16px;border-radius:12px;font-family:var(--sans);
+  font-size:12px;font-weight:600;color:var(--text-md);
+  background:var(--surface);border:1px solid oklch(0.55 calc(var(--c)*.65) var(--h)/.28);
+  cursor:pointer;appearance:none;outline:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a07050' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+}
+
+/* ── STATS ─────────────────────────────────────────────────────── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;}
+.stat-card{padding:22px 24px;border-radius:18px;transition:transform .18s var(--spring);}
+.stat-card:hover{transform:translateY(-2px);}
+.stat-label{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:oklch(0.68 calc(var(--c)*.26) var(--h));margin-bottom:12px;}
+.stat-value{font-size:42px;font-weight:800;letter-spacing:-.04em;line-height:1;color:var(--text-hi);}
+.stat-value.v-success{
+  color:var(--success);
+  text-shadow:0 0 32px oklch(0.76 .20 162/.45);
+}
+.stat-value.v-warn{
+  color:var(--warn);
+  text-shadow:0 0 32px oklch(0.82 .18 52/.40);
+}
+.stat-sub{font-size:11px;color:var(--text-muted);margin-top:8px;font-weight:500;}
+.stat-delta{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:9px;font-weight:800;letter-spacing:.06em;
+  padding:3px 8px;border-radius:999px;margin-top:8px;
+}
+.delta-up{background:oklch(.76 .20 162/.14);color:var(--success);border:1px solid oklch(.76 .20 162/.22);}
+.delta-dn{background:oklch(.82 .18 52/.12);color:var(--warn);border:1px solid oklch(.82 .18 52/.22);}
+.delta-info{background:oklch(.84 calc(var(--c)*.92) var(--h)/.10);color:var(--mark-color);border:1px solid var(--mark-border);}
+
+/* per-card accent inset glow */
+.stat-success{box-shadow:inset 0 2px 0 oklch(.76 .20 162/.40),inset 0 0 28px -12px oklch(.76 .20 162/.08),0 8px 32px -12px oklch(.04 0 0/.70);}
+.stat-warn   {box-shadow:inset 0 2px 0 oklch(.82 .18 52/.35), inset 0 0 28px -12px oklch(.82 .18 52/.08), 0 8px 32px -12px oklch(.04 0 0/.70);}
+
+/* ── MAIN GRID ─────────────────────────────────────────────────── */
+.main-grid{display:grid;grid-template-columns:1fr 320px;gap:12px;margin-bottom:12px;}
+
+.graph-card{border-radius:18px;padding:24px 28px;min-height:360px;display:flex;flex-direction:column;}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-shrink:0;}
+.card-title{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:oklch(0.68 calc(var(--c)*.26) var(--h));}
+.card-meta{font-size:11px;font-weight:500;color:var(--text-muted);}
+.card-badge{
+  font-size:9px;font-weight:800;letter-spacing:.10em;text-transform:uppercase;
+  padding:3px 10px;border-radius:999px;
+  background:oklch(.22 calc(var(--c)*.52) var(--h)/.30);
+  border:1px solid var(--mark-border);color:var(--mark-color);
+  box-shadow:0 0 12px -4px oklch(.84 calc(var(--c)*.92) var(--h)/.30);
+}
+.graph-area{flex:1;position:relative;}
+
+.sessions-card{border-radius:18px;padding:22px 20px;display:flex;flex-direction:column;gap:0;}
+.sessions-card .card-header{margin-bottom:14px;}
+.session-row{
+  padding:12px 14px;border-radius:12px;
+  border:1px solid transparent;
+  display:flex;align-items:center;gap:12px;
+  transition:background .15s,border-color .15s;cursor:pointer;
+  margin-bottom:4px;
+}
+.session-row:hover{
+  background:oklch(.22 calc(var(--c)*.30) var(--h)/.10);
+  border-color:oklch(.55 calc(var(--c)*.65) var(--h)/.18);
+}
+.s-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.s-dot.live{background:var(--mark-color);box-shadow:0 0 0 3px oklch(.84 calc(var(--c)*.92) var(--h)/.22);animation:pulse-dot 1.8s ease-in-out infinite;}
+.s-dot.done{background:var(--success);}
+.s-dot.stall{background:var(--warn);}
+.s-info{flex:1;min-width:0;}
+.s-id{font-family:var(--mono);font-size:10.5px;color:var(--text-md);font-weight:500;}
+.s-meta{font-size:10px;color:var(--text-muted);margin-top:1px;}
+.s-steps{font-size:11px;font-weight:700;color:var(--text-lo);white-space:nowrap;}
+.s-steps.done{color:var(--success);}
+.s-steps.stall{color:var(--warn);}
+
+/* ── BOTTOM GRID ───────────────────────────────────────────────── */
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+.rates-card{border-radius:18px;padding:24px 26px;}
+.step-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.step-row:last-child{margin-bottom:0;}
+.step-name{font-size:11px;font-weight:600;color:var(--text-lo);width:155px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bar-bg{flex:1;height:5px;border-radius:999px;background:oklch(.22 calc(var(--c)*.18) var(--h)/.18);}
+.bar-fill{height:100%;border-radius:999px;}
+.step-pct{font-size:10px;font-weight:700;width:34px;text-align:right;flex-shrink:0;}
+
+.chat-card{border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:16px;}
+.chat-head{display:flex;align-items:center;gap:12px;}
+.chat-mark{
+  width:34px;height:34px;border-radius:10px;
+  display:grid;place-items:center;
+  background:var(--mark-bg);border:1px solid var(--mark-border);color:var(--mark-color);
+}
+.chat-title{font-size:14px;font-weight:700;color:var(--text-hi);}
+.chat-sub{font-size:10px;color:var(--text-muted);}
+.chat-msgs{display:flex;flex-direction:column;gap:6px;}
+.chat-bub{
+  padding:11px 14px;font-size:12.5px;line-height:1.55;
+  border-radius:14px 14px 14px 4px;
+  background:oklch(.20 calc(var(--c)*.38) var(--h)/.18);
+  border:1px solid oklch(.52 calc(var(--c)*.58) var(--h)/.22);
+  color:var(--text-md);max-width:95%;
+}
+.chat-bub b{color:var(--mark-color);font-weight:700;}
+.chat-input-row{display:flex;gap:8px;}
+.chat-input{
+  flex:1;padding:11px 18px;border-radius:999px;
+  font-size:13px;color:var(--text-md);font-family:var(--sans);
+  background:oklch(.16 calc(var(--c)*.28) var(--h)/.14);
+  border:1px solid oklch(.52 calc(var(--c)*.60) var(--h)/.28);
+  outline:none;transition:border-color .15s,box-shadow .15s;
+}
+.chat-input::placeholder{color:var(--text-muted);}
+.chat-input:focus{
+  border-color:var(--btn-border);
+  box-shadow:0 0 0 3px oklch(.84 calc(var(--c)*.92) var(--h)/.12);
+}
+.chat-send{
+  padding:11px 22px;border-radius:999px;font-family:var(--sans);
+  font-size:12px;font-weight:700;cursor:pointer;
+  color:var(--btn-text);background:var(--btn-bg);border:1px solid var(--btn-border);
+  transition:all .18s;
+  box-shadow:0 0 16px -6px oklch(.84 calc(var(--c)*.92) var(--h)/.30);
+}
+.chat-send:hover{background:var(--btn-bg-h);border-color:var(--btn-border-h);}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <span data-compass="16" style="color:var(--mark-color)"></span>
+    <span class="nav-logo-name">Ouija</span>
+  </a>
+  <div class="nav-pill glint">
+    <a href="#" class="nav-link">Home</a>
+    <a href="#" class="nav-link">Features</a>
+    <a href="#" class="nav-link active">Admin</a>
+    <a href="#" class="nav-link">Pricing</a>
+  </div>
+  <a href="#" class="nav-cta glint">Demo it →</a>
+</nav>
+
+<div class="page">
+
+  <div class="banner">
+    <p>This is a preview of a Ouija client's admin dashboard — documentation, historical onboarding data, visual journey charts, and a synthesizer agent you can query.</p>
+  </div>
+
+  <div class="admin-head">
+    <div class="admin-id">
+      <div class="admin-mark"><span data-compass="20" style="color:var(--mark-color)"></span></div>
+      <div>
+        <div class="admin-title">Ouija Admin</div>
+        <div class="admin-sub">Onboarding intelligence</div>
+      </div>
+    </div>
+    <select class="flow-select">
+      <option>Shopify pixel setup</option>
+      <option>Stripe KYB onboarding</option>
+    </select>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card glass">
+      <div class="stat-label">Sessions</div>
+      <div class="stat-value">47</div>
+      <div class="stat-sub">Total guided</div>
+      <div class="stat-delta delta-info">↑ 12 today</div>
+    </div>
+    <div class="stat-card glass stat-success">
+      <div class="stat-label">Completed</div>
+      <div class="stat-value v-success">38</div>
+      <div class="stat-sub">Finished</div>
+      <div class="stat-delta delta-up">81% rate</div>
+    </div>
+    <div class="stat-card glass stat-warn">
+      <div class="stat-label">Abandoned</div>
+      <div class="stat-value v-warn">9</div>
+      <div class="stat-sub">Dropped off</div>
+      <div class="stat-delta delta-dn">Step 4 mostly</div>
+    </div>
+    <div class="stat-card glass">
+      <div class="stat-label">Avg completion</div>
+      <div class="stat-value">5.2</div>
+      <div class="stat-sub">Steps / 6 total</div>
+      <div class="stat-delta delta-up">↑ from 4.1</div>
+    </div>
+  </div>
+
+  <!-- Main grid -->
+  <div class="main-grid">
+    <div class="graph-card glass glint">
+      <div class="card-header">
+        <span class="card-title">Journey graph</span>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="card-meta">Shopify → Meta pixel</span>
+          <span class="card-badge">Live</span>
+        </div>
+      </div>
+      <div class="graph-area">
+        <svg id="jg" viewBox="0 0 620 260" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+          <defs>
+            <radialGradient id="nodeGlow" cx="47%" cy="50%" r="25%">
+              <stop offset="0%" stop-color="oklch(0.84 0.22 36)" stop-opacity=".14"/>
+              <stop offset="100%" stop-color="oklch(0.84 0.22 36)" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="glow-filter">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+          </defs>
+          <rect x="0" y="0" width="620" height="260" fill="url(#nodeGlow)"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="sessions-card glass">
+      <div class="card-header">
+        <span class="card-title">Recent sessions</span>
+        <span class="card-meta" style="color:var(--mark-color);font-weight:700;font-size:9px;letter-spacing:.08em">● LIVE</span>
+      </div>
+      <div class="session-row">
+        <div class="s-dot live"></div>
+        <div class="s-info"><div class="s-id">judge_d4f9a1c2</div><div class="s-meta">Shopify · active now</div></div>
+        <div class="s-steps">Step 3/6</div>
+      </div>
+      <div class="session-row">
+        <div class="s-dot done"></div>
+        <div class="s-info"><div class="s-id">judge_8b2e3f77</div><div class="s-meta">Shopify · 4 min ago</div></div>
+        <div class="s-steps done">6/6 ✓</div>
+      </div>
+      <div class="session-row">
+        <div class="s-dot done"></div>
+        <div class="s-info"><div class="s-id">judge_c1a0d55e</div><div class="s-meta">Stripe KYB · 11 min ago</div></div>
+        <div class="s-steps done">5/5 ✓</div>
+      </div>
+      <div class="session-row">
+        <div class="s-dot stall"></div>
+        <div class="s-info"><div class="s-id">judge_f3e82b91</div><div class="s-meta">Shopify · 18 min ago</div></div>
+        <div class="s-steps stall">4/6 stalled</div>
+      </div>
+      <div class="session-row">
+        <div class="s-dot done"></div>
+        <div class="s-info"><div class="s-id">judge_9d7ca340</div><div class="s-meta">Shopify · 31 min ago</div></div>
+        <div class="s-steps done">6/6 ✓</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom grid -->
+  <div class="bottom-grid">
+    <div class="rates-card glass">
+      <div class="card-header" style="margin-bottom:20px">
+        <span class="card-title">Step completion rates</span>
+        <span class="card-meta">Shopify pixel setup</span>
+      </div>
+      <div id="step-rates"></div>
+    </div>
+
+    <div class="chat-card glass glint">
+      <div class="chat-head">
+        <div class="chat-mark"><span data-compass="16" style="color:var(--mark-color)"></span></div>
+        <div>
+          <div class="chat-title">Synthesis agent</div>
+          <div class="chat-sub">Query onboarding data</div>
+        </div>
+      </div>
+      <div class="chat-msgs">
+        <div class="chat-bub">
+          Most users stall at <b>Step 4 — Connect channel</b>. Of 9 dropoffs, 7 happened here.
+          The "Connect" button is below the fold on smaller viewports — worth fixing.
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <input class="chat-input" type="text" placeholder="Where are users getting stuck?">
+        <button class="chat-send">Ask</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Compass SVG ─────────────────────────────────────────── */
+function cSVG(size) {
+  const s = Number(size);
+  return `<svg width="${s}" height="${s}" viewBox="0 0 100 100" fill="none" style="display:block;flex-shrink:0">
+    <circle cx="50" cy="50" r="43" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="80.4" y1="19.6" x2="75.6" y2="24.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".38"/>
+    <line x1="80.4" y1="80.4" x2="75.6" y2="75.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".38"/>
+    <line x1="19.6" y1="80.4" x2="24.4" y2="75.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".38"/>
+    <line x1="19.6" y1="19.6" x2="24.4" y2="24.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".38"/>
+    <path d="M50,12 L56,36 L50,50 L44,36 Z" fill="currentColor"/>
+    <path d="M50,88 L44,64 L50,50 L56,64 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M88,50 L64,44 L50,50 L64,56 Z" fill="currentColor" opacity=".68"/>
+    <path d="M12,50 L36,44 L50,50 L36,56 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" opacity=".52"/>
+    <circle cx="50" cy="50" r="4.5" fill="currentColor"/>
+  </svg>`;
+}
+document.querySelectorAll('[data-compass]').forEach(el => { el.innerHTML = cSVG(el.dataset.compass); });
+
+// Nav scroll halo
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+
+/* ── Journey graph ───────────────────────────────────────── */
+const NODES = [
+  { id:'s1', label:'Open\nSettings',   x:55,  y:110, s:'done'    },
+  { id:'s2', label:'Sales\nChannels',  x:145, y:110, s:'done'    },
+  { id:'s3', label:'Add\nChannel',     x:235, y:110, s:'done'    },
+  { id:'s4', label:'Connect\nChannel', x:325, y:110, s:'current' },
+  { id:'s5', label:'Verify\nPixel',    x:415, y:110, s:'future'  },
+  { id:'s6', label:'Complete',         x:505, y:110, s:'future'  },
+];
+const FORK = { x:325, y:196, label:'Alt: reload\npage' };
+
+const svg = document.getElementById('jg');
+
+// Background glow around current node
+svg.innerHTML += `<circle cx="325" cy="110" r="48" fill="oklch(0.84 0.22 36/.06)"/>
+  <circle cx="325" cy="110" r="32" fill="oklch(0.84 0.22 36/.06)"/>`;
+
+// Edges
+for (let i=0; i<NODES.length-1; i++) {
+  const a=NODES[i], b=NODES[i+1];
+  const done = a.s==='done' && (b.s==='done'||b.s==='current');
+  svg.innerHTML += `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"
+    stroke="${done?'oklch(0.60 0.192 35/.55)':'oklch(0.28 0.067 35/.28)'}"
+    stroke-width="${done?'1.8':'1.2'}"
+    stroke-dasharray="${b.s==='future'?'4 4':'0'}"/>`;
+}
+
+// Fork edge
+svg.innerHTML += `
+  <path d="M325 121 Q325 158 325 187" stroke="oklch(0.82 0.18 52/.40)" stroke-width="1.2" stroke-dasharray="3 3"/>
+  <text x="335" y="168" font-family="Manrope,sans-serif" font-size="8" font-weight="800"
+    fill="oklch(0.82 0.18 52/.60)" letter-spacing=".10em">BREAKPOINT</text>`;
+
+// Nodes
+NODES.forEach(n => {
+  if (n.s==='done') {
+    svg.innerHTML += `
+      <circle cx="${n.x}" cy="${n.y}" r="10" fill="oklch(0.20 0.096 35/.50)" stroke="oklch(0.60 0.192 35/.60)" stroke-width="1.5"/>
+      <path d="M${n.x-3.5} ${n.y} l3 3 5-5" stroke="oklch(0.84 0.22 36)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`;
+  } else if (n.s==='current') {
+    svg.innerHTML += `
+      <circle cx="${n.x}" cy="${n.y}" r="22" fill="oklch(0.84 0.22 36/.06)"/>
+      <circle cx="${n.x}" cy="${n.y}" r="16" fill="oklch(0.84 0.22 36/.08)"/>
+      <circle cx="${n.x}" cy="${n.y}" r="11" fill="transparent" stroke="oklch(0.88 0.22 38)" stroke-width="2.5"/>
+      <circle cx="${n.x}" cy="${n.y}" r="5" fill="oklch(0.88 0.22 38)"/>`;
+  } else {
+    svg.innerHTML += `
+      <circle cx="${n.x}" cy="${n.y}" r="9" fill="oklch(0.14 0.034 35/.60)" stroke="oklch(0.28 0.067 35/.30)" stroke-width="1.2"/>`;
+  }
+});
+
+// Fork node
+svg.innerHTML += `<circle cx="${FORK.x}" cy="${FORK.y}" r="8"
+  fill="oklch(0.18 0.043 52/.50)" stroke="oklch(0.82 0.18 52/.50)" stroke-width="1.2" stroke-dasharray="3 2"/>`;
+
+// Labels
+NODES.forEach(n => {
+  const col = n.s==='done'?'oklch(0.62 0.140 35)':n.s==='current'?'oklch(0.90 0.21 38)':'oklch(0.36 0.086 35)';
+  const lines = n.label.split('\n');
+  const y0 = n.y - 22 - (lines.length-1)*8;
+  lines.forEach((ln,i) => {
+    svg.innerHTML += `<text x="${n.x}" y="${y0+i*13}" text-anchor="middle"
+      font-family="Manrope,sans-serif" font-size="9" font-weight="700"
+      fill="${col}" letter-spacing=".02em">${ln}</text>`;
+  });
+});
+
+// Fork label
+FORK.label.split('\n').forEach((ln,i) => {
+  svg.innerHTML += `<text x="${FORK.x+16}" y="${FORK.y+3+i*11}" text-anchor="start"
+    font-family="Manrope,sans-serif" font-size="9" font-weight="600"
+    fill="oklch(0.82 0.18 52)" letter-spacing=".02em">${ln}</text>`;
+});
+
+// "YOU ARE HERE" pill
+svg.innerHTML += `
+  <rect x="291" y="126" width="68" height="15" rx="7.5" fill="oklch(0.22 0.096 35/.30)" stroke="oklch(0.84 0.22 36/.45)"/>
+  <text x="325" y="137" text-anchor="middle" font-family="Manrope,sans-serif" font-size="7.5" font-weight="800"
+    fill="oklch(0.88 0.22 38)" letter-spacing=".10em">YOU ARE HERE</text>`;
+
+/* ── Step rates ──────────────────────────────────────────── */
+const steps = [
+  { name:'Open Settings',    pct:98 },
+  { name:'Sales Channels',   pct:95 },
+  { name:'Add Channel',      pct:89 },
+  { name:'Connect Channel',  pct:61 },
+  { name:'Verify Pixel',     pct:82 },
+  { name:'Complete',         pct:81 },
+];
+document.getElementById('step-rates').innerHTML = steps.map((s,i) => {
+  const hot = s.pct < 70;
+  const color = hot ? 'oklch(0.82 0.18 52)' : 'oklch(0.76 0.20 162)';
+  const pctColor = hot ? 'oklch(0.82 0.18 52)' : 'var(--text-muted)';
+  return `<div class="step-row">
+    <span class="step-name">${i+1}. ${s.name}</span>
+    <div class="bar-bg"><div class="bar-fill" style="width:${s.pct}%;background:${color};
+      box-shadow:0 0 8px ${color}60"></div></div>
+    <span class="step-pct" style="color:${pctColor}">${s.pct}%</span>
+  </div>`;
+}).join('');
+</script>
+</body>
+</html>

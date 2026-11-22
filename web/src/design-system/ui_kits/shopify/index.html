@@ -1,0 +1,182 @@
+<!-- @dsCard group="Shopify" viewport="1440x900" name="Ouija inside Shopify Admin" subtitle="The extension layered onto a realistic commerce admin — premium green theme, native feel" -->
+<!DOCTYPE html>
+<html lang="en" data-theme="shopify">
+<head>
+<meta charset="utf-8" />
+<title>Ouija · Shopify Admin</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  :root {
+    /* host (Shopify-admin-like) local palette — the SITE's own colors */
+    --s-green:#008060; --s-green-d:#005c47; --s-bg:#f1f2f4; --s-surface:#ffffff;
+    --s-border:#e1e3e5; --s-ink:#1a1a1a; --s-ink2:#4a4a4a; --s-ink3:#8a8a8a;
+    --s-nav:#f6f6f7; --s-hover:#ededed;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--s-bg);
+    font-family: 'Manrope', -apple-system, system-ui, sans-serif; color: var(--s-ink); -webkit-font-smoothing: antialiased; }
+  .app { display: grid; grid-template-columns: 232px 1fr; grid-template-rows: 56px 1fr; height: 100vh; }
+
+  /* top bar */
+  .top { grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; padding: 0 16px;
+    background: var(--s-ink); color: #fff; }
+  .top .logo { display:flex; align-items:center; gap:9px; font-weight:800; font-size:15px; width:200px;}
+  .top .logo .mk { width:26px;height:26px;border-radius:7px; background:linear-gradient(160deg,#19c37d,#008060); display:grid;place-items:center; }
+  .top .logo .mk svg{width:16px;height:16px;color:#fff;}
+  .top .search { flex:1; max-width:520px; margin:0 auto; height:34px; background:rgba(255,255,255,.13);
+    border:1px solid rgba(255,255,255,.16); border-radius:9px; display:flex; align-items:center; gap:9px; padding:0 12px; color:#c9c9c9; font-size:13px; }
+  .top .search svg{width:16px;height:16px;}
+  .top .right { display:flex; align-items:center; gap:10px; width:200px; justify-content:flex-end;}
+  .top .ic { width:34px;height:34px;border-radius:8px;display:grid;place-items:center;color:#d2d2d2;}
+  .top .ic svg{width:18px;height:18px;}
+  .top .ava { width:30px;height:30px;border-radius:8px;background:linear-gradient(150deg,#5b8def,#a06bf0);display:grid;place-items:center;font-weight:700;font-size:12px;color:#fff;}
+
+  /* nav */
+  .nav { background: var(--s-nav); border-right: 1px solid var(--s-border); padding: 12px 12px; overflow-y:auto; }
+  .nav .store { display:flex;align-items:center;gap:10px; padding:7px 8px; border-radius:8px; margin-bottom:10px; }
+  .nav .store:hover{background:var(--s-hover);}
+  .nav .store .b{width:28px;height:28px;border-radius:7px;background:#d7f0e6;display:grid;place-items:center;color:#005c47;font-weight:800;font-size:13px;}
+  .nav .store .nm{font-weight:700;font-size:13.5px;}
+  .nav .store .ch{margin-left:auto;color:var(--s-ink3);}
+  .nav .store .ch svg{width:15px;height:15px;}
+  .ni { display:flex;align-items:center;gap:11px; padding:8px 9px; border-radius:8px; font-size:13.5px; font-weight:600; color:var(--s-ink2); cursor:pointer; margin-bottom:1px;}
+  .ni:hover{background:var(--s-hover);}
+  .ni.on{background:#ebebeb;color:var(--s-ink);}
+  .ni svg{width:18px;height:18px;opacity:.85;}
+  .ni .badge{margin-left:auto;background:#e3e3e3;color:#5a5a5a;font-size:11px;font-weight:700;border-radius:7px;padding:1px 7px;}
+  .nav .sec{font-size:11px;font-weight:700;color:var(--s-ink3);text-transform:uppercase;letter-spacing:.04em;padding:14px 9px 6px;}
+
+  /* main */
+  .main { overflow-y:auto; padding: 28px 0; }
+  .wrap { max-width: 760px; margin: 0; padding: 0 36px; }
+  .greet { font-size:13px; color:var(--s-ink3); font-weight:600; }
+  .h1 { font-size:24px; font-weight:800; letter-spacing:-.02em; margin:2px 0 22px; }
+
+  .card { background:var(--s-surface); border:1px solid var(--s-border); border-radius:14px; box-shadow:0 1px 0 rgba(0,0,0,.02); margin-bottom:18px; }
+  .card.pad { padding:20px 22px; }
+  .setup .sh { display:flex;align-items:center;gap:12px; padding:18px 22px; }
+  .setup .sh .t{font-weight:800;font-size:16px;}
+  .setup .sh .p{margin-left:auto;font-size:13px;color:var(--s-ink3);font-weight:600;}
+  .setup .bar{height:5px;background:#eaeaea;border-radius:99px;margin:0 22px 4px;overflow:hidden;}
+  .setup .bar i{display:block;height:100%;width:40%;background:linear-gradient(90deg,#19c37d,#008060);border-radius:99px;}
+  .task { display:flex;align-items:center;gap:13px; padding:13px 22px; border-top:1px solid #f0f0f0;}
+  .task .ck{width:20px;height:20px;border-radius:50%;border:1.8px solid #c9c9c9;display:grid;place-items:center;flex:0 0 auto;}
+  .task.done .ck{background:#008060;border-color:#008060;color:#fff;}
+  .task.done .ck svg{width:13px;height:13px;}
+  .task .tx{font-size:13.5px;font-weight:600;color:var(--s-ink);}
+  .task .tx small{display:block;color:var(--s-ink3);font-weight:500;font-size:12px;margin-top:2px;}
+  .task.done .tx{color:var(--s-ink3);text-decoration:line-through;}
+  .task .act{margin-left:auto;}
+  .sbtn{border:none;border-radius:9px;font-family:inherit;font-weight:700;font-size:13px;padding:8px 15px;cursor:pointer;white-space:nowrap;}
+  .sbtn.primary{background:linear-gradient(180deg,#0a8f6a,#006b51);color:#fff;box-shadow:0 1px 2px rgba(0,0,0,.18);}
+  .sbtn.ghost{background:#fff;border:1px solid #cfcfcf;color:var(--s-ink);}
+
+  .metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+  .metric{background:var(--s-surface);border:1px solid var(--s-border);border-radius:12px;padding:16px 18px;}
+  .metric .l{font-size:12.5px;color:var(--s-ink3);font-weight:600;}
+  .metric .v{font-size:22px;font-weight:800;margin-top:7px;letter-spacing:-.02em;}
+  .metric .d{font-size:11.5px;font-weight:700;margin-top:4px;color:#0a8f6a;}
+</style>
+</head>
+<body>
+  <div class="app">
+    <div class="top">
+      <div class="logo"><span class="mk"><i data-lucide="shopping-bag"></i></span>Northwind</div>
+      <div class="search"><i data-lucide="search"></i> Search</div>
+      <div class="right">
+        <span class="ic"><i data-lucide="bell"></i></span>
+        <span class="ava">MK</span>
+      </div>
+    </div>
+
+    <aside class="nav">
+      <div class="store"><span class="b">N</span><span class="nm">Northwind</span><span class="ch"><i data-lucide="chevrons-up-down"></i></span></div>
+      <div class="ni on"><i data-lucide="house"></i> Home</div>
+      <div class="ni"><i data-lucide="shopping-cart"></i> Orders <span class="badge">6</span></div>
+      <div class="ni"><i data-lucide="tag"></i> Products</div>
+      <div class="ni"><i data-lucide="users"></i> Customers</div>
+      <div class="ni"><i data-lucide="chart-line"></i> Analytics</div>
+      <div class="ni"><i data-lucide="megaphone"></i> Marketing</div>
+      <div class="ni"><i data-lucide="percent"></i> Discounts</div>
+      <div class="sec">Sales channels</div>
+      <div class="ni"><i data-lucide="globe"></i> Online Store</div>
+      <div class="ni"><i data-lucide="store"></i> Point of Sale</div>
+      <div class="sec">Apps</div>
+      <div class="ni"><i data-lucide="grid-2x2"></i> Beacon Ads</div>
+    </aside>
+
+    <main class="main">
+      <div class="wrap">
+        <div class="greet">Good afternoon, Maya</div>
+        <div class="h1">Home</div>
+
+        <div class="card setup">
+          <div class="sh"><span class="t">Set up your store</span><span class="p">2 of 5 tasks complete</span></div>
+          <div class="bar"><i></i></div>
+          <div style="height:8px"></div>
+          <div class="task done"><span class="ck"><i data-lucide="check"></i></span><span class="tx">Add your first product</span></div>
+          <div class="task done"><span class="ck"><i data-lucide="check"></i></span><span class="tx">Customize your theme</span></div>
+          <div class="task"><span class="ck"></span><span class="tx">Add a custom domain<small>Make your store easy to find</small></span><span class="act"><button class="sbtn ghost">Add domain</button></span></div>
+          <div class="task"><span class="ck"></span><span class="tx">Set up payments<small>Start accepting orders</small></span><span class="act"><button class="sbtn ghost">Set up</button></span></div>
+          <div class="task" id="task-target"><span class="ck"></span><span class="tx">Connect a marketing channel<small>Track sales with the Beacon Ads pixel</small></span><span class="act"><button class="sbtn primary" id="host-cta">Connect channel</button></span></div>
+        </div>
+
+        <div class="metrics">
+          <div class="metric"><div class="l">Sales</div><div class="v">$8,420</div><div class="d">▲ 12% this week</div></div>
+          <div class="metric"><div class="l">Sessions</div><div class="v">3,184</div><div class="d">▲ 4% this week</div></div>
+          <div class="metric"><div class="l">Orders</div><div class="v">128</div><div class="d">▲ 9% this week</div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Ouija overlay layer -->
+  <div id="ouija-root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script type="text/babel">
+    lucide.createIcons();
+    const { SidebarPanel, MessageBubble, Spotlight, Pointer, Coachmark } = window.OuijaDesignSystem_93fedd;
+
+    function useRect(id){
+      const [r,setR]=React.useState(null);
+      React.useLayoutEffect(()=>{
+        const measure=()=>{const el=document.getElementById(id); if(el) setR(el.getBoundingClientRect());};
+        measure(); window.addEventListener('resize',measure);
+        const t=setTimeout(measure,300);
+        return ()=>{window.removeEventListener('resize',measure);clearTimeout(t);};
+      },[id]);
+      return r;
+    }
+
+    function Ouija(){
+      const r = useRect('host-cta');
+      const PAD=8;
+      return (
+        <>
+          {r && (
+            <div style={{position:'fixed',inset:0,zIndex:50,pointerEvents:'none'}}>
+              <Spotlight radius={12} style={{top:r.top-PAD,left:r.left-PAD,width:r.width+PAD*2,height:r.height+PAD*2}} />
+              <Coachmark arrow="down" html="Click <b>Connect channel</b> to link the Beacon Ads pixel."
+                copyValue="px_8f3c20a91b4e"
+                style={{position:'fixed',top:r.top-118,left:r.left-70}} />
+            </div>
+          )}
+          <div style={{position:'fixed',top:'72px',right:'var(--panel-margin)',zIndex:60}}>
+            <SidebarPanel subtitle="Connect Beacon Ads" step={3} totalSteps={6} animate
+              advanceLabel="I did it — next">
+              <MessageBubble html="Let's connect your marketing pixel. On your <b>Home</b> setup guide, click <b>Connect channel</b> — I've highlighted it for you." />
+              <MessageBubble variant="user">Found it</MessageBubble>
+            </SidebarPanel>
+          </div>
+        </>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('ouija-root')).render(<Ouija/>);
+  </script>
+</body>
+</html>

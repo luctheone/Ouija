@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Ouija — UI Chameleon schemes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Manrope', system-ui, sans-serif;
+    background: #0a0a0c;
+    color: #e8e6e3;
+    padding: 40px 48px 80px;
+  }
+  h1 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; margin-bottom: 6px; }
+  h1 .i { font-style: italic; font-family: Georgia, serif; font-weight: 600; }
+  .sub { color: #8b8884; font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  h2 { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #b8b4ae; margin: 48px 0 18px; border-top: 1px solid #1e1e22; padding-top: 22px; }
+  .note { font-size: 12.5px; color: #8b8884; margin: -8px 0 18px; max-width: 880px; line-height: 1.5; }
+
+  /* scheme grid */
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .card { position: relative; border: 1px solid #1e1e22; border-radius: 16px; padding: 14px; overflow: hidden; }
+  /* a colorful, slightly-busy wallpaper sits BEHIND the glass bar so the backdrop-blur is visible */
+  .card .wall { position: absolute; inset: 0; opacity: .9; }
+  .card > * { position: relative; }
+  .swatch-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .swatch { width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+  .nm { font-size: 13px; font-weight: 700; }
+  .vals { font-size: 10.5px; color: #d9d6d0; font-family: ui-monospace, monospace; opacity:.8; }
+
+  /* mini sidebar mockup — REAL liquid glass: translucent + heavy backdrop-blur + inset highlight */
+  .bar {
+    border-radius: 14px; padding: 12px; border: 1px solid;
+    backdrop-filter: blur(22px) saturate(160%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+  }
+  .bar-dark {
+    background: oklch(0.20 0.02 52 / 0.42);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.14), inset 0 1.5px 0 rgba(255,200,150,.10), 0 16px 40px -14px rgba(0,0,0,.7);
+  }
+  .bar-light {
+    background: oklch(0.98 0.01 90 / 0.46);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 16px 40px -14px rgba(60,50,40,.4);
+  }
+  .bar h3 { font-size: 11px; font-weight: 800; letter-spacing: -.01em; margin-bottom: 7px; }
+  .pill { display:inline-block; font-size:8.5px; font-weight:700; padding:2px 7px; border-radius:99px; margin-bottom:8px; }
+  .msg { font-size: 10px; line-height: 1.45; border-radius: 9px; padding: 7px 9px; margin-bottom: 7px; }
+  .hint { font-size: 9px; line-height: 1.4; border-radius: 8px; padding: 6px 8px; margin-bottom: 7px; }
+  .done { font-size: 10px; font-weight: 700; text-align: center; padding: 7px; border-radius: 99px; }
+
+  /* real-site section */
+  .sites { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  .site { position: relative; height: 260px; border-radius: 16px; overflow: hidden; border: 1px solid #1e1e22; }
+  .site .chrome { height: 30px; display: flex; align-items: center; gap: 6px; padding: 0 12px; font-size: 11px; font-weight: 600; }
+  .dot { width: 9px; height: 9px; border-radius: 99px; }
+  .site .body { padding: 18px 20px; }
+  .floating { position: absolute; top: 44px; right: 14px; width: 168px; }
+  .cap { font-size: 11.5px; color: #8b8884; margin-top: 9px; line-height: 1.45; }
+  .cap b { color: #cfccc7; }
+  .legend { font-size: 12px; color: #8b8884; }
+</style>
+</head>
+<body>
+  <h1>Ouija <span class="i">UI Chameleon</span> — scheme library</h1>
+  <div class="sub">11 pre-built Reliquary schemes · host-page scan → nearest-match → the sidebar adopts it</div>
+
+  <h2>The 11 schemes (shipped — dark base)</h2>
+  <div class="note">Each card: the accent swatch + oklch(hue, chroma), then a mini sidebar mockup in that scheme. The <b>frosted-glass blur is structural</b> (a backdrop-filter on a translucent panel) — it is identical in every scheme and in both light & dark mode; only the accent hue/chroma changes. The colorful wallpaper behind each card is just there so you can <i>see</i> the glass frosting it.</div>
+  <div class="grid" id="grid-dark"></div>
+
+  <h2>Same schemes, light-surface treatment (NOT shipped — for your call)</h2>
+  <div class="note">My flagged decision was to keep the shipped sidebar dark-glass (a guidance overlay must stay distinct from the host, not vanish into a white page). These are what a light-surface mode <i>could</i> look like if you want me to wire it — same accent, inverted surface. Compare and decide.</div>
+  <div class="grid" id="grid-light"></div>
+
+  <h2>On real sites — scan → match → harmonize</h2>
+  <div class="note">Representative host pages (CSS mockups of the real brands' palettes). The scanner samples the host's dominant accent + background; the matcher snaps to the nearest scheme; the sidebar floats on top wearing it. True overlay on the live DOM happens once the extension is loaded — this shows the matching logic faithfully.</div>
+  <div class="sites" id="sites"></div>
+
+<script>
+const SCHEMES = [
+  { id:'amber-warm', label:'Amber (default)', h:35, c:0.18 },
+  { id:'sunset-red', label:'Sunset', h:20, c:0.19 },
+  { id:'magenta-vibrant', label:'Vibrant', h:355, c:0.20 },
+  { id:'violet-saas', label:'Violet', h:320, c:0.17 },
+  { id:'indigo', label:'Indigo', h:285, c:0.16 },
+  { id:'blue-corporate', label:'Corporate Blue', h:255, c:0.15 },
+  { id:'teal', label:'Teal', h:200, c:0.15 },
+  { id:'green-fresh', label:'Fresh Green', h:155, c:0.16 },
+  { id:'lime', label:'Lime', h:120, c:0.15 },
+  { id:'neutral-slate', label:'Neutral', h:255, c:0.045 },
+  { id:'high-contrast', label:'High Contrast', h:35, c:0.225 },
+];
+
+// Faithful to styles.css token formulas: oklch(L, c*factor, h)
+function ok(l, cf, h, a){ return `oklch(${l} ${(cf).toFixed(3)} ${h}${a!==undefined?` / ${a}`:''})`; }
+
+function miniBar(s, mode){
+  const c = s.c, h = s.h;
+  const dark = mode==='dark';
+  const accent = ok(dark?0.84:0.55, c*0.92, h);
+  const accentSoft = ok(dark?0.74:0.50, c*0.6, h);
+  const txt = dark ? ok(0.94, c*0.14, h) : ok(0.28, c*0.20, h);
+  const txtMuted = dark ? ok(0.70, c*0.30, h) : ok(0.48, c*0.25, h);
+  const border = ok(dark?0.55:0.62, c*0.55, h, 0.30);
+  const msgBg = dark ? ok(0.26, c*0.30, h, 0.40) : ok(0.94, c*0.30, h, 0.7);
+  const pillBg = ok(dark?0.30:0.92, c*0.5, h, dark?0.5:0.9);
+  const hintBg = ok(dark?0.40:0.88, c*0.92, h, dark?0.10:0.5);
+  const doneBg = accent, doneTxt = dark ? 'oklch(0.12 0 0)' : 'oklch(0.99 0 0)';
+  return `<div class="bar ${dark?'bar-dark':'bar-light'}" style="border-color:${border}">
+    <h3 style="color:${accent}">Ouija</h3>
+    <span class="pill" style="background:${pillBg};color:${accentSoft}">STEP 3 OF 7</span>
+    <div class="msg" style="background:${msgBg};color:${txt}">Copy your Pixel ID from Meta Events Manager.</div>
+    <div class="hint" style="background:${hintBg};color:${txtMuted}">↳ Head to business.facebook.com, then press Done ✓.</div>
+    <div class="done" style="background:${doneBg};color:${doneTxt}">Done ✓</div>
+  </div>`;
+}
+
+function card(s, mode){
+  // A colorful wallpaper behind the glass bar, so the backdrop-blur is visibly frosting it.
+  const wall = `radial-gradient(circle at 26% 16%, ${ok(0.52, s.c*1.3, s.h)} 0%, ${ok(0.13, s.c*0.5, s.h)} 74%)`;
+  return `<div class="card">
+    <div class="wall" style="background:${wall}"></div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:${ok(0.65,s.c,s.h)}"></div>
+      <div><div class="nm">${s.label}</div><div class="vals">oklch · h${s.h} c${s.c}</div></div>
+    </div>
+    ${miniBar(s, mode)}
+  </div>`;
+}
+
+document.getElementById('grid-dark').innerHTML = SCHEMES.map(s=>card(s,'dark')).join('');
+document.getElementById('grid-light').innerHTML = SCHEMES.map(s=>card(s,'light')).join('');
+
+// Real-site mockups: {name, bg, accent(css), text, chromeBg, schemeId, scanNote}
+const SITES = [
+  { name:'dashboard.stripe.com', bg:'#f6f9fc', text:'#3c4257', accent:'#635bff', chrome:'#ffffff', cdot:'#635bff',
+    scheme:'indigo', note:'scanner sees Stripe indigo (#635bff) → <b>Indigo</b>' },
+  { name:'admin.shopify.com', bg:'#f1f1f1', text:'#303030', accent:'#008060', chrome:'#ffffff', cdot:'#008060',
+    scheme:'green-fresh', note:'scanner sees Shopify green (#008060) → <b>Fresh Green</b>' },
+  { name:'github.com', bg:'#0d1117', text:'#c9d1d9', accent:'#2f81f7', chrome:'#161b22', cdot:'#2f81f7',
+    scheme:'blue-corporate', note:'dark host + blue accent (#2f81f7) → <b>Corporate Blue</b>' },
+  { name:'notion.so', bg:'#ffffff', text:'#37352f', accent:'#cfcdc8', chrome:'#fbfbfa', cdot:'#b8b4ae',
+    scheme:'neutral-slate', note:'low-saturation neutral host → <b>Neutral</b>' },
+];
+
+function siteBody(site){
+  return `<div class="body">
+    <div style="height:14px;width:46%;border-radius:5px;background:${site.accent};opacity:.9;margin-bottom:12px"></div>
+    <div style="height:9px;width:78%;border-radius:5px;background:${site.text};opacity:.18;margin-bottom:8px"></div>
+    <div style="height:9px;width:64%;border-radius:5px;background:${site.text};opacity:.18;margin-bottom:8px"></div>
+    <div style="height:9px;width:71%;border-radius:5px;background:${site.text};opacity:.18;margin-bottom:18px"></div>
+    <div style="display:inline-block;padding:8px 16px;border-radius:8px;background:${site.accent};color:#fff;font-size:11px;font-weight:700">Continue</div>
+  </div>`;
+}
+
+document.getElementById('sites').innerHTML = SITES.map(site=>{
+  const s = SCHEMES.find(x=>x.id===site.scheme);
+  return `<div>
+    <div class="site" style="background:${site.bg}">
+      <div class="chrome" style="background:${site.chrome};color:${site.text}">
+        <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+        <span style="margin-left:8px;opacity:.7">${site.name}</span>
+      </div>
+      ${siteBody(site)}
+      <div class="floating">${miniBar(s,'dark')}</div>
+    </div>
+    <div class="cap">${site.note}</div>
+  </div>`;
+}).join('');
+</script>
+</body>
+</html>

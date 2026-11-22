@@ -1,0 +1,106 @@
+{
+  "site": "shopify",
+  "task": "meta-pixel-connect",
+  "graph_template": {
+    "edges": [
+      {
+        "to": "meta_1",
+        "from": "nav_1"
+      },
+      {
+        "to": "meta_2",
+        "from": "meta_1"
+      },
+      {
+        "to": "meta_3",
+        "from": "meta_2"
+      },
+      {
+        "to": "meta_4",
+        "from": "meta_3"
+      },
+      {
+        "to": "nav_2",
+        "from": "meta_4"
+      },
+      {
+        "to": "shopify_1",
+        "from": "nav_2"
+      },
+      {
+        "to": "shopify_2",
+        "from": "shopify_1"
+      },
+      {
+        "to": "shopify_3",
+        "from": "shopify_2"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "nav_1",
+        "site": "ouijaboard.vercel.app/demo/meta-events-manager",
+        "instruction": "Navigate to the Meta Events Manager to get your Pixel credentials",
+        "selector_hint": "",
+        "verify_condition": "URL contains /demo/meta-events-manager"
+      },
+      {
+        "id": "meta_1",
+        "site": "ouijaboard.vercel.app/demo/meta-events-manager",
+        "instruction": "Click the Settings tab to view your Pixel ID and Conversions API",
+        "selector_hint": "[role=tab][aria-selected=false]",
+        "verify_condition": "Settings tab is selected"
+      },
+      {
+        "id": "meta_2",
+        "site": "ouijaboard.vercel.app/demo/meta-events-manager",
+        "instruction": "Copy the Pixel ID \u2014 it will be saved to your Ouija clipboard",
+        "selector_hint": "[aria-label=Copy Pixel ID]",
+        "verify_condition": "clipboard contains Pixel ID"
+      },
+      {
+        "id": "meta_3",
+        "site": "ouijaboard.vercel.app/demo/meta-events-manager",
+        "instruction": "Click Generate access token",
+        "selector_hint": "[aria-label=Generate access token]",
+        "verify_condition": "Access token field is visible"
+      },
+      {
+        "id": "meta_4",
+        "site": "ouijaboard.vercel.app/demo/meta-events-manager",
+        "instruction": "Copy the access token \u2014 it will not be shown again",
+        "selector_hint": "[aria-label=Copy access token]",
+        "verify_condition": "clipboard contains Access Token"
+      },
+      {
+        "id": "nav_2",
+        "site": "ouijaboard.vercel.app/demo/shopify-pixel-settings",
+        "instruction": "Navigate to your Shopify admin to paste the credentials",
+        "selector_hint": "",
+        "verify_condition": "URL contains /demo/shopify-pixel-settings"
+      },
+      {
+        "id": "shopify_1",
+        "site": "ouijaboard.vercel.app/demo/shopify-pixel-settings",
+        "instruction": "Paste your Pixel ID from the clipboard into the Pixel ID field",
+        "selector_hint": "[aria-label=Pixel ID]",
+        "verify_condition": "The Pixel ID input field (aria-label Pixel ID) has a non-empty value. ONLY check this one field, ignore the access token field."
+      },
+      {
+        "id": "shopify_2",
+        "site": "ouijaboard.vercel.app/demo/shopify-pixel-settings",
+        "instruction": "Paste your access token from the clipboard into the token field",
+        "selector_hint": "[aria-label=Access token]",
+        "verify_condition": "The Access token input field (aria-label Access token) has a non-empty value. ONLY check this one field, ignore the Pixel ID field."
+      },
+      {
+        "id": "shopify_3",
+        "site": "ouijaboard.vercel.app/demo/shopify-pixel-settings",
+        "instruction": "Click Save to connect your Meta Pixel",
+        "selector_hint": "[aria-label=Save pixel configuration]",
+        "verify_condition": "The page shows a success state: Meta Pixel connected or Connected checkmark visible"
+      }
+    ],
+    "welcome_message": "Let's connect your Meta Pixel to Shopify. First, head to the Meta Events Manager to grab your credentials:\n\nhttps://ouijaboard.vercel.app/demo/meta-events-manager\n\nOpen that link, then press **Done** when you're there."
+  }
+}

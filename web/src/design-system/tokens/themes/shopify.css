@@ -1,0 +1,87 @@
+/* ============================================================
+   OUIJA · THEME — SHOPIFY-NATIVE  (apply: <html data-theme="shopify">)
+   ------------------------------------------------------------
+   Color story — "frosted eucalyptus light"
+   Ouija should feel like it was made *by* Shopify: calm, confident,
+   premium green. Not a flat lime fill — a considered two-green system
+   read through the liquid glass:
+
+     · STRUCTURE  deep forest/sage  → depth, the press & deep tones
+     · PRIMARY    Shopify-grade emerald (#0d946b) → fills & actions
+     · GUIDANCE   luminous eucalyptus glow → the "light" of attention
+     · NEUTRAL    paper greys warmed a hair toward green so the frost
+                  reads as green-tinted light, never cold blue
+   Guidance stays *within* the green family (monochromatic) so it
+   complements the brand instead of clashing with a second hue.
+   Everything else — glass, motion, spacing, radii, type rhythm — is
+   inherited unchanged from the base system.
+   ============================================================ */
+
+[data-theme="shopify"] {
+  /* Accent — a PREMIUM green story: deep pine → rich emerald → spring neon.
+     --accent-rgb drives glows; --accent-neon-rgb is the bright glint. */
+  --accent-rgb:      17 168 120;          /* @kind color */ /* luminous emerald (glow) */
+  --accent-neon-rgb: 74 222 128;          /* @kind color */ /* spring neon (glint/edges) */
+  --accent-50:   #e7f8f0;
+  --accent-100:  #c3f0db;
+  --accent-200:  #8fe4bf;
+  --accent-300:  #4fd3a0;   /* bright eucalyptus */
+  --accent-400:  #1cb97f;
+  --accent-500:  #0f9d6b;   /* primary — rich emerald */
+  --accent-600:  #0a7d54;   /* hover — deep emerald */
+  --accent-700:  #06603f;   /* press — pine */
+
+  /* Neutrals — warmed toward green-grey paper (premium, not cold) */
+  --ink-50:  #f3f7f5;
+  --ink-100: #e9efeb;
+  --ink-200: #d7e0db;
+  --ink-300: #bac5bf;
+  --ink-400: #97a39d;
+  --ink-500: #6f7d77;
+  --ink-600: #525d58;
+  --ink-700: #3f4d48;
+  --ink-800: #2a3531;
+  --ink-900: #18211d;
+  --ink-950: #0f1614;
+
+  /* Glass — a whisper of green in the frost ("eucalyptus light") */
+  --glass-tint:        rgba(243, 251, 247, 0.62);
+  --glass-tint-strong: rgba(246, 252, 249, 0.80);
+  --glass-tint-soft:   rgba(238, 248, 243, 0.42);
+
+  /* Premium depth + glint */
+  --fill-accent-grad: linear-gradient(165deg, #1fc586 0%, #0c8159 55%, #06623f 100%);
+  --shadow-accent:    0 10px 28px -8px rgb(var(--accent-rgb) / 0.55);
+
+  /* Success — a deeper jade so confirmation reads distinct from guidance */
+  --success-rgb: 16 163 116; /* @kind color */
+  --success-400: #3fd0a2;
+  --success-500: #14b384;
+  --success-600: #0c8a66;
+
+  /* --- Re-resolve derived tokens INSIDE this scope ---
+     Aliases declared at :root freeze to the base value and the themed
+     column merely inherits that frozen result; redeclaring them here
+     forces re-resolution against the themed raw tokens above. */
+  --text-primary:   var(--ink-900);
+  --text-secondary: var(--ink-700);
+  --text-tertiary:  var(--ink-500);
+  --text-muted:     var(--ink-400);
+  --surface-page:   var(--ink-100);
+  --surface-sunken: var(--ink-50);
+  --text-accent:        var(--accent-600);
+  --fill-accent:        var(--accent-500);
+  --fill-accent-hover:  var(--accent-600);
+  --fill-accent-press:  var(--accent-700);
+  --accent-glow:        rgb(var(--accent-rgb) / 0.55);
+  --text-success:       var(--success-600);
+  --success-glow:       rgb(var(--success-rgb) / 0.5);
+  --glass-tint-accent:  rgb(var(--accent-rgb) / 0.16);
+  --glow-accent:    0 0 0 4px rgb(var(--accent-rgb) / 0.18), 0 8px 30px -4px rgb(var(--accent-rgb) / 0.45);
+  --glow-focus:     0 0 0 4px rgb(var(--accent-rgb) / 0.22);
+  --glow-success:   0 0 0 4px rgb(var(--success-rgb) / 0.18), 0 8px 26px -6px rgb(var(--success-rgb) / 0.4);
+  --glow-spotlight: 0 0 0 1.5px rgb(var(--accent-neon-rgb) / 0.95), 0 0 0 5px rgb(var(--accent-rgb) / 0.30), 0 0 14px 1px rgb(var(--accent-neon-rgb) / 0.55), 0 0 40px 7px rgb(var(--accent-rgb) / 0.45);
+
+  /* Typeface — Manrope's friendly roundness already suits Shopify's
+     approachable brand, so it is kept. (Shopify Sans is proprietary.) */
+}

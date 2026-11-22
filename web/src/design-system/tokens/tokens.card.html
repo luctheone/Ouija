@@ -1,0 +1,214 @@
+<!-- @dsCard group="Colors" viewport="960x640" name="Color System" subtitle="Adaptive hue tokens — amber default, host-overridable" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Ouija — Color Tokens</title>
+<link rel="stylesheet" href="../styles.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:var(--font-sans);
+  background:oklch(0.09 calc(var(--ouija-c)*0.28) var(--ouija-h));
+  padding:36px 32px;
+  min-height:100vh;
+}
+
+/* Live hue picker */
+.hue-strip{
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:36px;
+  padding:14px 18px;
+  background:var(--ouija-surface);
+  backdrop-filter:var(--ouija-blur-panel);
+  -webkit-backdrop-filter:var(--ouija-blur-panel);
+  border-radius:14px;
+  border:1px solid var(--ouija-glint-mid);
+  box-shadow:var(--ouija-shadow-panel);
+}
+.hue-lbl{font-size:var(--fs-xs);font-weight:var(--fw-bold);color:var(--ouija-text-muted);letter-spacing:var(--ls-eyebrow);text-transform:uppercase;white-space:nowrap;}
+input[type=range]{flex:1;accent-color:oklch(0.74 var(--ouija-c) var(--ouija-h));height:4px;cursor:pointer;}
+.hue-val{font-family:var(--font-mono);font-size:var(--fs-xs);color:var(--ouija-text-md);min-width:42px;text-align:right;}
+
+/* Swatch grid */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+.card{
+  border-radius:16px;
+  padding:20px;
+  background:var(--ouija-surface);
+  backdrop-filter:var(--ouija-blur-panel);
+  -webkit-backdrop-filter:var(--ouija-blur-panel);
+  border:1px solid var(--ouija-glint-mid);
+  box-shadow:var(--ouija-shadow-panel);
+}
+.card-title{font-size:var(--fs-xs);font-weight:var(--fw-bold);color:var(--ouija-text-muted);letter-spacing:var(--ls-eyebrow);text-transform:uppercase;margin-bottom:14px;}
+.swatches{display:flex;flex-direction:column;gap:8px;}
+.swatch{display:flex;align-items:center;gap:12px;}
+.swatch-dot{width:28px;height:28px;border-radius:8px;flex:0 0 auto;border:1px solid oklch(1 0 0 / 0.08);}
+.swatch-info{flex:1;min-width:0;}
+.swatch-name{font-size:var(--fs-xs);font-weight:var(--fw-bold);color:var(--ouija-text-hi);letter-spacing:.01em;}
+.swatch-token{font-family:var(--font-mono);font-size:10px;color:var(--ouija-text-muted);}
+
+/* Panel preview */
+.panel-prev{
+  position:relative;
+  isolation:isolate;
+  border-radius:var(--ouija-radius-panel);
+  padding:18px 16px 16px;
+  background:var(--ouija-surface);
+  backdrop-filter:var(--ouija-blur-panel);
+  -webkit-backdrop-filter:var(--ouija-blur-panel);
+  box-shadow:var(--ouija-shadow-panel);
+}
+@property --pg{syntax:'<angle>';inherits:false;initial-value:45deg;}
+.panel-prev::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:conic-gradient(from var(--pg),var(--ouija-glint-lo) 0deg,var(--ouija-glint-lo) 66deg,var(--ouija-glint-mid) 75deg,var(--ouija-glint-hi) 84deg,var(--ouija-glint-mid) 93deg,var(--ouija-glint-lo) 102deg,var(--ouija-glint-lo) 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:pgspin 9s ease-in-out infinite;pointer-events:none;z-index:3;
+}
+@keyframes pgspin{to{--pg:405deg;}}
+.panel-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.panel-mark{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--ouija-mark-bg);border:1px solid var(--ouija-mark-border);color:var(--ouija-mark-color);flex:0 0 auto;}
+.panel-mark svg{width:16px;height:16px;}
+.panel-name{font-family:var(--font-serif);font-style:italic;font-size:var(--fs-identity);line-height:1.1;color:var(--ouija-text-hi);}
+.panel-sub{font-size:var(--fs-xs);color:var(--ouija-text-muted);font-weight:600;letter-spacing:.04em;}
+.panel-nodes{display:flex;align-items:center;gap:5px;margin-bottom:12px;}
+.nd{border-radius:50%;flex:0 0 auto;}
+.nd.dn{width:7px;height:7px;background:var(--ouija-node-done-fill);border:1px solid var(--ouija-node-done-stroke);}
+.nd.nw{width:9px;height:9px;background:transparent;border:1.5px solid var(--ouija-node-now-stroke);box-shadow:0 0 10px var(--ouija-node-now-glow);}
+.nd.ft{width:7px;height:7px;background:var(--ouija-node-future-fill);}
+.nd-seg{flex:1;height:1px;background:var(--ouija-node-seg);}
+.panel-bub{padding:9px 12px;border-radius:14px 14px 14px 4px;font-size:13px;line-height:1.5;background:var(--ouija-bubble-ai);border:1px solid var(--ouija-bubble-ai-border);color:var(--ouija-bubble-ai-text);margin-bottom:6px;}
+.panel-bub b{color:var(--ouija-text-hi);font-weight:600;}
+.panel-bub.u{border-radius:14px 14px 4px 14px;background:var(--ouija-bubble-user);border-color:var(--ouija-bubble-user-border);color:var(--ouija-bubble-user-text);}
+.panel-btn{width:100%;height:44px;border-radius:999px;border:1px solid var(--ouija-btn-border);background:var(--ouija-btn-bg);color:var(--ouija-btn-text);font-family:var(--font-sans);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:12px;cursor:pointer;}
+
+/* Host presets */
+.presets{display:flex;gap:8px;margin-top:14px;}
+.preset{height:30px;padding:0 12px;border-radius:999px;border:none;font-family:var(--font-sans);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.02em;background:var(--ouija-surface-soft);color:var(--ouija-text-lo);border:1px solid var(--ouija-glint-mid);}
+.preset:hover{color:var(--ouija-text-md);}
+.row-full{grid-column:1/-1;}
+</style>
+</head>
+<body>
+
+<!-- Live hue picker -->
+<div class="hue-strip">
+  <span class="hue-lbl">--ouija-h</span>
+  <input type="range" id="hue" min="0" max="360" value="35"/>
+  <span class="hue-val" id="hval">35</span>
+  <span class="hue-lbl" style="margin-left:16px">--ouija-c</span>
+  <input type="range" id="chr" min="0" max="37" value="18"/>
+  <span class="hue-val" id="cval">0.18</span>
+</div>
+
+<div class="grid">
+
+  <!-- Glass surface -->
+  <div class="card">
+    <div class="card-title">Glass Surface</div>
+    <div class="swatches">
+      <div class="swatch"><div class="swatch-dot" style="background:var(--ouija-surface)"></div><div class="swatch-info"><div class="swatch-name">surface</div><div class="swatch-token">--ouija-surface</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:var(--ouija-surface-strong)"></div><div class="swatch-info"><div class="swatch-name">surface-strong</div><div class="swatch-token">--ouija-surface-strong</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:var(--ouija-surface-soft);border:1px dashed oklch(1 0 0 / 0.2)"></div><div class="swatch-info"><div class="swatch-name">surface-soft</div><div class="swatch-token">--ouija-surface-soft</div></div></div>
+    </div>
+  </div>
+
+  <!-- Glint -->
+  <div class="card">
+    <div class="card-title">Glint</div>
+    <div class="swatches">
+      <div class="swatch"><div class="swatch-dot" style="background:var(--ouija-glint-hi)"></div><div class="swatch-info"><div class="swatch-name">glint-hi</div><div class="swatch-token">--ouija-glint-hi</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:var(--ouija-glint-mid)"></div><div class="swatch-info"><div class="swatch-name">glint-mid</div><div class="swatch-token">--ouija-glint-mid</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:linear-gradient(135deg,oklch(0.9 0.15 var(--ouija-h)) 0%,oklch(0.5 0.1 var(--ouija-h)) 100%)"></div><div class="swatch-info"><div class="swatch-name">glint-lo</div><div class="swatch-token">--ouija-glint-lo</div></div></div>
+    </div>
+  </div>
+
+  <!-- Text -->
+  <div class="card">
+    <div class="card-title">Text</div>
+    <div class="swatches">
+      <div class="swatch"><div class="swatch-dot" style="background:var(--ouija-text-hi)"></div><div class="swatch-info"><div class="swatch-name">text-hi</div><div class="swatch-token">--ouija-text-hi</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:var(--ouija-text-md)"></div><div class="swatch-info"><div class="swatch-name">text-md</div><div class="swatch-token">--ouija-text-md</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:var(--ouija-text-lo)"></div><div class="swatch-info"><div class="swatch-name">text-lo</div><div class="swatch-token">--ouija-text-lo</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:var(--ouija-text-muted)"></div><div class="swatch-info"><div class="swatch-name">text-muted</div><div class="swatch-token">--ouija-text-muted</div></div></div>
+    </div>
+  </div>
+
+  <!-- Bubbles + Nodes -->
+  <div class="card">
+    <div class="card-title">Bubbles &amp; Nodes</div>
+    <div class="swatches">
+      <div class="swatch"><div class="swatch-dot" style="background:var(--ouija-bubble-ai);border:1px solid var(--ouija-bubble-ai-border)"></div><div class="swatch-info"><div class="swatch-name">bubble-ai</div><div class="swatch-token">--ouija-bubble-ai</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:var(--ouija-bubble-user);border:1px solid var(--ouija-bubble-user-border)"></div><div class="swatch-info"><div class="swatch-name">bubble-user</div><div class="swatch-token">--ouija-bubble-user</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:var(--ouija-node-done-fill);border:1px solid var(--ouija-node-done-stroke)"></div><div class="swatch-info"><div class="swatch-name">node-done</div><div class="swatch-token">--ouija-node-done-fill</div></div></div>
+      <div class="swatch"><div class="swatch-dot" style="background:transparent;border:1.5px solid var(--ouija-node-now-stroke);box-shadow:0 0 8px var(--ouija-node-now-glow)"></div><div class="swatch-info"><div class="swatch-name">node-now</div><div class="swatch-token">--ouija-node-now-stroke</div></div></div>
+    </div>
+  </div>
+
+  <!-- Live panel preview -->
+  <div class="card row-full">
+    <div class="card-title">Live preview — updates with hue / chroma</div>
+    <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;margin-top:4px;">
+      <div class="panel-prev" style="width:240px;">
+        <div class="panel-head">
+          <div class="panel-mark">
+            <svg viewBox="0 0 64 64" fill="none"><path d="M32 6C33.2 16.8 38.2 24.5 47.6 27.4C50.8 28.4 50.8 35.6 47.6 36.6C38.2 39.5 33.2 47.2 32 58C30.8 47.2 25.8 39.5 16.4 36.6C13.2 35.6 13.2 28.4 16.4 27.4C25.8 24.5 30.8 16.8 32 6Z" fill="currentColor"/></svg>
+          </div>
+          <div><div class="panel-name">Ouija</div><div class="panel-sub">Step 3 of 6</div></div>
+        </div>
+        <div class="panel-nodes">
+          <div class="nd dn"></div><div class="nd-seg"></div>
+          <div class="nd dn"></div><div class="nd-seg"></div>
+          <div class="nd nw"></div><div class="nd-seg"></div>
+          <div class="nd ft"></div><div class="nd-seg"></div>
+          <div class="nd ft"></div><div class="nd-seg"></div>
+          <div class="nd ft"></div>
+        </div>
+        <div class="panel-bub">Open <b>Settings</b> — I've highlighted it.</div>
+        <div class="panel-bub u">Found it</div>
+        <button class="panel-btn">Continue →</button>
+      </div>
+      <div style="flex:1;min-width:200px;">
+        <div style="font-size:var(--fs-xs);color:var(--ouija-text-muted);letter-spacing:var(--ls-eyebrow);text-transform:uppercase;font-weight:700;margin-bottom:10px;">Host presets</div>
+        <div class="presets">
+          <button class="preset" onclick="setHue(35,0.18)">Amber</button>
+          <button class="preset" onclick="setHue(148,0.2)">Shopify</button>
+          <button class="preset" onclick="setHue(252,0.22)">Stripe</button>
+          <button class="preset" onclick="setHue(210,0.16)">Meta</button>
+          <button class="preset" onclick="setHue(280,0.14)">Notion</button>
+        </div>
+        <div style="margin-top:16px;font-size:var(--fs-xs);color:var(--ouija-text-lo);line-height:1.6;max-width:280px;">
+          Two primitives drive the entire system. The host-detector sets <span style="font-family:var(--font-mono);color:var(--ouija-text-md)">--ouija-h</span> and <span style="font-family:var(--font-mono);color:var(--ouija-text-md)">--ouija-c</span> on the document root. Every component token updates automatically via <span style="font-family:var(--font-mono);color:var(--ouija-text-md)">oklch()</span> derivation.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function setHue(h,c){
+  document.documentElement.style.setProperty('--ouija-h',h);
+  document.documentElement.style.setProperty('--ouija-c',c);
+  document.getElementById('hue').value=h;
+  document.getElementById('hval').textContent=h;
+  document.getElementById('chr').value=Math.round(c*100);
+  document.getElementById('cval').textContent=c.toFixed(2);
+}
+document.getElementById('hue').addEventListener('input',function(){
+  document.documentElement.style.setProperty('--ouija-h',this.value);
+  document.getElementById('hval').textContent=this.value;
+});
+document.getElementById('chr').addEventListener('input',function(){
+  const v=(this.value/100).toFixed(2);
+  document.documentElement.style.setProperty('--ouija-c',v);
+  document.getElementById('cval').textContent=v;
+});
+</script>
+</body>
+</html>

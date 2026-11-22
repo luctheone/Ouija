@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Ouija — Lumen Directions</title>
+<link rel="stylesheet" href="../styles.css" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; font-family: 'Manrope', sans-serif; overflow: hidden; }
+
+  .stage {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    height: 100vh;
+  }
+
+  .col {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .lbl {
+    position: absolute;
+    top: 26px;
+    left: 26px;
+    z-index: 20;
+  }
+  .lbl-letter {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .lbl-name {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 21px;
+    line-height: 1;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .lbl-desc {
+    font-size: 11px;
+    line-height: 1.55;
+    max-width: 185px;
+    display: block;
+    opacity: 0.65;
+  }
+
+  /* =====================================================
+     A · RELIQUARY
+     Dark inverted glass. Amber candlelight. Precious.
+     Layout: centered document — no bubbles, just serif
+     prose presented as sacred instruction.
+     ===================================================== */
+
+  .col-a { background: #0e0a05; }
+  .col-a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 100% 70% at 50% -20%, #7a4e14 0%, transparent 55%),
+      radial-gradient(ellipse 55% 45% at 95% 95%, #4c2808 0%, transparent 50%),
+      radial-gradient(ellipse 45% 40% at 2% 65%,  #3a1e06 0%, transparent 50%);
+  }
+  .col-a .lbl-letter { color: #5a3c14; }
+  .col-a .lbl-name   { color: #c8922e; }
+  .col-a .lbl-desc   { color: #7a5828; }
+
+  @property --rq-g { syntax: '<angle>'; inherits: false; initial-value: 45deg; }
+
+  .rq-panel {
+    position: relative;
+    z-index: 2;
+    width: 298px;
+    border-radius: 26px;
+    isolation: isolate;
+    background:
+      radial-gradient(ellipse 90% 55% at 28% 8%, rgba(175,120,50,0.13) 0%, transparent 55%),
+      rgba(16, 10, 4, 0.84);
+    backdrop-filter: blur(32px) saturate(160%);
+    -webkit-backdrop-filter: blur(32px) saturate(160%);
+    box-shadow:
+      inset 0 1.5px 0 rgba(210,160,70,0.28),
+      inset 0 -14px 32px -14px rgba(175,110,30,0.1),
+      0 0 0 0.5px rgba(175,125,50,0.18),
+      0 38px 90px -22px rgba(0,0,0,0.97);
+  }
+  .rq-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(from var(--rq-g),
+      transparent 0deg, transparent 65deg,
+      rgba(195,148,60,0.1) 74deg,
+      rgba(255,210,100,0.72) 84deg,
+      rgba(195,148,60,0.1) 94deg,
+      transparent 103deg, transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    animation: rqspin 10s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 3;
+  }
+  @keyframes rqspin { to { --rq-g: 405deg; } }
+
+  .rq-body {
+    position: relative;
+    z-index: 2;
+    padding: 28px 24px 24px;
+    text-align: center;
+  }
+  .rq-crown {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .rq-hr { flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(190,140,55,0.28)); }
+  .rq-hr.r { background: linear-gradient(to left, transparent, rgba(190,140,55,0.28)); }
+  .rq-seal {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    background: radial-gradient(circle at 38% 32%, rgba(215,160,70,0.22), rgba(100,65,18,0.12));
+    border: 1px solid rgba(205,155,60,0.2);
+    display: grid; place-items: center;
+    color: #c0882a;
+  }
+  .rq-seal svg { width: 19px; height: 19px; }
+
+  .rq-name {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 44px;
+    line-height: 0.88;
+    color: #eedcb2;
+    letter-spacing: 0.015em;
+    margin-bottom: 5px;
+  }
+  .rq-eyebrow {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #5e3e18;
+    margin-bottom: 20px;
+  }
+  .rq-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(190,140,55,0.28), transparent);
+    margin-bottom: 20px;
+  }
+
+  /* Italic serif prose — no bubbles */
+  .rq-prose {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 15.5px;
+    line-height: 1.68;
+    color: #a87840;
+    margin-bottom: 22px;
+    padding: 0 2px;
+  }
+  .rq-prose em { font-style: normal; color: #e8d0a0; }
+
+  .rq-step-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .rq-step-line { flex: 1; height: 1px; background: rgba(190,140,55,0.14); }
+  .rq-step-num {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #5e3e18;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+
+  .rq-btn {
+    width: 100%;
+    height: 46px;
+    border-radius: 99px;
+    border: 1px solid rgba(205,155,60,0.24);
+    background: rgba(195,145,55,0.06);
+    color: #c0882a;
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.01em;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .rq-btn:hover { background: rgba(195,145,55,0.12); border-color: rgba(205,155,60,0.4); }
+
+  /* =====================================================
+     B · VITRINE
+     Editorial void. Linen light. The panel as a frame —
+     barely there glass, the negative space IS the luxury.
+     Huge name, hairline rule, almost no chrome.
+     ===================================================== */
+
+  .col-b {
+    background: #ece9e4;
+    border-left: 1px solid rgba(0,0,0,0.05);
+    border-right: 1px solid rgba(0,0,0,0.05);
+  }
+  .col-b::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 55% at 50% -5%, #e4e0d9 0%, transparent 55%),
+      radial-gradient(ellipse 45% 40% at 85% 90%, #dcd8d0 0%, transparent 55%);
+  }
+  .col-b .lbl-letter { color: #a8a49c; }
+  .col-b .lbl-name   { color: #1a1714; }
+  .col-b .lbl-desc   { color: #78746c; }
+
+  .vt-panel {
+    position: relative;
+    z-index: 2;
+    width: 278px;
+    border-radius: 5px;
+    border: 0.5px solid rgba(0,0,0,0.13);
+    background: rgba(238,235,230,0.58);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 40px rgba(0,0,0,0.04);
+  }
+
+  .vt-body { padding: 30px 26px 26px; }
+
+  .vt-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .vt-dot-prog { display: flex; gap: 4px; align-items: center; }
+  .vt-dp {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #d4d0ca;
+  }
+  .vt-dp.on { background: #1a1714; }
+  .vt-roman {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 12.5px;
+    color: #aaa69e;
+  }
+
+  .vt-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 64px;
+    line-height: 0.82;
+    letter-spacing: -0.025em;
+    color: #1a1714;
+    margin-bottom: 20px;
+  }
+
+  .vt-rule { height: 0.5px; background: #1a1714; opacity: 0.85; margin-bottom: 18px; }
+
+  .vt-text {
+    font-size: 13px;
+    line-height: 1.72;
+    color: #54504a;
+    margin-bottom: 22px;
+    font-weight: 400;
+    text-wrap: pretty;
+  }
+  .vt-text strong { color: #1a1714; font-weight: 600; }
+
+  .vt-confirm {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+  .vt-user-reply {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #1a1714;
+    border-bottom: 0.5px solid #1a1714;
+    padding-bottom: 1px;
+  }
+  .vt-confirm-tick {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: #1a1714;
+    display: grid; place-items: center;
+    flex: 0 0 auto;
+  }
+  .vt-confirm-tick svg { width: 9px; height: 9px; }
+
+  .vt-btn {
+    width: 100%;
+    height: 42px;
+    border-radius: 2px;
+    border: 0.5px solid #1a1714;
+    background: transparent;
+    color: #1a1714;
+    font-family: 'Manrope', sans-serif;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .vt-btn:hover { background: #1a1714; color: #ece9e4; }
+
+  /* =====================================================
+     C · SOLSTICE
+     Deep mineral night. The glass is iridescent — full
+     spectrum border that breathes. Cool teal soul.
+     Progress: glowing nodes, not a bar.
+     ===================================================== */
+
+  .col-c { background: #050810; }
+  .col-c::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 75% 58% at 18% 100%, oklch(0.55 0.18 168 / 0.2)  0%, transparent 52%),
+      radial-gradient(ellipse 65% 52% at 88%   3%, oklch(0.48 0.22 282 / 0.18) 0%, transparent 50%),
+      radial-gradient(ellipse 48% 38% at 60%  55%, oklch(0.42 0.18 200 / 0.1)  0%, transparent 50%),
+      radial-gradient(ellipse 38% 35% at 12%  28%, oklch(0.48 0.15 242 / 0.1)  0%, transparent 50%);
+  }
+  .col-c .lbl-letter { color: #1e5248; }
+  .col-c .lbl-name   { color: #4ed8b8; }
+  .col-c .lbl-desc   { color: #2e6a60; }
+
+  @property --sl-g { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+
+  .sl-panel {
+    position: relative;
+    z-index: 2;
+    width: 298px;
+    border-radius: 26px;
+    isolation: isolate;
+    background:
+      radial-gradient(ellipse 80% 55% at 22% 12%, oklch(0.38 0.1 168 / 0.12) 0%, transparent 58%),
+      rgba(5, 8, 16, 0.74);
+    backdrop-filter: blur(30px) saturate(210%);
+    -webkit-backdrop-filter: blur(30px) saturate(210%);
+    box-shadow:
+      0 0 0 1px rgba(78,216,184,0.07),
+      inset 0 1px 0 rgba(78,216,184,0.14),
+      0 34px 90px -22px rgba(0,0,0,0.97);
+  }
+  .sl-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(from var(--sl-g),
+      transparent 0deg, transparent 65deg,
+      oklch(0.72 0.2 168 / 0.1) 74deg,
+      oklch(0.88 0.18 168 / 0.72) 84deg,
+      oklch(0.72 0.2 168 / 0.1) 94deg,
+      transparent 103deg, transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    animation: slspin 9s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 3;
+  }
+  @keyframes slspin { to { --sl-g: 360deg; } }
+
+  .sl-body {
+    position: relative;
+    z-index: 2;
+    padding: 22px 20px 20px;
+  }
+  .sl-head {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-bottom: 16px;
+  }
+  .sl-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    background: radial-gradient(circle at 38% 30%,
+      oklch(0.72 0.2 168 / 0.28),
+      oklch(0.50 0.22 280 / 0.14));
+    border: 1px solid oklch(0.72 0.2 168 / 0.2);
+    display: grid; place-items: center;
+    color: oklch(0.84 0.18 168);
+  }
+  .sl-icon svg { width: 17px; height: 17px; }
+  .sl-id { flex: 1; min-width: 0; }
+  .sl-name {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 25px;
+    line-height: 0.95;
+    color: #dff6f0;
+    letter-spacing: 0.01em;
+  }
+  .sl-sub {
+    font-size: 10.5px;
+    color: oklch(0.62 0.12 168);
+    font-weight: 500;
+    margin-top: 2px;
+    letter-spacing: 0.02em;
+  }
+  .sl-min {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: oklch(0.28 0.04 168 / 0.3);
+    cursor: pointer;
+    display: grid; place-items: center;
+    color: oklch(0.62 0.12 168);
+    flex: 0 0 auto;
+  }
+  .sl-min svg { width: 14px; height: 14px; }
+
+  /* Glowing node progress */
+  .sl-prog {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 16px;
+  }
+  .sl-node {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    background: oklch(0.28 0.04 168 / 0.5);
+    border: 1px solid oklch(0.4 0.08 168 / 0.25);
+    transition: all 0.3s;
+  }
+  .sl-node.done {
+    background: oklch(0.56 0.16 168 / 0.55);
+    border-color: oklch(0.68 0.18 168 / 0.65);
+  }
+  .sl-node.now {
+    width: 9px; height: 9px;
+    background: transparent;
+    border: 1.5px solid oklch(0.84 0.18 168);
+    box-shadow: 0 0 10px oklch(0.84 0.18 168 / 0.65), inset 0 0 4px oklch(0.84 0.18 168 / 0.3);
+  }
+  .sl-seg {
+    flex: 1;
+    height: 1px;
+    background: oklch(0.25 0.04 168 / 0.5);
+  }
+  .sl-step-lbl {
+    font-size: 10px;
+    font-weight: 600;
+    color: oklch(0.46 0.1 168);
+    letter-spacing: 0.04em;
+    margin-left: 2px;
+    white-space: nowrap;
+  }
+
+  /* Chat stack */
+  .sl-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-bottom: 16px;
+  }
+  .sl-msg { display: flex; gap: 8px; align-items: flex-end; }
+  .sl-msg.user { flex-direction: row-reverse; }
+  .sl-av {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    background: radial-gradient(circle at 38% 30%,
+      oklch(0.72 0.2 168 / 0.26),
+      oklch(0.50 0.22 280 / 0.12));
+    border: 1px solid oklch(0.72 0.2 168 / 0.15);
+    display: grid; place-items: center;
+    color: oklch(0.84 0.18 168);
+  }
+  .sl-av svg { width: 11px; height: 11px; }
+  .sl-bub {
+    padding: 10px 13px;
+    border-radius: 16px 16px 16px 5px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: #b0e4da;
+    background: oklch(0.36 0.06 168 / 0.18);
+    border: 1px solid oklch(0.58 0.12 168 / 0.12);
+    font-weight: 400;
+    max-width: 214px;
+    text-wrap: pretty;
+  }
+  .sl-bub b { color: #dff6f0; font-weight: 600; }
+  .sl-bub.user {
+    border-radius: 16px 16px 5px 16px;
+    background: oklch(0.40 0.14 168 / 0.24);
+    border-color: oklch(0.68 0.18 168 / 0.25);
+    color: #90d8c8;
+    font-weight: 500;
+  }
+
+  .sl-btn {
+    width: 100%;
+    height: 44px;
+    border-radius: 99px;
+    border: 1px solid oklch(0.68 0.2 168 / 0.28);
+    background: oklch(0.38 0.12 168 / 0.12);
+    color: oklch(0.84 0.18 168);
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .sl-btn:hover {
+    background: oklch(0.42 0.14 168 / 0.2);
+    border-color: oklch(0.68 0.2 168 / 0.5);
+  }
+
+  /* ---- Color splashes: soft blobs straddling the panel border.
+     backdrop-filter blurs them inside the panel = real liquid glass ---- */
+  .rq-host, .vt-host, .sl-host {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .rq-host > div, .vt-host > div, .sl-host > div {
+    position: absolute;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Reliquary: amber / sienna blobs */
+  .rq-host .s1 { width: 280px; height: 280px; top: 74%; left: 14%; background: radial-gradient(circle, rgba(224,128,38,0.72) 0%, rgba(200,106,26,0.50) 42%, transparent 70%); }
+  .rq-host .s2 { width: 210px; height: 210px; top: 30%; left: 86%; background: radial-gradient(circle, rgba(188,86,20,0.62) 0%, rgba(160,70,12,0.40) 42%, transparent 70%); }
+  .rq-host .s3 { width: 165px; height: 165px; top: 53%; left: 61%; background: radial-gradient(circle, rgba(244,158,50,0.50) 0%, rgba(222,136,36,0.32) 42%, transparent 70%); }
+
+  /* Vitrine: blush / sage blobs — restrained for the void aesthetic */
+  .vt-host .s1 { width: 250px; height: 250px; top: 71%; left: 14%; background: radial-gradient(circle, rgba(200,158,128,0.34) 0%, rgba(180,140,110,0.20) 42%, transparent 70%); }
+  .vt-host .s2 { width: 185px; height: 185px; top: 30%; left: 86%; background: radial-gradient(circle, rgba(148,172,152,0.28) 0%, rgba(128,154,135,0.16) 42%, transparent 70%); }
+  .vt-host .s3 { width: 155px; height: 155px; top: 52%; left: 58%; background: radial-gradient(circle, rgba(190,168,146,0.26) 0%, rgba(170,148,126,0.15) 42%, transparent 70%); }
+
+  /* Solstice: teal / cyan blobs */
+  .sl-host .s1 { width: 270px; height: 270px; top: 74%; left: 14%; background: radial-gradient(circle, oklch(0.74 0.22 168 / 0.54) 0%, oklch(0.64 0.20 168 / 0.34) 42%, transparent 70%); }
+  .sl-host .s2 { width: 200px; height: 200px; top: 28%; left: 86%; background: radial-gradient(circle, oklch(0.64 0.20 192 / 0.46) 0%, oklch(0.54 0.18 192 / 0.28) 42%, transparent 70%); }
+  .sl-host .s3 { width: 165px; height: 165px; top: 53%; left: 61%; background: radial-gradient(circle, oklch(0.70 0.20 155 / 0.40) 0%, oklch(0.62 0.18 155 / 0.24) 42%, transparent 70%); }
+
+  /* Vitrine glass shimmer sweep */
+  .vt-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(115deg, transparent 42%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.04) 57%, transparent 67%);
+    background-size: 260% 100%;
+    background-position: 180% 0;
+    mix-blend-mode: screen;
+    animation: vtsweep 11s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes vtsweep { 0% { background-position: 175% 0; } 18%, 100% { background-position: -120% 0; } }
+
+  /* Button SVG sizing */
+  .rq-btn svg, .vt-btn svg, .sl-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rq-panel::after, .sl-panel::after { animation: none; }
+    .vt-panel::before { animation: none; opacity: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- ======== A · RELIQUARY ======== -->
+  <div class="col col-a">
+    <div class="lbl">
+      <span class="lbl-letter">A</span>
+      <span class="lbl-name">Reliquary</span>
+      <span class="lbl-desc">Dark inverted glass. Amber warmth. AI guidance as precious inscription.</span>
+    </div>
+    <div class="rq-host"><div class="s1"></div><div class="s2"></div><div class="s3"></div></div>
+    <div class="rq-panel" id="rq"></div>
+  </div>
+
+  <!-- ======== B · VITRINE ======== -->
+  <div class="col col-b">
+    <div class="lbl">
+      <span class="lbl-letter">B</span>
+      <span class="lbl-name">Vitrine</span>
+      <span class="lbl-desc">Editorial void. Museum case. The name as architecture.</span>
+    </div>
+    <div class="vt-host"><div class="s1"></div><div class="s2"></div><div class="s3"></div></div>
+    <div class="vt-panel" id="vt"></div>
+  </div>
+
+  <!-- ======== C · SOLSTICE ======== -->
+  <div class="col col-c">
+    <div class="lbl">
+      <span class="lbl-letter">C</span>
+      <span class="lbl-name">Solstice</span>
+      <span class="lbl-desc">Mineral night glass. Teal glint border. Glowing node progress.</span>
+    </div>
+    <div class="sl-host"><div class="s1"></div><div class="s2"></div><div class="s3"></div></div>
+    <div class="sl-panel" id="sl"></div>
+  </div>
+
+</div>
+
+<script>
+  const SPARK = `<svg viewBox="0 0 64 64" fill="none"><path d="M32 6C33.2 16.8 38.2 24.5 47.6 27.4C50.8 28.4 50.8 35.6 47.6 36.6C38.2 39.5 33.2 47.2 32 58C30.8 47.2 25.8 39.5 16.4 36.6C13.2 35.6 13.2 28.4 16.4 27.4C25.8 24.5 30.8 16.8 32 6Z" fill="currentColor"/></svg>`;
+  const MINUS = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg>`;
+  const ARROW = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>`;
+  const CHECK = `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>`;
+
+  /* ---- A: RELIQUARY ---- */
+  document.getElementById('rq').innerHTML = `
+    <div class="rq-body">
+      <div class="rq-crown">
+        <div class="rq-hr"></div>
+        <div class="rq-seal">${SPARK}</div>
+        <div class="rq-hr r"></div>
+      </div>
+      <div class="rq-name">Ouija</div>
+      <div class="rq-eyebrow">Connect Your Pixel</div>
+      <div class="rq-divider"></div>
+      <p class="rq-prose">Open <em>Settings</em> in the left menu — I've pointed it out for you. Once there, look for the <em>Pixel</em> section near the bottom.</p>
+      <div class="rq-step-row">
+        <div class="rq-step-line"></div>
+        <div class="rq-step-num">III of VI</div>
+        <div class="rq-step-line"></div>
+      </div>
+      <button class="rq-btn">I did it — continue ${ARROW}</button>
+    </div>`;
+
+  /* ---- B: VITRINE ---- */
+  document.getElementById('vt').innerHTML = `
+    <div class="vt-body">
+      <div class="vt-top">
+        <div class="vt-dot-prog">
+          <div class="vt-dp on"></div>
+          <div class="vt-dp on"></div>
+          <div class="vt-dp on"></div>
+          <div class="vt-dp"></div>
+          <div class="vt-dp"></div>
+          <div class="vt-dp"></div>
+        </div>
+        <div class="vt-roman">iii.</div>
+      </div>
+      <div class="vt-name">Ouija</div>
+      <div class="vt-rule"></div>
+      <p class="vt-text">Open <strong>Settings</strong> in the left menu — I've pointed it out for you. Look for the Pixel section near the bottom.</p>
+      <div class="vt-confirm">
+        <div class="vt-confirm-tick">${CHECK}</div>
+        <span class="vt-user-reply">Found it</span>
+      </div>
+      <button class="vt-btn">Continue ${ARROW}</button>
+    </div>`;
+
+  /* ---- C: SOLSTICE ---- */
+  document.getElementById('sl').innerHTML = `
+    <div class="sl-body">
+      <div class="sl-head">
+        <div class="sl-icon">${SPARK}</div>
+        <div class="sl-id">
+          <div class="sl-name">Ouija</div>
+          <div class="sl-sub">Connect your pixel</div>
+        </div>
+        <button class="sl-min">${MINUS}</button>
+      </div>
+      <div class="sl-prog">
+        <div class="sl-node done"></div>
+        <div class="sl-seg"></div>
+        <div class="sl-node done"></div>
+        <div class="sl-seg"></div>
+        <div class="sl-node now"></div>
+        <div class="sl-seg"></div>
+        <div class="sl-node"></div>
+        <div class="sl-seg"></div>
+        <div class="sl-node"></div>
+        <div class="sl-seg"></div>
+        <div class="sl-node"></div>
+        <div class="sl-step-lbl">Step 3</div>
+      </div>
+      <div class="sl-stack">
+        <div class="sl-msg">
+          <div class="sl-av">${SPARK}</div>
+          <div class="sl-bub">Open <b>Settings</b> in the left menu — I've pointed it out for you.</div>
+        </div>
+        <div class="sl-msg user">
+          <div class="sl-bub user">Found it</div>
+        </div>
+      </div>
+      <button class="sl-btn">I did it — next ${ARROW}</button>
+    </div>`;
+</script>
+</body>
+</html>

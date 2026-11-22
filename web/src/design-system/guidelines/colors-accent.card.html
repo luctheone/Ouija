@@ -1,0 +1,30 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Accent — the glow of guidance" subtitle="One restrained periwinkle-indigo; appears only on active/guidance states" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; font-family: var(--font-sans); background: var(--white); }
+  .row { display: flex; gap: 0; padding: 22px; }
+  .sw { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .chip { width: 100%; height: 56px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
+  .name { font-size: 11px; font-weight: var(--fw-semibold); color: var(--text-secondary); letter-spacing: var(--ls-eyebrow); }
+  .hex { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-muted); }
+  .label { display: flex; flex-direction: column; gap: 1px; padding-left: 2px; }
+  .chip.primary { box-shadow: var(--glow-accent); }
+</style>
+</head>
+<body>
+  <div class="row" id="row"></div>
+  <script>
+    const steps = ['50','100','200','300','400','500','600','700'];
+    document.getElementById('row').innerHTML = steps.map(s => {
+      const v = getComputedStyle(document.documentElement).getPropertyValue('--accent-'+s).trim();
+      const isPrimary = s === '500';
+      return `<div class="sw"><div class="chip ${isPrimary?'primary':''}" style="background:var(--accent-${s})"></div>
+        <div class="label"><span class="name">${s}${isPrimary?' ◆':''}</span><span class="hex">${v}</span></div></div>`;
+    }).join('');
+  </script>
+</body>
+</html>

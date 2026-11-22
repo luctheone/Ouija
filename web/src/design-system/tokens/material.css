@@ -1,0 +1,75 @@
+/* ============================================================
+   OUIJA · MATERIAL TOKENS — Glass physics
+   ──────────────────────────────────────────────────────────
+   Defines the physical constants of the floating surface:
+   blur, radius, shadow stack, glint animation.
+   Color-agnostic — all tinting lives in colors.css.
+
+   The "glint" is a single bright arc rotating around the panel
+   border — like candlelight catching a glass edge. It is driven
+   by @property --ouija-glint-angle and assembled per-component
+   using the conic-gradient + mask technique (see SidebarPanel).
+   ============================================================ */
+
+/* Register animatable custom property for the glint rotation */
+@property --ouija-glint-angle {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 45deg;
+}
+
+/* @keyframes ouija-glint-spin is injected by SidebarPanel (and any component
+   that uses the glint) so the animation declaration doesn't appear under a
+   non-root selector where the token scanner would mis-classify it. */
+
+:root {
+  /* ─── BACKDROP FILTER ────────────────────────────────────────
+     Strong blur on the main panel; lighter on nested surfaces.
+  ──────────────────────────────────────────────────────────── */
+  --ouija-blur-panel:   blur(28px) saturate(175%); /* @kind other */
+  --ouija-blur-orb:     blur(20px) saturate(160%);  /* @kind other */
+  --ouija-blur-tooltip: blur(16px) saturate(145%);  /* @kind other */
+  --ouija-blur-bubble:  blur(10px) saturate(130%);  /* @kind other */
+
+  /* ─── BORDER RADIUS ──────────────────────────────────────────*/
+  --ouija-radius-panel:       24px;   /* the main floating surface          */
+  --ouija-radius-orb:         999px;  /* collapsed pill orb                 */
+  --ouija-radius-bubble-ai:   14px 14px 14px 4px; /* AI speech bubble       */
+  --ouija-radius-bubble-user: 14px 14px 4px 14px; /* user reply bubble      */
+  --ouija-radius-btn:         999px;  /* pill CTA button                    */
+  --ouija-radius-tooltip:     12px;   /* overlay tooltip / coachmark        */
+
+  /* ─── PANEL GEOMETRY ─────────────────────────────────────────*/
+  --ouija-panel-width:  296px;
+  --ouija-panel-margin: 16px;  /* gap to the host viewport edge */
+
+  /* ─── NODE PROGRESS ─────────────────────────────────────────
+     Small glowing nodes strung on a hairline — shows journey depth.
+  ──────────────────────────────────────────────────────────── */
+  --ouija-node-size:       7px;   /* done / future nodes         */
+  --ouija-node-size-now:   9px;   /* current node (slightly larger) */
+  --ouija-node-gap:        5px;
+  --ouija-node-border-w:   1px;
+  --ouija-node-now-border-w: 1.5px;
+
+  /* ─── GLINT ANIMATION ────────────────────────────────────────
+     Duration and arc can be dialled per host theme.
+  ──────────────────────────────────────────────────────────── */
+  --ouija-glint-duration:  9s;      /* @kind other */
+  --ouija-glint-ease:      ease-in-out; /* @kind other */
+  --ouija-glint-arc-start: 66deg;  /* @kind other */
+  --ouija-glint-peak:      84deg;  /* @kind other */
+  --ouija-glint-arc-end:   102deg; /* @kind other */
+
+  /* ─── ELEVATION STACK ────────────────────────────────────────
+     Non-tinted drops; the tinted shadow is in colors.css
+     as --ouija-shadow-panel (because it uses --ouija-h / --ouija-c).
+  ──────────────────────────────────────────────────────────── */
+  --ouija-elevation-sm: 0  2px 12px  -2px oklch(0.04 0 0 / 0.45);
+  --ouija-elevation-md: 0  8px 28px  -6px oklch(0.04 0 0 / 0.62);
+  --ouija-elevation-lg: 0 22px 64px -16px oklch(0.04 0 0 / 0.88);
+
+  /* ─── PRESS / INTERACTION ────────────────────────────────────*/
+  --ouija-press-scale: 0.96;                       /* @kind other */
+  --ouija-hover-lift:  translateY(-2px) scale(1.02); /* @kind other */
+}

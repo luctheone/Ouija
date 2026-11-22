@@ -1,0 +1,31 @@
+<!-- @dsCard group="Brand" viewport="700x180" name="Elevation, glow & shadow" subtitle="Cool tinted shadows for float; accent/success glows for active states" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; font-family: var(--font-sans); background: var(--ink-50); }
+  .wrap { padding: 30px 26px; display: flex; gap: 22px; align-items: center; }
+  .col { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .box { width: 92px; height: 64px; background: var(--white); border-radius: var(--radius-md); }
+  .sm { box-shadow: var(--shadow-sm); }
+  .md { box-shadow: var(--shadow-md); }
+  .lg { box-shadow: var(--shadow-lg); }
+  .xl { box-shadow: var(--shadow-xl); }
+  .acc { box-shadow: var(--glow-accent); }
+  .suc { box-shadow: var(--glow-success); }
+  .tok { font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="col"><div class="box sm"></div><span class="tok">shadow-sm</span></div>
+    <div class="col"><div class="box md"></div><span class="tok">shadow-md</span></div>
+    <div class="col"><div class="box lg"></div><span class="tok">shadow-lg</span></div>
+    <div class="col"><div class="box xl"></div><span class="tok">shadow-xl</span></div>
+    <div class="col"><div class="box acc"></div><span class="tok">glow-accent</span></div>
+    <div class="col"><div class="box suc"></div><span class="tok">glow-success</span></div>
+  </div>
+</body>
+</html>

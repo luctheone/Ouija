@@ -1,0 +1,52 @@
+<!-- @dsCard group="Brand" viewport="700x180" name="Iconography — Lucide + spark mark" subtitle="Thin rounded Lucide line icons; monochrome currentColor; the ✦ spark is the only brand glyph" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; font-family: var(--font-sans); background: var(--white); color: var(--text-secondary); }
+  .wrap { padding: 26px 28px; display: flex; align-items: center; gap: 30px; }
+  .mark { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .orb { width: 56px; height: 56px; border-radius: var(--radius-pill);
+         background: var(--glass-tint-strong); border: 1px solid var(--glass-stroke);
+         box-shadow: var(--glass-highlight), var(--glow-accent); display: flex; align-items: center; justify-content: center; color: var(--accent-600); }
+  .orb img { width: 30px; height: 30px; }
+  .cap { font-size: 10.5px; font-family: var(--font-mono); color: var(--text-muted); }
+  .rule { width: 1px; height: 64px; background: var(--ink-200); }
+  .icons { display: grid; grid-template-columns: repeat(8, 1fr); gap: 18px 22px; color: var(--text-secondary); }
+  .icons i { display: inline-flex; }
+  .icons svg { width: 22px; height: 22px; stroke-width: 1.75; }
+  .accent { color: var(--accent-500); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="mark">
+      <div class="orb"><img src="../assets/ouija-compass-mark.svg" alt="Ouija" /></div>
+      <span class="cap">brand mark</span>
+    </div>
+    <div class="rule"></div>
+    <div class="icons">
+      <i data-lucide="sparkles" class="accent"></i>
+      <i data-lucide="mouse-pointer-click"></i>
+      <i data-lucide="copy"></i>
+      <i data-lucide="check"></i>
+      <i data-lucide="arrow-right"></i>
+      <i data-lucide="chevron-right"></i>
+      <i data-lucide="x"></i>
+      <i data-lucide="minus"></i>
+      <i data-lucide="circle-help"></i>
+      <i data-lucide="loader"></i>
+      <i data-lucide="key-round"></i>
+      <i data-lucide="globe"></i>
+      <i data-lucide="external-link"></i>
+      <i data-lucide="info"></i>
+      <i data-lucide="undo-2"></i>
+      <i data-lucide="settings-2"></i>
+    </div>
+  </div>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

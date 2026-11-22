@@ -1,0 +1,17 @@
+/* ============================================================
+   OUIJA · DESIGN SYSTEM — GLOBAL ENTRY POINT
+   Consumers link this single file. It only @imports token layers;
+   never put rules directly here.
+   ============================================================ */
+
+@import url('./tokens/fonts.css');
+@import url('./tokens/colors.css');
+@import url('./tokens/typography.css');
+@import url('./tokens/spacing.css');
+@import url('./tokens/material.css');
+@import url('./tokens/effects.css');
+@import url('./tokens/motion.css');
+
+/* Site-matched theme variants — opt in with <html data-theme="shopify|stripe"> */
+@import url('./tokens/themes/shopify.css');
+@import url('./tokens/themes/stripe.css');

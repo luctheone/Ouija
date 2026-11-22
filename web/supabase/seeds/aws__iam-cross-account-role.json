@@ -1,0 +1,115 @@
+{
+  "site": "aws",
+  "task": "iam-cross-account-role",
+  "graph_template": {
+    "edges": [
+      {
+        "to": "monitor_1",
+        "from": "nav_1"
+      },
+      {
+        "to": "nav_2",
+        "from": "monitor_1"
+      },
+      {
+        "to": "aws_1",
+        "from": "nav_2"
+      },
+      {
+        "to": "aws_2",
+        "from": "aws_1"
+      },
+      {
+        "to": "aws_3",
+        "from": "aws_2"
+      },
+      {
+        "to": "aws_4",
+        "from": "aws_3"
+      },
+      {
+        "to": "nav_3",
+        "from": "aws_4"
+      },
+      {
+        "to": "monitor_2",
+        "from": "nav_3"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "nav_1",
+        "site": "ouijaboard.vercel.app/demo/aws-monitoring-connect",
+        "confidence": 0.95,
+        "instruction": "Go to CloudPulse to get your AWS credentials",
+        "selector_hint": "",
+        "verify_condition": "URL contains /demo/aws-monitoring-connect"
+      },
+      {
+        "id": "monitor_1",
+        "site": "ouijaboard.vercel.app/demo/aws-monitoring-connect",
+        "confidence": 0.95,
+        "instruction": "Click Copy credentials to save your Account ID and External ID",
+        "selector_hint": "[aria-label='Copy credentials']",
+        "verify_condition": "clipboard contains External ID"
+      },
+      {
+        "id": "nav_2",
+        "site": "ouijaboard.vercel.app/demo/aws-iam-console",
+        "confidence": 0.95,
+        "instruction": "Go to the AWS IAM Console",
+        "selector_hint": "",
+        "verify_condition": "URL contains /demo/aws-iam-console"
+      },
+      {
+        "id": "aws_1",
+        "site": "ouijaboard.vercel.app/demo/aws-iam-console",
+        "confidence": 0.95,
+        "instruction": "From your Ouija clipboard, copy the Account ID and paste it into the Account ID field",
+        "selector_hint": "[aria-label='Account ID']",
+        "verify_condition": "The Account ID field has been filled in"
+      },
+      {
+        "id": "aws_2",
+        "site": "ouijaboard.vercel.app/demo/aws-iam-console",
+        "confidence": 0.95,
+        "instruction": "From your Ouija clipboard, copy the External ID and paste it into the External ID field",
+        "selector_hint": "[aria-label='External ID']",
+        "verify_condition": "The External ID field has been filled in"
+      },
+      {
+        "id": "aws_3",
+        "site": "ouijaboard.vercel.app/demo/aws-iam-console",
+        "confidence": 0.95,
+        "instruction": "Click Create role",
+        "selector_hint": "[aria-label='Create role']",
+        "verify_condition": "Role created"
+      },
+      {
+        "id": "aws_4",
+        "site": "ouijaboard.vercel.app/demo/aws-iam-console",
+        "confidence": 0.95,
+        "instruction": "Copy the Role ARN from the summary",
+        "selector_hint": "[aria-label='Copy Role ARN']",
+        "verify_condition": "clipboard contains OuijaMonitoringRole"
+      },
+      {
+        "id": "nav_3",
+        "site": "ouijaboard.vercel.app/demo/aws-monitoring-connect",
+        "confidence": 0.95,
+        "instruction": "Go back to CloudPulse to finish connecting",
+        "selector_hint": "",
+        "verify_condition": "URL contains /demo/aws-monitoring-connect"
+      },
+      {
+        "id": "monitor_2",
+        "site": "ouijaboard.vercel.app/demo/aws-monitoring-connect",
+        "confidence": 0.95,
+        "instruction": "Paste the Role ARN to connect your account",
+        "selector_hint": "[aria-label='Role ARN']",
+        "verify_condition": "URL contains connected=1"
+      }
+    ],
+    "welcome_message": "Hey! I'll walk you through a simplified cross-account IAM flow \u2014 just click Done when a step is completed. First step: head over to CloudPulse https://ouijaboard.vercel.app/demo/aws-monitoring-connect to grab your credentials. \ud83c\udfaf"
+  }
+}

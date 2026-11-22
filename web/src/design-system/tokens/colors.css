@@ -1,0 +1,176 @@
+/* ============================================================
+   OUIJA · COLOR TOKENS — Adaptive / Reliquary system
+   ──────────────────────────────────────────────────────────
+   PRINCIPLE: Ouija owns no brand color.
+   Two CSS custom properties — --ouija-h (hue) and --ouija-c (chroma)
+   — are the only color primitives. Everything else derives from them
+   via oklch(). The host-detector snippet overrides these two vars;
+   all semantic tokens update automatically.
+
+   Defaults → Reliquary amber (h: 35, c: 0.18).
+   Dark panel on any background.
+   ============================================================ */
+
+@property --ouija-h { syntax: '<number>'; inherits: true; initial-value: 35; }
+@property --ouija-c { syntax: '<number>'; inherits: true; initial-value: 0.18; }
+
+:root {
+  /* ─── ADAPTIVE PRIMITIVES ────────────────────────────────────
+     Overridden at runtime by the host-detector:
+       document.documentElement.style.setProperty('--ouija-h', detectedHue);
+       document.documentElement.style.setProperty('--ouija-c', detectedChroma);
+  ──────────────────────────────────────────────────────────── */
+  --ouija-h: 35;    /* @kind other */
+  --ouija-c: 0.18;  /* @kind other */
+
+  /* ─── GLASS SURFACE (dark, tinted) ──────────────────────────
+     Very dark semi-transparent, pushed toward the detected hue.
+  ──────────────────────────────────────────────────────────── */
+  --ouija-surface:        oklch(0.10 calc(var(--ouija-c) * 0.30) var(--ouija-h) / 0.84);
+  --ouija-surface-strong: oklch(0.08 calc(var(--ouija-c) * 0.25) var(--ouija-h) / 0.94);
+  --ouija-surface-soft:   oklch(0.18 calc(var(--ouija-c) * 0.22) var(--ouija-h) / 0.10);
+
+  /* ─── GLINT ──────────────────────────────────────────────────
+     The rotating border highlight — the warmth of candlelight.
+  ──────────────────────────────────────────────────────────── */
+  --ouija-glint-hi:  oklch(0.88 calc(var(--ouija-c) * 0.90) var(--ouija-h) / 0.72);
+  --ouija-glint-mid: oklch(0.68 calc(var(--ouija-c) * 0.62) var(--ouija-h) / 0.12);
+  --ouija-glint-lo:  oklch(0.50 calc(var(--ouija-c) * 0.42) var(--ouija-h) / 0.00);
+
+  /* ─── TEXT ───────────────────────────────────────────────────*/
+  --ouija-text-hi:    oklch(0.94 calc(var(--ouija-c) * 0.16) var(--ouija-h));
+  --ouija-text-md:    oklch(0.72 calc(var(--ouija-c) * 0.52) var(--ouija-h));
+  --ouija-text-lo:    oklch(0.48 calc(var(--ouija-c) * 0.40) var(--ouija-h));
+  --ouija-text-muted: oklch(0.32 calc(var(--ouija-c) * 0.30) var(--ouija-h));
+
+  /* ─── MESSAGE BUBBLES ────────────────────────────────────────*/
+  --ouija-bubble-ai:           oklch(0.22 calc(var(--ouija-c) * 0.35) var(--ouija-h) / 0.13);
+  --ouija-bubble-ai-border:    oklch(0.50 calc(var(--ouija-c) * 0.55) var(--ouija-h) / 0.17);
+  --ouija-bubble-ai-text:      var(--ouija-text-md);
+  --ouija-bubble-user:         oklch(0.28 calc(var(--ouija-c) * 0.80) var(--ouija-h) / 0.32);
+  --ouija-bubble-user-border:  oklch(0.55 calc(var(--ouija-c) * 0.85) var(--ouija-h) / 0.28);
+  --ouija-bubble-user-text:    oklch(0.88 calc(var(--ouija-c) * 0.24) var(--ouija-h));
+
+  /* ─── PROGRESS NODES ─────────────────────────────────────────*/
+  --ouija-node-done-fill:   oklch(0.56 calc(var(--ouija-c) * 0.80) var(--ouija-h) / 0.55);
+  --ouija-node-done-stroke: oklch(0.68 calc(var(--ouija-c) * 0.85) var(--ouija-h) / 0.65);
+  --ouija-node-now-stroke:  oklch(0.84 var(--ouija-c) var(--ouija-h));
+  --ouija-node-now-glow:    oklch(0.84 var(--ouija-c) var(--ouija-h) / 0.60);
+  --ouija-node-future-fill: oklch(0.20 calc(var(--ouija-c) * 0.20) var(--ouija-h) / 0.50);
+  --ouija-node-seg:         oklch(0.28 calc(var(--ouija-c) * 0.18) var(--ouija-h) / 0.30);
+
+  /* ─── MARK / ICON ────────────────────────────────────────────*/
+  --ouija-mark-bg:     oklch(0.20 calc(var(--ouija-c) * 0.40) var(--ouija-h) / 0.20);
+  --ouija-mark-border: oklch(0.55 calc(var(--ouija-c) * 0.65) var(--ouija-h) / 0.22);
+  --ouija-mark-color:  oklch(0.74 calc(var(--ouija-c) * 0.82) var(--ouija-h));
+
+  /* ─── CTA BUTTON ─────────────────────────────────────────────*/
+  --ouija-btn-bg:           oklch(0.22 calc(var(--ouija-c) * 0.50) var(--ouija-h) / 0.07);
+  --ouija-btn-border:       oklch(0.65 calc(var(--ouija-c) * 0.60) var(--ouija-h) / 0.24);
+  --ouija-btn-text:         oklch(0.74 calc(var(--ouija-c) * 0.82) var(--ouija-h));
+  --ouija-btn-bg-hover:     oklch(0.26 calc(var(--ouija-c) * 0.52) var(--ouija-h) / 0.14);
+  --ouija-btn-border-hover: oklch(0.65 calc(var(--ouija-c) * 0.60) var(--ouija-h) / 0.44);
+
+  /* ─── PANEL SHADOW ───────────────────────────────────────────
+     Tint-aware: top inset + deep drop, no flat black.
+  ──────────────────────────────────────────────────────────── */
+  --ouija-shadow-panel:
+    inset 0 1.5px 0 var(--ouija-glint-mid),
+    inset 0 -14px 32px -14px oklch(0.30 calc(var(--ouija-c) * 0.50) var(--ouija-h) / 0.10),
+    0 0 0 0.5px oklch(0.40 calc(var(--ouija-c) * 0.55) var(--ouija-h) / 0.18),
+    0 38px 90px -22px oklch(0.04 0 0 / 0.97);
+
+  /* ─── STATE COLORS (host-independent) ───────────────────────*/
+  --ouija-success: oklch(0.72 0.18 162);
+  --ouija-warn:    oklch(0.78 0.16  72);
+  --ouija-danger:  oklch(0.68 0.20  22);
+
+  /* ─── SPOTLIGHT OVERLAY ──────────────────────────────────────*/
+  --ouija-spotlight-dim:    oklch(0.04 0 0 / 0.28);
+  --ouija-spotlight-glow:   oklch(var(--ouija-c) var(--ouija-c) var(--ouija-h) / 0.18);
+
+  /* ============================================================
+     LEGACY TOKENS — kept for components not yet migrated.
+     Do not use in new components; prefer --ouija-* above.
+     ============================================================ */
+  --white:   #ffffff;
+  --ink-50:  #f5f6fa;  --ink-100: #ebedf4;  --ink-200: #dde0ec;
+  --ink-300: #c4c9da;  --ink-400: #a0a6bd;  --ink-500: #7c8299;
+  --ink-600: #5c6075;  --ink-700: #434759;  --ink-800: #2d3040;
+  --ink-900: #1d1f2b;  --ink-950: #14151e;
+
+  --accent-rgb:  113 116 238; /* @kind color */
+  --accent-50:   #eef0fe;  --accent-100: #dfe2fd;  --accent-200: #c4c9fb;
+  --accent-300:  #a3a9f7;  --accent-400: #8a8ef3;  --accent-500: #7174ee;
+  --accent-600:  #5d5ce0;  --accent-700: #4c47c4;
+  --accent-glow: rgb(var(--accent-rgb) / 0.55);
+
+  --success-rgb: 47 191 147; /* @kind color */
+  --success-400: #4fd1a8;  --success-500: #2fbf93;  --success-600: #1f9e78;
+  --success-glow: rgb(var(--success-rgb) / 0.5);
+  --warn-500:    #f0b24a;
+  --danger-500:  #f0726a;
+
+  --text-primary:   var(--ink-900);  --text-secondary:  var(--ink-700);
+  --text-tertiary:  var(--ink-500);  --text-muted:      var(--ink-400);
+  --text-accent:    var(--accent-600); --text-on-accent: #ffffff;
+  --text-success:   var(--success-600);
+
+  --surface-page:   var(--ink-100);
+  --surface-card:   var(--white);
+  --surface-sunken: var(--ink-50);
+
+  --fill-accent:       var(--accent-500);
+  --fill-accent-hover: var(--accent-600);
+  --fill-accent-press: var(--accent-700);
+}
+
+/* ─── LIGHT MODE OVERRIDES ─────────────────────────────────────
+   Applied when host-detector detects a light host.
+   Usage: add class .ouija-light or attr data-ouija-mode="light"
+   to the panel's root element (or its host container).
+──────────────────────────────────────────────────────────────── */
+.ouija-light,
+[data-ouija-mode="light"] {
+  --ouija-surface:        oklch(0.97 calc(var(--ouija-c) * 0.04) var(--ouija-h) / 0.72);
+  --ouija-surface-strong: oklch(0.95 calc(var(--ouija-c) * 0.06) var(--ouija-h) / 0.90);
+  --ouija-surface-soft:   oklch(0.92 calc(var(--ouija-c) * 0.04) var(--ouija-h) / 0.14);
+
+  --ouija-glint-hi:  oklch(1 0 0 / 0.80);
+  --ouija-glint-mid: oklch(0.80 calc(var(--ouija-c) * 0.08) var(--ouija-h) / 0.12);
+  --ouija-glint-lo:  oklch(0.60 0 0 / 0.00);
+
+  --ouija-text-hi:    oklch(0.13 calc(var(--ouija-c) * 0.08) var(--ouija-h));
+  --ouija-text-md:    oklch(0.34 calc(var(--ouija-c) * 0.12) var(--ouija-h));
+  --ouija-text-lo:    oklch(0.55 calc(var(--ouija-c) * 0.10) var(--ouija-h));
+  --ouija-text-muted: oklch(0.70 calc(var(--ouija-c) * 0.08) var(--ouija-h));
+
+  --ouija-bubble-ai:          oklch(0.14 calc(var(--ouija-c) * 0.06) var(--ouija-h) / 0.05);
+  --ouija-bubble-ai-border:   oklch(0.14 calc(var(--ouija-c) * 0.06) var(--ouija-h) / 0.09);
+  --ouija-bubble-ai-text:     var(--ouija-text-md);
+  --ouija-bubble-user:        oklch(0.14 calc(var(--ouija-c) * 0.10) var(--ouija-h) / 0.08);
+  --ouija-bubble-user-border: oklch(0.14 calc(var(--ouija-c) * 0.08) var(--ouija-h) / 0.11);
+  --ouija-bubble-user-text:   var(--ouija-text-hi);
+
+  --ouija-node-done-fill:   oklch(0.40 calc(var(--ouija-c) * 0.50) var(--ouija-h) / 0.50);
+  --ouija-node-done-stroke: oklch(0.28 calc(var(--ouija-c) * 0.55) var(--ouija-h) / 0.60);
+  --ouija-node-now-stroke:  oklch(0.18 calc(var(--ouija-c) * 0.55) var(--ouija-h));
+  --ouija-node-now-glow:    oklch(0.18 calc(var(--ouija-c) * 0.55) var(--ouija-h) / 0.28);
+  --ouija-node-future-fill: oklch(0.60 calc(var(--ouija-c) * 0.10) var(--ouija-h) / 0.30);
+  --ouija-node-seg:         oklch(0.55 calc(var(--ouija-c) * 0.08) var(--ouija-h) / 0.22);
+
+  --ouija-mark-bg:     oklch(0.90 calc(var(--ouija-c) * 0.08) var(--ouija-h) / 0.90);
+  --ouija-mark-border: oklch(0.38 calc(var(--ouija-c) * 0.14) var(--ouija-h) / 0.18);
+  --ouija-mark-color:  oklch(0.20 calc(var(--ouija-c) * 0.25) var(--ouija-h));
+
+  --ouija-btn-bg:           oklch(0.13 calc(var(--ouija-c) * 0.08) var(--ouija-h) / 0.05);
+  --ouija-btn-border:       oklch(0.13 calc(var(--ouija-c) * 0.08) var(--ouija-h) / 0.28);
+  --ouija-btn-text:         oklch(0.13 calc(var(--ouija-c) * 0.08) var(--ouija-h));
+  --ouija-btn-bg-hover:     oklch(0.13 calc(var(--ouija-c) * 0.08) var(--ouija-h) / 0.08);
+  --ouija-btn-border-hover: oklch(0.13 calc(var(--ouija-c) * 0.08) var(--ouija-h) / 0.52);
+
+  --ouija-shadow-panel:
+    inset 0 1px 0 oklch(1 0 0 / 0.60),
+    0 0 0 0.5px oklch(0.13 calc(var(--ouija-c) * 0.08) var(--ouija-h) / 0.11),
+    0 24px 60px -18px oklch(0.04 0 0 / 0.16);
+}

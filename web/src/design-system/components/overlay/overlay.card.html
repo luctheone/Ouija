@@ -1,0 +1,62 @@
+<!-- @dsCard group="Components" viewport="700x420" name="Spotlight · Pointer · Coachmark" subtitle="The on-page overlays — a glowing frame, a directional arrow, and a copy coachmark drawn onto the host site" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html, body { margin: 0; height: 100%; font-family: var(--font-sans); }
+  .stage { position: relative; min-height: 420px; overflow: hidden;
+    background: linear-gradient(135deg, #e3e9f6 0%, #eef1f4 50%, #eaf0f1 100%); }
+  /* mocked host page chrome */
+  .host { position: absolute; inset: 0; padding: 34px 40px; }
+  .host__bar { height: 46px; background:#fff; border-radius:12px; box-shadow:0 1px 3px rgba(0,0,0,.06);
+    display:flex; align-items:center; justify-content:space-between; padding:0 18px; }
+  .host__bar .seg { display:flex; gap:10px; }
+  .host__bar .seg i { width:64px;height:13px;background:#e4e8ef;border-radius:6px;display:block; }
+  /* the real host button we highlight */
+  .host__btn { position:absolute; top:120px; left:72px;
+    background:#2d6cdf; color:#fff; border:none; border-radius:10px;
+    font-family:var(--font-sans); font-weight:700; font-size:14px; padding:11px 20px; box-shadow:0 2px 6px rgba(45,108,223,.35); }
+  .host__panel { position:absolute; top:120px; right:40px; width:240px; height:200px; background:#fff; border-radius:12px; box-shadow:0 1px 4px rgba(0,0,0,.06); padding:18px; }
+  .host__panel .l { height:11px; background:#e4e8ef; border-radius:5px; margin-bottom:12px; }
+  .host__panel .l:nth-child(2){width:80%} .host__panel .l:nth-child(3){width:60%}
+
+  #overlay { position: absolute; inset: 0; z-index: 5; }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="host">
+      <div class="host__bar"><div class="seg"><i></i><i></i><i></i></div><div class="seg"><i style="width:30px"></i></div></div>
+      <button class="host__btn" id="target">Events Manager</button>
+      <div class="host__panel"><div class="l"></div><div class="l"></div><div class="l"></div></div>
+    </div>
+    <div id="overlay"></div>
+  </div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <script type="text/babel">
+    const { Spotlight, Pointer, Coachmark } = window.OuijaDesignSystem_93fedd;
+
+    function Demo() {
+      // frame the host button (measured from its fixed mocked position)
+      const t = { top: 120, left: 72, w: 152, h: 42 };
+      return (
+        <>
+          <Spotlight radius={12} style={{ top: t.top - 7, left: t.left - 7, width: t.w + 14, height: t.h + 14 }} />
+          <Pointer direction="right" style={{ top: t.top + t.h/2 - 17, left: t.left - 52 }} />
+          <Coachmark arrow="up" animate
+            html="Click <b>Events Manager</b> to open your pixel settings."
+            copyValue="px_8f3c20a91b4e"
+            style={{ position:'absolute', top: t.top + t.h + 22, left: t.left }} />
+        </>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('overlay')).render(<Demo/>);
+  </script>
+</body>
+</html>

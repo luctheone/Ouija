@@ -1,0 +1,92 @@
+/* Geist — loaded via Google Fonts CDN; no upload needed */
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap');
+
+/* ============================================================
+   OUIJA · THEME — STRIPE-NATIVE  (apply: <html data-theme="stripe">)
+   ------------------------------------------------------------
+   Color story — "refined fintech indigo"
+   Ouija should feel native to the Stripe Dashboard: cool, precise,
+   trustworthy. Anchored on Stripe's *dashboard* indigo (#5469d4) —
+   deliberately COOLER and more BLUE than the generic over-saturated
+   violet that reads as "default AI product." Steered toward blue, not
+   purple, for an elegant fintech calm.
+
+     · PRIMARY    Stripe indigo (#5469d4) → fills & actions
+     · DEPTH      deeper blue-indigo (#333f95) → press, structure
+     · GUIDANCE   a luminous-but-cool indigo glow → attention as light
+     · NEUTRAL    Stripe's cool blue-slate greys on its signature
+                  #f6f9fc paper, so the frost reads cool and clean
+     · SUCCESS    Stripe's teal-green (#3ecf8e)
+   Type is switched to Geist — a sober, technical geometric that
+   strengthens the precise fintech feel — while keeping the same scale,
+   weights, and rhythm. Glass, motion, spacing, radii are inherited.
+   ============================================================ */
+
+[data-theme="stripe"] {
+  /* Accent — a PREMIUM indigo story: deep ink-blurple → Stripe indigo →
+     electric periwinkle glint. Cooler & bluer than generic AI violet. */
+  --accent-rgb:      84 105 212;          /* @kind color */ /* Stripe indigo (glow) */
+  --accent-neon-rgb: 139 156 255;         /* @kind color */ /* electric periwinkle (glint) */
+  --accent-50:   #eef1fe;
+  --accent-100:  #dde3fd;
+  --accent-200:  #bcc7fa;
+  --accent-300:  #93a4f4;   /* bright periwinkle */
+  --accent-400:  #6f82ea;
+  --accent-500:  #5469d4;   /* primary — Stripe indigo */
+  --accent-600:  #4150b8;   /* hover — deeper, more blue */
+  --accent-700:  #2f3a8f;   /* press — ink-indigo */
+
+  /* Neutrals — Stripe's cool blue-slate scale on #f6f9fc paper */
+  --ink-50:  #f6f9fc;
+  --ink-100: #e9edf4;
+  --ink-200: #d9dee8;
+  --ink-300: #aab3c5;
+  --ink-400: #8792a8;
+  --ink-500: #697386;
+  --ink-600: #525f7f;
+  --ink-700: #3c4257;
+  --ink-800: #2a3149;
+  --ink-900: #232a45;
+  --ink-950: #1a1f36;
+
+  /* Glass — cool frost on Stripe's signature near-white blue */
+  --glass-tint:        rgba(246, 249, 252, 0.60);
+  --glass-tint-strong: rgba(249, 251, 253, 0.80);
+  --glass-tint-soft:   rgba(243, 247, 251, 0.42);
+
+  /* Premium depth + glint */
+  --fill-accent-grad: linear-gradient(165deg, #6b7cf0 0%, #4a5ad0 52%, #3340a6 100%);
+  --shadow-accent:    0 10px 28px -8px rgb(var(--accent-rgb) / 0.55);
+
+  /* Success — Stripe teal-green */
+  --success-rgb: 62 207 142; /* @kind color */
+  --success-400: #6fe0ad;
+  --success-500: #3ecf8e;
+  --success-600: #1fa971;
+
+  /* --- Re-resolve derived tokens INSIDE this scope ---
+     Aliases declared at :root freeze to the base value and the themed
+     column merely inherits that frozen result; redeclaring them here
+     forces re-resolution against the themed raw tokens above. */
+  --text-primary:   var(--ink-900);
+  --text-secondary: var(--ink-700);
+  --text-tertiary:  var(--ink-500);
+  --text-muted:     var(--ink-400);
+  --surface-page:   var(--ink-100);
+  --surface-sunken: var(--ink-50);
+  --text-accent:        var(--accent-600);
+  --fill-accent:        var(--accent-500);
+  --fill-accent-hover:  var(--accent-600);
+  --fill-accent-press:  var(--accent-700);
+  --accent-glow:        rgb(var(--accent-rgb) / 0.55);
+  --text-success:       var(--success-600);
+  --success-glow:       rgb(var(--success-rgb) / 0.5);
+  --glass-tint-accent:  rgb(var(--accent-rgb) / 0.16);
+  --glow-accent:    0 0 0 4px rgb(var(--accent-rgb) / 0.18), 0 8px 30px -4px rgb(var(--accent-rgb) / 0.45);
+  --glow-focus:     0 0 0 4px rgb(var(--accent-rgb) / 0.22);
+  --glow-success:   0 0 0 4px rgb(var(--success-rgb) / 0.18), 0 8px 26px -6px rgb(var(--success-rgb) / 0.4);
+  --glow-spotlight: 0 0 0 1.5px rgb(var(--accent-neon-rgb) / 0.95), 0 0 0 5px rgb(var(--accent-rgb) / 0.30), 0 0 14px 1px rgb(var(--accent-neon-rgb) / 0.55), 0 0 40px 7px rgb(var(--accent-rgb) / 0.45);
+
+  /* Typeface — Geist: sober, precise, technical. Strengthens fintech feel. */
+  --font-sans: 'Geist', 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
